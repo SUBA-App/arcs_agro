@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sales_app/screen/absensi/absensi_provider.dart';
 
-import 'font_color.dart';
+import '../../font_color.dart';
 
 class NextAbsensiScreen extends StatefulWidget {
   const NextAbsensiScreen({super.key, required this.path});
@@ -25,7 +27,7 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
         title: Text(
           "Check In Absensi",
           style: TextStyle(
-              fontFamily: FontColor.fontPoppins, color: FontColor.black),
+              fontFamily: FontColor.fontPoppins, color: FontColor.black, fontSize: 16),
         ),
       ),
       body: Column(
@@ -44,8 +46,8 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
             child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                    onPressed: () {
-
+                    onPressed: () async {
+                      await Provider.of<AbsensiProvider>(context, listen: false).addAbsen(context, File(widget.path));
                     },
                     style: ButtonStyle(
                         backgroundColor:
@@ -55,7 +57,7 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                     child: Text(
                       "Check In",
                       style: TextStyle(
-                          color: Colors.white, fontFamily: FontColor.fontPoppins),
+                          color: Colors.black, fontFamily: FontColor.fontPoppins),
                     ))),
           )
         ],

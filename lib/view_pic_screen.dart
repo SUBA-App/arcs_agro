@@ -1,9 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
+import 'api/api_service.dart';
+
 class ViewPicScreen extends StatefulWidget {
-  const ViewPicScreen({super.key});
+  const ViewPicScreen({super.key, required this.url});
+
+  final String url;
 
   @override
   State<ViewPicScreen> createState() => _ViewPicScreenState();
@@ -20,11 +23,11 @@ class _ViewPicScreenState extends State<ViewPicScreen> {
           children: [
             IconButton(onPressed: () {
               Navigator.pop(context);
-            }, icon: Icon(Icons.arrow_back, color: Colors.white,)),
+            }, icon: const Icon(Icons.arrow_back, color: Colors.white,)),
             Expanded(
               child: PhotoView(
                   imageProvider: NetworkImage(
-                      'https://et2o98r3gkt.exactdn.com/wp-content/uploads/2021/05/bilyet-giro.jpg?strip=all&lossy=1&quality=92&webp=92&ssl=1&fit=656%2C365'),
+              '${ApiService.imageUrlPayment}${widget.url}'),
               ),
             ),
           ],

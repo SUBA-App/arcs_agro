@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sales_app/font_color.dart';
-import 'package:sales_app/next_absensi_screen.dart';
+import 'package:sales_app/screen/absensi/next_absensi_screen.dart';
 
 class TakePictureAbsensiScreen extends StatefulWidget {
   const TakePictureAbsensiScreen({super.key, required this.camera});
