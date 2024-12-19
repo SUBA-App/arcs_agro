@@ -5,6 +5,7 @@ import 'package:sales_app/api/api_service.dart';
 
 import 'package:sales_app/list_product_screen.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
+import 'package:sales_app/screen/absensi/next_absensi_provider.dart';
 import 'package:sales_app/screen/login_screen/login_provider.dart';
 import 'package:sales_app/screen/login_screen/login_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -29,6 +30,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => ReportProvider()),
       ChangeNotifierProvider(create: (_) => ProductProvider()),
+      ChangeNotifierProvider(create: (_) => NextAbsensiProvider()),
     ],
     child: const MyApp(),
   ),);

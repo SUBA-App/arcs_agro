@@ -19,7 +19,7 @@ import '../../service/location_foreground_service.dart';
 
 class MainProvider extends ChangeNotifier {
 
-  bool isLoading = false;
+  bool isLoading = true;
   ActiveResult? result;
 
   void showLoading(BuildContext context) {

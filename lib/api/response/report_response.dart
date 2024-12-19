@@ -1,5 +1,9 @@
 
 
+import 'dart:ui';
+
+import 'absen_response.dart';
+
 class ReportResponse {
   bool error;
   String message;
@@ -33,6 +37,7 @@ class ReportResult {
   Payment payment;
   String created_at;
   String time_at;
+  String note;
   int status;
   String checkDate;
 
@@ -46,6 +51,7 @@ class ReportResult {
     required this.payment,
     required this.created_at,
     required this.time_at,
+    required this.note,
     required this.status,
     required this.checkDate});
 
@@ -56,6 +62,7 @@ class ReportResult {
     salesCompany: json['sales_company'],
       storeName: json['store_name'],
       invoice: json['invoice'],
+    note: json['note'] ?? '',
     payment: Payment.fromJson(json['payment']),
     created_at: json['created_at'],
     time_at: json['time_at'],
@@ -69,6 +76,7 @@ class ReportResult {
     'sales_company': salesCompany,
     'store_name': storeName,
     'invoice': invoice,
+    'note': note,
     'payment':payment.toJson(),
     'created_at': created_at,
     'time_at': time_at,
@@ -82,20 +90,20 @@ class Payment {
   String methodName;
   String noGiro;
   String giroDate;
-  String picture;
+  List<ImageS> pictures;
   String bankName;
   int amount;
 
 
   Payment({required this.method,required this.methodName,required this.noGiro,required this.giroDate,
-    required this.picture,required this.bankName,required this.amount});
+    required this.pictures,required this.bankName,required this.amount});
 
   factory Payment.fromJson(Map<String, dynamic> json) => Payment(
       method: json["method"]?? 0,
       methodName: json['method_name'] ?? '',
     noGiro: json['no_giro'] ?? '',
     giroDate: json['giro_date'] ?? '',
-    picture: json['picture'] ?? '',
+    pictures: List<ImageS>.from(json['pictures'].map((e) => ImageS.fromJson(e))),
     bankName: json['bank_name'] ?? '',
     amount: json['amount'] ?? 0,
 
@@ -106,7 +114,7 @@ class Payment {
     "method_name": methodName,
     'no_giro': noGiro,
     'giro_date': giroDate,
-    'picture': picture,
+    'pictures':List<dynamic>.from(pictures.map((e) => e.toJson())),
     'bank_name': bankName,
     'amount': amount
   };

@@ -44,6 +44,7 @@ class ProductData {
   String productNo;
   int price;
   int size;
+  int show;
   String qty;
   String composition;
 
@@ -53,6 +54,7 @@ class ProductData {
       required this.productNo,
       required this.price,
       required this.size,
+        required this.show,
       required this.qty,
       required this.composition});
 
@@ -62,6 +64,7 @@ class ProductData {
       productNo: json['product_no'],
       price: json['price'],
       size: json['size'],
+      show: json['show'] ?? 1,
       qty: json['qty'],
       composition: json['composition']);
 
@@ -71,6 +74,7 @@ class ProductData {
         "product_no": productNo,
         "price": price,
         "size": size,
+    'show': show,
         "qty": qty,
         "composition": composition
       };

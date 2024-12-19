@@ -20,53 +20,56 @@ class ProductItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(result.productName, style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black
-                  ),),
-                  Row(
-                    children: [
-                      Text('Isi ${result.qty.isEmpty ? '-' : result.qty}', style: TextStyle(
-                          fontFamily: FontColor.fontPoppins,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: FontColor.black
-                      ),),
-                      SizedBox(width: 8,),
-                      Text('Ukuran ${result.size}', style: TextStyle(
-                          fontFamily: FontColor.fontPoppins,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: FontColor.black
-                      ),),
-                    ],
-                  ),
-                  Text(result.composition.isEmpty ? '-' : result.composition, style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: FontColor.black
-                  ),),
-                  Text('No ${result.productNo}', style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: FontColor.black.withOpacity(0.7)
-                  ),),
-                ],
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(result.productName, style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black
+                    ),),
+                    Row(
+                      children: [
+                        Text('Isi ${result.qty.isEmpty ? '-' : result.qty}', style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: FontColor.black
+                        ),),
+                        SizedBox(width: 8,),
+                        Text('Ukuran ${result.size}', style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: FontColor.black
+                        ),),
+                      ],
+                    ),
+                    Text(result.composition.isEmpty ? '-' : result.composition, style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: FontColor.black
+                    ),),
+                    Text('No ${result.productNo}', style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: FontColor.black.withOpacity(0.7)
+                    ),),
+                  ],
+                ),
               ),
+              result.show == 1 ?
               Text('16.000', style: TextStyle(
                   fontFamily: FontColor.fontPoppins,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: FontColor.black
-              ),),
+              ),) : SizedBox(),
             ],
           ),
         ),

@@ -69,11 +69,11 @@ class AbsensiProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addAbsen(BuildContext context, File file) async {
+  Future<void> addAbsen(BuildContext context, List<File> files, String kios) async {
     showLoading(context);
 
     final position = await _determinePosition();
-    final response = await ApiService.addAbsen(file, position.latitude, position.longitude);
+    final response = await ApiService.addAbsen(files, position.latitude, position.longitude, kios);
 
     if (response.runtimeType == DefaultResponse) {
       final resp = response as DefaultResponse;
@@ -86,9 +86,15 @@ class AbsensiProvider extends ChangeNotifier {
         }
         Fluttertoast.showToast(msg: 'Absensi Berhasil');
       } else {
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
         Fluttertoast.showToast(msg: resp.message);
       }
     } else {
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
       Fluttertoast.showToast(msg: response.toString());
     }
   }

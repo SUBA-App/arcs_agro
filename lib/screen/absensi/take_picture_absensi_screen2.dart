@@ -5,16 +5,16 @@ import 'package:flutter/services.dart';
 import 'package:sales_app/font_color.dart';
 import 'package:sales_app/screen/absensi/next_absensi_screen.dart';
 
-class TakePictureAbsensiScreen extends StatefulWidget {
-  const TakePictureAbsensiScreen({super.key, required this.camera});
+class TakePictureAbsensiScreen2 extends StatefulWidget {
+  const TakePictureAbsensiScreen2({super.key, required this.camera});
 
   final CameraDescription camera;
 
   @override
-  State<TakePictureAbsensiScreen> createState() => _TakePictureAbsensiScreenState();
+  State<TakePictureAbsensiScreen2> createState() => _TakePictureAbsensiScreenState();
 }
 
-class _TakePictureAbsensiScreenState extends State<TakePictureAbsensiScreen> {
+class _TakePictureAbsensiScreenState extends State<TakePictureAbsensiScreen2> {
 
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
@@ -83,14 +83,8 @@ class _TakePictureAbsensiScreenState extends State<TakePictureAbsensiScreen> {
                         fontSize: 16
                       ),),
 
-                        IconButton(onPressed: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => NextAbsensiScreen(
-                                paths: paths,
-                              ),
-                            ),
-                          );
+                        IconButton(onPressed: () {
+                         Navigator.pop(context, paths);
                         },style: ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(Colors.green)
                         ), icon: Icon(Icons.check, color: Colors.white,)),

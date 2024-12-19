@@ -52,6 +52,17 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
   }
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((e) {
+      Provider.of<ReportProvider>(context, listen: false).loadBanks(context);
+    });
+
+    super.initState();
+  }
+
+  bool isKet = false;
+
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ReportProvider>(context);
     return Scaffold(
@@ -238,32 +249,92 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                       ],
                     )
                         : const SizedBox.shrink(),
-                    provider.selectedMethod?.id == 2 ? TextField(
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: FontColor.fontPoppins,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      cursorColor: FontColor.black,
-                      controller: provider.bankName,
-                      decoration: InputDecoration(
-                          hintText: "Nama Bank",
-                          hintStyle: TextStyle(
-                              fontFamily: FontColor.fontPoppins,
-                              fontWeight: FontWeight.w400,
-                              color: FontColor.black),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Colors.black26,
+                    provider.selectedMethod?.id == 2 || provider.selectedMethod?.id == 3 ?GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.white,
+
+                            builder: (context) {
+                              final provider2 = Provider.of<ReportProvider>(context);
+                          return Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Text("Pilih Bank", style: TextStyle(
+                                    fontFamily: FontColor.fontPoppins,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500
+                                ),),
+                                SizedBox(height: 16,),
+                                SearchBar(
+                                  backgroundColor: WidgetStatePropertyAll(Color(0xFFf0f0f0)),
+                                  elevation: WidgetStatePropertyAll(0),
+                                  padding: WidgetStatePropertyAll(EdgeInsets.all(8)),
+                                  hintText: "Cari Nama Bank",
+                                  hintStyle: WidgetStatePropertyAll(TextStyle(
+                                      fontFamily: FontColor.fontPoppins,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,color: Colors.black54
+                                  )),
+                                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  )),
+                                  leading: Icon(Icons.search, color: Colors.grey,),
+                                  onChanged: (e) {
+                                    Provider.of<ReportProvider>(context, listen: false).searchBank(e);
+                                  },
+                                ),
+                                SizedBox(height: 16,),
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount:provider2.banks.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Provider.of<ReportProvider>(context, listen: false).setBank(provider.banks[index]);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(vertical: 16),
+                                        decoration: BoxDecoration(
+                                          border: Border(bottom: BorderSide(color: Colors.black12))
+                                        ),
+                                        child: Text(provider2.banks[index].name, style: TextStyle(
+                                            fontFamily: FontColor.fontPoppins,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400
+                                        ),),
+                                      ),
+                                    );
+                                  }),
+                                )
+                              ],
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: FontColor.yellow72,
-                              ))),
-                    ) : const SizedBox(),
+                          );
+                        });
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(provider.selectedBank == null ?"Pilih Bank" : provider.selectedBank!.name, style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400
+                            ),),
+                            Icon(Icons.arrow_drop_down, color: Colors.black54,)
+                          ],
+                        ),
+                      ),
+                    ) :const SizedBox(),
                     const SizedBox(height: 16,),
                     provider.selectedMethod != null ? TextField(
                       style: TextStyle(
@@ -283,7 +354,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                           labelStyle: TextStyle(
                               fontFamily: FontColor.fontPoppins,
                               fontWeight: FontWeight.w400,
-                              color: FontColor.black, fontSize: 14),
+                              color: FontColor.black.withOpacity(0.7), fontSize: 14),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: const BorderSide(
@@ -296,15 +367,84 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                 color: FontColor.yellow72,
                               ))),
                     ) :const SizedBox.shrink(),
-                    const SizedBox(
-                      height: 16,
+                    SizedBox(height: 8,),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width:24,
+                                height: 24,
+                                child: Checkbox(value: isKet, onChanged: (v) {
+                                  setState(() {
+                                    isKet = v!;
+                                  });
+                                  Provider.of<ReportProvider>(context, listen: false).ket.clear();
+                                }, activeColor: FontColor.black,shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)
+                                ),)),
+                            Text("Tambah Keterangan",style: TextStyle(
+                                fontFamily: FontColor.fontPoppins,
+                                fontWeight: FontWeight.w400,
+                                color: FontColor.black, fontSize: 12), )
+                          ],
+                        ),
+                        SizedBox(height: 8,),
+                        isKet ? TextField(
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: FontColor.fontPoppins,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          cursorColor: FontColor.black,
+                          controller: provider.ket,
+
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                              labelText: "Keterangan",
+                              labelStyle: TextStyle(
+                                  fontFamily: FontColor.fontPoppins,
+                                  fontWeight: FontWeight.w400,
+                                  color: FontColor.black.withOpacity(0.7), fontSize: 14),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Colors.black26,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: FontColor.yellow72,
+                                  ))),
+                        ) : SizedBox()
+                      ],
                     ),
+                    provider.selectedMethod?.id == 2 || provider.selectedMethod?.id == 3 ?
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: provider.selectedListImage.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                      return Container(
+                        width: double.infinity,
+                        height: 200,
+                        margin: EdgeInsets.only(top: 8),
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black12,)
+                        ),
+                        child: Center(child: ClipRRect(borderRadius: BorderRadius.circular(10),child: Image.file(provider.selectedListImage[index], ))),
+                      );
+                    }) :SizedBox(),
+                    SizedBox(height: 16,),
                     provider.selectedMethod?.id == 2 || provider.selectedMethod?.id == 3 ? GestureDetector(
                       onTap: () async {
-                        final picker = await ImagePicker().pickImage(source: ImageSource.gallery);
-                        if (picker != null) {
-                          final file = File(picker.path);
-                          Provider.of<ReportProvider>(context, listen: false).setImage(file);
+                        final picker = await ImagePicker().pickMultiImage();
+                        if (picker.isNotEmpty) {
+                          Provider.of<ReportProvider>(context, listen: false).setImage(picker);
                         }
                       },
                       child: SizedBox(
@@ -314,9 +454,10 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                             color: Colors.grey,
                             radius: const Radius.circular(10),
                             strokeWidth: 1,
-                            child: Center(child: provider.selectedImage == null ? Image.asset('assets/images/new.png', width: 50,height: 50,) : Image.file(provider.selectedImage!))),
+                            child:  Center(child: Image.asset('assets/images/new.png', width: 50,height: 50,))),
                       ),
                     ) : const SizedBox.shrink(),
+                    SizedBox(height: 16,)
                   ],
                 ),
               ),

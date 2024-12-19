@@ -31,10 +31,10 @@ class AbsenResult {
   String checkOut;
   String checkInTime;
   String checkOutTime;
-  String picture;
-  List<Coordinate> coordinates;
+  List<String> pictures;
+  String storeName;
 
-  AbsenResult({required this.id, required this.status, required this.checkIn, required this.checkOut,required this.checkInTime, required this.checkOutTime, required this.picture, required this.coordinates});
+  AbsenResult({required this.id, required this.status, required this.checkIn, required this.checkOut,required this.checkInTime, required this.checkOutTime, required this.pictures, required this.storeName});
 
   factory AbsenResult.fromJson(Map<String, dynamic> json) => AbsenResult(
     id: json["id"],
@@ -43,8 +43,9 @@ class AbsenResult {
     checkOut: json['check_out'],
       checkInTime: json['check_in_time'],
       checkOutTime: json['check_out_time'],
-    picture: json['picture'],
-    coordinates: List<Coordinate>.from(json['coordinates'].map((e) => Coordinate.fromJson(e)))
+    storeName: json['store_name'],
+    pictures: List<String>.from(json['pictures'].map((e) => e)),
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -54,8 +55,8 @@ class AbsenResult {
     'check_out': checkOut,
     'check_in_time': checkInTime,
     'check_out_time': checkOutTime,
-    'picture':picture,
-    'coordinates': List<dynamic>.from(coordinates.map((e) => e.toJson()))
+    'store_name': storeName,
+    'pictures':List<dynamic>.from(pictures.map((e) => e)),
   };
 }
 
@@ -76,5 +77,19 @@ class Coordinate {
     "coordinate": coordinate,
     "time": time,
     'status': status
+  };
+}
+
+class ImageS {
+  String image;
+
+  ImageS({required this.image});
+
+  factory ImageS.fromJson(Map<String, dynamic> json) => ImageS(
+      image: json["image"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "image": image,
   };
 }

@@ -1,32 +1,30 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:flutter_foreground_task/models/service_request_result.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sales_app/api/api_service.dart';
 import 'package:sales_app/api/body/report_body.dart';
 import 'package:sales_app/api/model/method.dart';
-import 'package:sales_app/api/response/absen_response.dart';
-import 'package:sales_app/api/response/active_absen_response.dart';
 import 'package:sales_app/api/response/customer_response.dart';
 import 'package:sales_app/api/response/default_response.dart';
 import 'package:sales_app/api/response/invoice_response.dart';
 import 'package:sales_app/api/response/report_response.dart';
-import 'package:sales_app/screen/main/main_page.dart';
+import 'package:sales_app/bank.dart';
 import 'package:sales_app/util.dart';
-import 'package:sales_app/util/preferences.dart';
 
-import '../../service/location_foreground_service.dart';
 
 class ReportProvider extends ChangeNotifier {
 
   bool isLoading = false;
   List<ReportResult> reports = [];
   List<ReportResult> reports2 = [];
+
+  List<Bank> banks = [];
+  List<Bank> banks2 = [];
 
   List<CustData> customers = [];
   List<CustData> customers2 = [];
@@ -49,10 +47,11 @@ class ReportProvider extends ChangeNotifier {
   TextEditingController noGiro = TextEditingController();
   TextEditingController giroDate = TextEditingController();
   TextEditingController amount = TextEditingController();
-  TextEditingController bankName = TextEditingController();
+  TextEditingController ket = TextEditingController();
+  Bank? selectedBank;
   Method? selectedMethod;
   String selectedGiroDate = '';
-  File? selectedImage;
+  List<File> selectedListImage = [];
 
   List<Method> methods = [
     Method('Tunai', 1),
@@ -60,8 +59,30 @@ class ReportProvider extends ChangeNotifier {
     Method('Cek/Giro', 3)
   ];
 
+  Future<void> loadBanks(BuildContext context) async {
+    String data = await DefaultAssetBundle.of(context).loadString("assets/json/banks.json");
+    final bankse = (jsonDecode(data) as List).map((e) => Bank.fromJson(e)).toList();
+    banks.clear();
+    banks2.clear();
+    banks.addAll(bankse);
+    banks2.addAll(bankse);
+    notifyListeners();
+  }
+
   void setMethod(Method method) {
     selectedMethod = method;
+    if (method.id == 2) {
+      selectedGiroDate = "";
+      noGiro.text = "";
+      selectedListImage.clear();
+    } else if (method.id == 3) {
+      selectedListImage.clear();
+    } else {
+      selectedGiroDate = "";
+      noGiro.text = "";
+      selectedBank == null;
+      selectedListImage.clear();
+    }
     notifyListeners();
   }
 
@@ -71,8 +92,31 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setImage(File? file) {
-    selectedImage = file;
+  void setBank(Bank bank) {
+    selectedBank = bank;
+    notifyListeners();
+  }
+
+  void searchBank(String value) {
+    banks.clear();
+    if (value.isNotEmpty) {
+      for (var e in banks2) {
+        if (e.name.toLowerCase().contains(value.toLowerCase())) {
+          banks.add(e);
+
+        }
+      }
+    } else {
+      banks.addAll(banks2);
+    }
+    notifyListeners();
+  }
+
+  void setImage(List<XFile> files) {
+    selectedListImage.clear();
+    for(var i in files) {
+      selectedListImage.add(File(i.path));
+    }
     notifyListeners();
   }
 
@@ -194,7 +238,7 @@ class ReportProvider extends ChangeNotifier {
     reports = [];
     if (value.isNotEmpty) {
       for (var e in reports2) {
-        if (e.storeName.contains(value)) {
+        if (e.storeName.toLowerCase().contains(value.toLowerCase())) {
           reports.add(e);
         }
       }
@@ -221,8 +265,8 @@ class ReportProvider extends ChangeNotifier {
         if (amount.text.isEmpty
             || selectedKios == 'Pilih Kios'
             || selectedInvoiceId == 0
-        || selectedImage == null
-        || bankName.text.isEmpty
+        || selectedListImage.isEmpty
+        || selectedBank == null
         ) {
           error = true;
         }
@@ -232,7 +276,7 @@ class ReportProvider extends ChangeNotifier {
             || selectedInvoiceId == 0
         || noGiro.text.isEmpty
         || giroDate.text.isEmpty
-        || selectedImage == null
+        || selectedListImage.isEmpty
 
         ) {
           error = true;
@@ -244,10 +288,10 @@ class ReportProvider extends ChangeNotifier {
 
     if (!error) {
 
-      final body = ReportBody(selectedKios, selectedInvoiceId.toString(), selectedMethod!.id.toString(), noGiro.text, giroDate.text, bankName.text, int.parse(Util.toClearNumber(amount.text)));
+      final body = ReportBody(selectedKios, selectedInvoiceId.toString(), selectedMethod!.id.toString(), noGiro.text, giroDate.text, selectedBank?.name ?? '', int.parse(Util.toClearNumber(amount.text)), ket.text);
 
       showLoading(context);
-      final response = await ApiService.addReport(selectedImage, body);
+      final response = await ApiService.addReport(selectedListImage, body);
       if (response.runtimeType == DefaultResponse) {
         final resp = response as DefaultResponse;
         if (!resp.error) {

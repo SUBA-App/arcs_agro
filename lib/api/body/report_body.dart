@@ -6,9 +6,10 @@ class ReportBody {
   String giroDate;
   String bankName;
   int amount;
+  String note = "";
 
   ReportBody(this.storeName, this.invoice, this.paymentMethod, this.noGiro,
-      this.giroDate, this.bankName, this.amount);
+      this.giroDate, this.bankName, this.amount, this.note);
 
   Map<String, dynamic> toJson() => {
     'store_name': storeName,
@@ -17,6 +18,7 @@ class ReportBody {
     'no_giro': noGiro,
     'giro_date': giroDate,
     'bank_name': bankName,
-    'amount': amount.toString()
+    'amount': amount.toString(),
+    'note': note
   };
 }

@@ -12,6 +12,7 @@ import 'package:sales_app/screen/product/product_screen.dart';
 import 'package:sales_app/screen/report/laporan_kerja_screen.dart';
 import 'package:sales_app/screen/main/main_provider.dart';
 import 'package:sales_app/service/location_foreground_service.dart';
+import 'package:sales_app/util/preferences.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -96,13 +97,36 @@ class _MainPageState extends State<MainPage> {
           children: [
             Column(
               children: [
-                const SizedBox(
+                SizedBox(
                   width: double.infinity,
                   child: DrawerHeader(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: FontColor.yellow72,
                     ),
-                    child: Text('Sales App'),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 60,
+                          width: 60,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.asset('assets/images/businessman.png', width: 80,height: 80,),
+                          ),
+                        ),
+                        Text(Preferences.getUser()?.name ?? '', style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            fontWeight: FontWeight.w500,
+                            color: FontColor.black,
+                            fontSize: 14
+                        ),),
+                        Text("Sales - ${Preferences.getUser()?.companyName}", style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: FontColor.black.withOpacity(0.7)
+                        ),),
+                      ],
+                    ),
                   ),
                 ),
                 ListTile(

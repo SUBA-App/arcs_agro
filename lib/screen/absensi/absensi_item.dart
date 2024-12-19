@@ -37,7 +37,7 @@ class AbsensiItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Absensi", style: TextStyle(
+                  Text(result?.storeName ?? "", style: TextStyle(
                       fontFamily: FontColor.fontPoppins,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

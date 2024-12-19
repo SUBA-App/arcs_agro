@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 24,),
-              provider.isLoading ? const SizedBox() : provider.result?.status == 0 ? const SizedBox() :
+              provider.isLoading || provider.result?.status == 0 ? const SizedBox() :
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

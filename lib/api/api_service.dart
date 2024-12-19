@@ -1,9 +1,8 @@
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,10 +24,10 @@ import '../util/preferences.dart';
 
 class ApiService {
 
-  static const _baseUrl = 'http://10.0.2.2:8000/api/';
+  static const _baseUrl = 'https://weles.my.id/api/';
 
-  static const imageUrl = 'http://10.0.2.2:8000/storage/images/absensi/';
-  static const imageUrlPayment = 'http://10.0.2.2:8000/storage/images/payment/';
+  static const imageUrl = 'https://weles.my.id/storage/images/absensi/';
+  static const imageUrlPayment = 'https://weles.my.id/storage/images/payment/';
 
   static Map<String,String> _headers = {};
 
@@ -107,7 +106,7 @@ class ApiService {
       final response = await http.get(
           Uri.parse('${_baseUrl}absensi/detail/$id'), headers: _headers);
       if (kDebugMode) {
-        print('response absensi active: ${response.body}');
+        print('response absensi detail: ${response.body}');
       }
       return ActiveAbsenResponse.fromJson(jsonDecode(response.body) as Map<String,dynamic>);
     } catch (e) {
@@ -118,14 +117,18 @@ class ApiService {
     }
   }
 
-  static Future<Object> addAbsen(File file, double latitude, double longitude) async {
+  static Future<Object> addAbsen(List<File> files, double latitude, double longitude, String kios) async {
     try {
       var request =  http.MultipartRequest("POST", Uri.parse('${_baseUrl}absensi/add'));
       request.headers.addAll(_headers);
-      request.files.add(await http.MultipartFile.fromPath(
-        'image',
-        file.path,
-      ));
+      for(var i in files) {
+        print(i.path);
+        request.files.add(await http.MultipartFile.fromPath(
+          'images[]',
+          i.path,
+        ));
+      }
+      request.fields['store_name'] = kios;
       request.fields['latitude'] = latitude.toString();
       request.fields['longitude'] = longitude.toString();
       final response = await request.send();
@@ -284,15 +287,17 @@ class ApiService {
 
 
 
-  static Future<Object> addReport(File? file, ReportBody body) async {
+  static Future<Object> addReport(List<File> files, ReportBody body) async {
     try {
       var request =  http.MultipartRequest("POST", Uri.parse('${_baseUrl}report/add'));
       request.headers.addAll(_headers);
-      if (file != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'image',
-          file.path,
-        ));
+      if (files.isNotEmpty) {
+        for (var e in files) {
+          request.files.add(await http.MultipartFile.fromPath(
+            'images[]',
+            e.path,
+          ));
+        }
       }
       request.fields['store_name'] = body.storeName;
       request.fields['invoice'] = body.invoice;
@@ -301,6 +306,7 @@ class ApiService {
       request.fields['giro_date'] = body.giroDate;
       request.fields['bank_name'] = body.bankName;
       request.fields['amount'] = body.amount.toString();
+      request.fields['note'] = body.note;
 
       final response = await request.send();
       if(response.statusCode == 200) {
@@ -343,7 +349,7 @@ class ApiService {
         print('response check : ${response.body}');
       }
       final json = jsonDecode(response.body) as Map<String,dynamic>;
-      if (json['message'] == 'unauthenticated') {
+      if (json['message'] == 'Unauthenticated.') {
         Preferences.clear();
         if (context.mounted) {
           Navigator.pushAndRemoveUntil(
