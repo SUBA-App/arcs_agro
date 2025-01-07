@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sales_app/api/api_service.dart';
 import 'package:sales_app/screen/main/main_page.dart';
+import 'package:sales_app/screen/main/pin_screen/pin_screen.dart';
 
 import '../../api/response/login_response.dart';
 import '../../util/preferences.dart';
@@ -37,9 +38,16 @@ class LoginProvider extends ChangeNotifier {
           await Preferences.saveSession(resp.result!.token, resp.result!.user);
           ApiService.init();
           if (context.mounted) {
-            Navigator.pop(context);
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (context) => const MainPage()), (e) => false);
+            if (resp.result!.user.hasPin) {
+              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) => const PinScreen(mode: 3)), (e) => false);
+            } else {
+              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) => const PinScreen(mode: 1)), (e) => false);
+            }
+            
           }
         } else {
           if (context.mounted) {

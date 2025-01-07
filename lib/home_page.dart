@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/screen/absensi/absensi_item.dart';
+import 'package:sales_app/screen/absensi/absensi_provider.dart';
 import 'package:sales_app/screen/main/main_page.dart';
 import 'package:sales_app/screen/main/main_provider.dart';
 import 'package:sales_app/screen/product/product_screen.dart';

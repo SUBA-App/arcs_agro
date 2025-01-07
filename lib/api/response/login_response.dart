@@ -26,6 +26,7 @@ class LoginResponse {
 
 class Result {
   String token;
+
   User user;
 
 

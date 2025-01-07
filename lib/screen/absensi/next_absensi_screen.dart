@@ -29,6 +29,9 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
   final controller = PageController();
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((e) {
+      Provider.of<NextAbsensiProvider>(context, listen: false).setKios('Pilih Kios', 0);
+    });
     availableCameras().then((e) {
       cameraDescription = e.first;
     });
@@ -159,7 +162,6 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                     onPressed: () async {
-                      if (widget.paths.isNotEmpty || Provider.of<NextAbsensiProvider>(context, listen: false).selectedKios != "Pilih Kios") {
                         List<File> files = [];
                         for(var i in widget.paths) {
                           files.add(File(i));
@@ -167,9 +169,6 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                         await Provider.of<AbsensiProvider>(
                             context, listen: false).addAbsen(
                             context, files, Provider.of<NextAbsensiProvider>(context, listen: false).selectedKios);
-                      } else {
-                        Fluttertoast.showToast(msg: 'Data Belum Lengkap');
-                      }
                     },
                     style: ButtonStyle(
                         backgroundColor:

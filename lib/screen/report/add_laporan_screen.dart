@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +15,7 @@ import 'package:sales_app/screen/report/report_provider.dart';
 
 import '../../currency_formatter.dart';
 import '../../font_color.dart';
+import '../absensi/take_picture_absensi_screen2.dart';
 
 class AddLaporanScreen extends StatefulWidget {
   const AddLaporanScreen({super.key});
@@ -41,23 +44,68 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
       },
         context: context,
         locale: const Locale("id"),
-        firstDate: DateTime(2024, 1),
-        lastDate: DateTime.now());
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2100, 1));
     if (picked != null) {
       setState(() {
         final format = DateFormat('dd MMMM yyyy').format(picked);
-        Provider.of<ReportProvider>(context, listen: false).setGiroDate(format);
+        Provider.of<ReportProvider>(context, listen: false).setGiroDate(format, picked.millisecondsSinceEpoch);
       });
     }
   }
 
+  Future<void> payDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        builder: (context, child) {
+          return Theme(data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: FontColor.yellow72, // header background color
+              onPrimary: Colors.black, // header text color
+              onSurface: FontColor.black, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: FontColor.black, // button text color
+              ),
+            ),
+          ), child: child!);
+        },
+        context: context,
+        locale: const Locale("id"),
+        firstDate: DateTime(2024,1),
+        lastDate: DateTime(2100, 1));
+    if (picked != null) {
+      setState(() {
+        final format = DateFormat('dd MMMM yyyy').format(picked);
+        Provider.of<ReportProvider>(context, listen: false).setPayDate(format, picked.millisecondsSinceEpoch);
+      });
+    }
+  }
+
+  late CameraDescription cameraDescription;
+
+
+
   @override
   void initState() {
+    availableCameras().then((e) {
+      cameraDescription = e.first;
+    });
     WidgetsBinding.instance.addPostFrameCallback((e) {
       Provider.of<ReportProvider>(context, listen: false).loadBanks(context);
+      final dateTime = DateTime.now();
+      final format = DateFormat('dd MMMM yyyy').format(dateTime);
+      Provider.of<ReportProvider>(context, listen: false).setPayDate(format, dateTime.millisecondsSinceEpoch);
+      Provider.of<ReportProvider>(context, listen: false).clearData();
     });
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+
+    super.didChangeDependencies();
   }
 
   bool isKet = false;
@@ -84,7 +132,39 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    GestureDetector(
+                    InkWell(
+                      borderRadius: BorderRadius.circular(15),
+                      onTap: () {
+                        payDate(context);
+                      },
+                      child: Card(
+                        color: Colors.white,
+                        shadowColor: Colors.white,
+                        surfaceTintColor: Colors.grey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset('assets/images/daily-calendar.png', width: 16,height: 16,),
+                                  const SizedBox(width: 8,),
+                                  Text('Tanggal Pembayaran', style: TextStyle(
+                                      fontFamily: FontColor.fontPoppins, color: Colors.black54, fontSize: 12),)
+                                ],
+                              ),
+                              const SizedBox(height: 8,),
+                              Text(provider.selectedPayDate, style: TextStyle(
+                                  fontFamily: FontColor.fontPoppins, color: FontColor.black, fontSize: 14),)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8,),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(15),
                       onTap: () async {
                         final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const ChooseCustomerScreen()));
                         if (result != null) {
@@ -93,27 +173,37 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                       },
                       child: Card(
                         color: Colors.white,
-                        child: Container(
-                          height: 45,
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          shadowColor: Colors.white,
+                          surfaceTintColor: Colors.grey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                children: [
+                                  Image.asset('assets/images/store-alt.png', width: 16,height: 16,),
+                                  const SizedBox(width: 8,),
+                                  Text('Nama Kios', style: TextStyle(
+                                      fontFamily: FontColor.fontPoppins, color: Colors.black54, fontSize: 12),)
+                                ],
+                              ),
+                              const SizedBox(height: 8,),
                               Text(provider.selectedKios, style: TextStyle(
                                 fontSize: 14,
                                 fontFamily: FontColor.fontPoppins,
                                 fontWeight: FontWeight.w400,
                               ),),
-                              const Icon(Icons.keyboard_arrow_right, color: Colors.black54,)
                             ],
                           ),
-                        ),
+                        )
                       ),
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
-                    GestureDetector(
+                    InkWell(
+                      borderRadius: BorderRadius.circular(15),
                       onTap: () async {
                         final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseInvoiceScreen(customerId: provider.selectedKiosId.toString())));
                         if (result != null) {
@@ -121,26 +211,35 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                         }
                       },
                       child: Card(
-                        color: Colors.white,
-                        child: Container(
-                          height: 45,
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(provider.selectedInvoiceId == 0 ? 'Pilih Invoice' : provider.selectedInvoiceId.toString(), style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: FontColor.fontPoppins,
-                                fontWeight: FontWeight.w400,
-                              ),),
-                              const Icon(Icons.keyboard_arrow_right, color: Colors.black54,)
-                            ],
-                          ),
-                        ),
+                          color: Colors.white,
+                          shadowColor: Colors.white,
+                          surfaceTintColor: Colors.grey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset('assets/images/receipt.png', width: 16,height: 16,),
+                                    const SizedBox(width: 8,),
+                                    Text('Invoice', style: TextStyle(
+                                        fontFamily: FontColor.fontPoppins, color: Colors.black54, fontSize: 12),)
+                                  ],
+                                ),
+                                const SizedBox(height: 8,),
+                                Text(provider.selectedInvoiceId == 0 ? 'Pilih Invoice' : provider.selectedInvoiceId.toString(), style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: FontColor.fontPoppins,
+                                  fontWeight: FontWeight.w400,
+                                ),),
+                              ],
+                            ),
+                          )
                       ),
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
                     DropdownButtonFormField(
                         style: TextStyle(
@@ -178,7 +277,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                          Provider.of<ReportProvider>(context, listen: false).setMethod(value!);
                         }),
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
                     provider.selectedMethod?.id == 3
                         ? Column(
@@ -266,11 +365,11 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500
                                 ),),
-                                SizedBox(height: 16,),
+                                const SizedBox(height: 16,),
                                 SearchBar(
-                                  backgroundColor: WidgetStatePropertyAll(Color(0xFFf0f0f0)),
-                                  elevation: WidgetStatePropertyAll(0),
-                                  padding: WidgetStatePropertyAll(EdgeInsets.all(8)),
+                                  backgroundColor: const WidgetStatePropertyAll(Color(0xFFf0f0f0)),
+                                  elevation: const WidgetStatePropertyAll(0),
+                                  padding: const WidgetStatePropertyAll(EdgeInsets.all(8)),
                                   hintText: "Cari Nama Bank",
                                   hintStyle: WidgetStatePropertyAll(TextStyle(
                                       fontFamily: FontColor.fontPoppins,
@@ -280,12 +379,12 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                   shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)
                                   )),
-                                  leading: Icon(Icons.search, color: Colors.grey,),
+                                  leading: const Icon(Icons.search, color: Colors.grey,),
                                   onChanged: (e) {
                                     Provider.of<ReportProvider>(context, listen: false).searchBank(e);
                                   },
                                 ),
-                                SizedBox(height: 16,),
+                                const SizedBox(height: 16,),
                                 Expanded(
                                   child: ListView.builder(
                                     itemCount:provider2.banks.length,
@@ -297,8 +396,8 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                         Provider.of<ReportProvider>(context, listen: false).setBank(provider.banks[index]);
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(vertical: 16),
-                                        decoration: BoxDecoration(
+                                        padding: const EdgeInsets.symmetric(vertical: 16),
+                                        decoration: const BoxDecoration(
                                           border: Border(bottom: BorderSide(color: Colors.black12))
                                         ),
                                         child: Text(provider2.banks[index].name, style: TextStyle(
@@ -317,7 +416,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                       },
                       child: Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.grey),
@@ -330,7 +429,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.w400
                             ),),
-                            Icon(Icons.arrow_drop_down, color: Colors.black54,)
+                            const Icon(Icons.arrow_drop_down, color: Colors.black54,)
                           ],
                         ),
                       ),
@@ -367,7 +466,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                 color: FontColor.yellow72,
                               ))),
                     ) :const SizedBox.shrink(),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8,),
                     Column(
                       children: [
                         Row(
@@ -389,7 +488,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                 color: FontColor.black, fontSize: 12), )
                           ],
                         ),
-                        SizedBox(height: 8,),
+                        const SizedBox(height: 8,),
                         isKet ? TextField(
                           style: TextStyle(
                             fontSize: 14,
@@ -418,46 +517,121 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                   borderSide: const BorderSide(
                                     color: FontColor.yellow72,
                                   ))),
-                        ) : SizedBox()
+                        ) : const SizedBox()
                       ],
                     ),
-                    provider.selectedMethod?.id == 2 || provider.selectedMethod?.id == 3 ?
-                    ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: provider.selectedListImage.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                      return Container(
+                    const SizedBox(height: 16,),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        showModalBottomSheet(context: context, builder: (context) {
+                          return Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextButton(
+                                  onPressed: () async {
+                                    List<XFile> files = [];
+                                    final result =await  Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureAbsensiScreen2(camera: cameraDescription)));
+                                    if (result != null) {
+                                      for(var i in result) {
+                                        files.add(XFile(i));
+                                      }
+                                      Provider.of<ReportProvider>(context, listen: false).setImage(files);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Text('Kamera', style: TextStyle(
+                                      fontFamily: FontColor.fontPoppins,
+                                      fontSize: 14,
+                                      color: FontColor.black
+                                  ),),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    final picker = await ImagePicker().pickMultiImage();
+                                    if (picker.isNotEmpty) {
+                                      Provider.of<ReportProvider>(context, listen: false).setImage(picker);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Text('Galeri', style: TextStyle(
+                                      fontFamily: FontColor.fontPoppins,
+                                      fontSize: 14,
+                                      color: FontColor.black
+                                  ),),
+                                ),
+                              ],
+                            ),
+                          );
+                        });
+
+                      },
+                      child: Container(
                         width: double.infinity,
-                        height: 200,
-                        margin: EdgeInsets.only(top: 8),
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.black12,)
+                          color: Color(0xFFfcfcfc),
+                          border: Border.all(color: Colors.black26)
                         ),
-                        child: Center(child: ClipRRect(borderRadius: BorderRadius.circular(10),child: Image.file(provider.selectedListImage[index], ))),
-                      );
-                    }) :SizedBox(),
-                    SizedBox(height: 16,),
-                    provider.selectedMethod?.id == 2 || provider.selectedMethod?.id == 3 ? GestureDetector(
-                      onTap: () async {
-                        final picker = await ImagePicker().pickMultiImage();
-                        if (picker.isNotEmpty) {
-                          Provider.of<ReportProvider>(context, listen: false).setImage(picker);
-                        }
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 200,
-                        child: DottedBorder(
-                            color: Colors.grey,
-                            radius: const Radius.circular(10),
-                            strokeWidth: 1,
-                            child:  Center(child: Image.asset('assets/images/new.png', width: 50,height: 50,))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Tambah Foto', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              color: FontColor.black
+                            ),),
+                            Image.asset('assets/images/add-image.png', width: 16,height: 16,),
+                          ],
+                        ),
                       ),
-                    ) : const SizedBox.shrink(),
-                    SizedBox(height: 16,)
+                    ),
+                    const SizedBox(height: 16,),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: provider.selectedListImage.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 200,
+                            margin: const EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.black12,)
+                            ),
+                            child: Center(child: ClipRRect(borderRadius: BorderRadius.circular(10),child: Image.file(provider.selectedListImage[index], ))),
+                          ),
+                          Positioned(
+                            top:16,
+                            right: 8,
+                            child: SizedBox(
+                              width:25,
+                              height:25,
+                              child: IconButton(onPressed: () {
+                                Provider.of<ReportProvider>(context, listen: false).removeImage(Provider.of<ReportProvider>(context, listen: false).selectedListImage[index]);
+                              }, style: const ButtonStyle(
+                                  backgroundColor: WidgetStatePropertyAll(Colors.red),
+                                  padding: WidgetStatePropertyAll(EdgeInsets.zero)
+                              ),icon: const Icon(Icons.clear, color: Colors.white,size: 20,)),
+                            ),
+                          )
+                        ],
+                      );
+                    }),
+                    const SizedBox(height: 16,),
+
+
                   ],
                 ),
               ),

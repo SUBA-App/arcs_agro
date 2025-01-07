@@ -51,6 +51,9 @@ class ReportProvider extends ChangeNotifier {
   Bank? selectedBank;
   Method? selectedMethod;
   String selectedGiroDate = '';
+  int selectedGiroMillis = 0;
+  String selectedPayDate = '';
+  int selectedPayMillis = 0;
   List<File> selectedListImage = [];
 
   List<Method> methods = [
@@ -86,9 +89,16 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setGiroDate(String date) {
+  void setGiroDate(String date, int millis) {
     selectedGiroDate = date;
     giroDate.text = date;
+    selectedGiroMillis = millis;
+    notifyListeners();
+  }
+
+  void setPayDate(String date, int millis) {
+    selectedPayDate = date;
+    selectedPayMillis = millis;
     notifyListeners();
   }
 
@@ -113,10 +123,14 @@ class ReportProvider extends ChangeNotifier {
   }
 
   void setImage(List<XFile> files) {
-    selectedListImage.clear();
     for(var i in files) {
       selectedListImage.add(File(i.path));
     }
+    notifyListeners();
+  }
+
+  void removeImage(File file) {
+    selectedListImage.remove(file);
     notifyListeners();
   }
 
@@ -201,6 +215,8 @@ class ReportProvider extends ChangeNotifier {
 
   Future<void> getInvoices(int page, String customerId) async {
     isInvoiceLoading = true;
+    invoices = [];
+    invoices2 = [];
     notifyListeners();
     final response = await ApiService.invoices(page, customerId);
     if (response.runtimeType == InvoiceResponse) {
@@ -249,6 +265,19 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearData() {
+    selectedMethod = null;
+    amount.clear();
+    selectedKios = 'Pilih Kios';
+    selectedInvoiceId = 0;
+    selectedListImage = [];
+    selectedBank = null;
+    noGiro.clear();
+    giroDate.clear();
+
+    notifyListeners();
+  }
+
   Future<void> addReport(BuildContext context) async {
 
     bool error = false;
@@ -258,6 +287,7 @@ class ReportProvider extends ChangeNotifier {
         if (amount.text.isEmpty
             || selectedKios == 'Pilih Kios'
             || selectedInvoiceId == 0
+            || selectedListImage.isEmpty
         ) {
           error = true;
         }
@@ -287,8 +317,8 @@ class ReportProvider extends ChangeNotifier {
     }
 
     if (!error) {
-
-      final body = ReportBody(selectedKios, selectedInvoiceId.toString(), selectedMethod!.id.toString(), noGiro.text, giroDate.text, selectedBank?.name ?? '', int.parse(Util.toClearNumber(amount.text)), ket.text);
+      print(selectedPayDate);
+      final body = ReportBody(selectedPayMillis,selectedKios, selectedInvoiceId.toString(), selectedMethod!.id.toString(), noGiro.text, selectedGiroMillis, selectedBank?.name ?? '', int.parse(Util.toClearNumber(amount.text)), ket.text);
 
       showLoading(context);
       final response = await ApiService.addReport(selectedListImage, body);

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sales_app/api/api_service.dart';
 import 'package:sales_app/api/response/report_response.dart';
@@ -20,7 +19,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: FontColor.blackF9,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
         iconTheme: const IconThemeData(color: FontColor.black),
@@ -34,218 +33,328 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${widget.report.storeName}",
-                        style: TextStyle(
-                            fontFamily: FontColor.fontPoppins,
-                            color: FontColor.black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        "Invoice : ${widget.report.invoice}",
-                        style: TextStyle(
-                          fontFamily: FontColor.fontPoppins,
-                          color: FontColor.black,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+          
+                  borderRadius: BorderRadius.circular(15)
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.report.storeName,
+                          style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              color: FontColor.black,
+                              fontWeight: FontWeight.w500),
                         ),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 30,
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: widget.report.payment.method == 1
+                                  ? Colors.green
+                                  : widget.report.payment.method == 2
+                                  ? Colors.black54
+                                  : Colors.red),
+                          child: Text(
+                            widget.report.payment.method == 1
+                                ? 'Tunai'
+                                : widget.report.payment.method == 2
+                                ? 'Transfer'
+                                : "Cek/Giro",
+                            style: TextStyle(
+                                fontFamily: FontColor.fontPoppins,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          ),
+                        )
+                      ],
+                    ),
+                    Text(
+                      "Invoice",
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700
                       ),
-                      Text(
-                        "Tanggal : ${widget.report.created_at}",
-                        style: TextStyle(
-                          fontFamily: FontColor.fontPoppins,
-                          color: FontColor.black,
-                        ),
+                    ),
+                    Text(
+                      widget.report.invoice,
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        color: FontColor.black,
                       ),
-                      Text(
-                        "Jam : ${widget.report.time_at}",
-                        style: TextStyle(
-                          fontFamily: FontColor.fontPoppins,
-                          color: FontColor.black,
-                        ),
+                    ),
+                    const SizedBox(height: 8,),
+                    Text(
+                      "Tanggal Pembayaran",
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "Metode Pembayaran : ",
+                    ),
+                    Text(
+                      widget.report.created_at,
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        color: FontColor.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8,),
+                    widget.report.payment.method == 3 ||  widget.report.payment.method == 2
+                        ? Text(
+                      "Bank Penerima",
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700
+                      ),
+                    )
+                        : const SizedBox(),
+                    widget.report.payment.method == 3 ||  widget.report.payment.method == 2
+                        ? Text(
+                      widget.report.payment.bankName,
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        color: FontColor.black,
+                      ),
+                    )
+                        : const SizedBox(),
+                    widget.report.payment.method == 3
+                        ? Text(
+                      "Nomor",
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700
+                      ),
+                    )
+                        : const SizedBox(),
+                    widget.report.payment.method == 3
+                        ? Text(
+                            widget.report.payment.noGiro,
                             style: TextStyle(
                               fontFamily: FontColor.fontPoppins,
                               color: FontColor.black,
                             ),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: 30,
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: widget.report.payment.method == 1
-                                    ? Colors.green
-                                    : widget.report.payment.method == 2
-                                        ? Colors.black54
-                                        : Colors.red),
-                            child: Text(
-                              widget.report.payment.method == 1
-                                  ? 'Tunai'
-                                  : widget.report.payment.method == 2
-                                      ? 'Transfer'
-                                      : "Cek/Giro",
-                              style: TextStyle(
-                                  fontFamily: FontColor.fontPoppins,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
+                          )
+                        : const SizedBox(),
+                    widget.report.payment.method == 3
+                        ? Text(
+                      "Jatuh Tempo",
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700
+                      ),
+                    )
+                        : const SizedBox(),
+                    widget.report.payment.method == 3
+                        ? Text(
+                            widget.report.payment.giroDate,
+                            style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              color: FontColor.black,
                             ),
                           )
-                        ],
+                        : const SizedBox(),
+                    const SizedBox(height: 16,),
+                    Text(
+                      'Rp ${Util.convertToIdr(widget.report.payment.amount, 0)}',
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        color: FontColor.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700
                       ),
-                      widget.report.payment.method == 3 ||  widget.report.payment.method == 2
-                          ? Text(
-                        "Bank : ${widget.report.payment.bankName}",
-                        style: TextStyle(
-                          fontFamily: FontColor.fontPoppins,
-                          color: FontColor.black,
-                        ),
-                      )
-                          : const SizedBox(),
-                      widget.report.payment.method == 3
-                          ? Text(
-                              "Nomor : ${widget.report.payment.noGiro}",
-                              style: TextStyle(
-                                fontFamily: FontColor.fontPoppins,
-                                color: FontColor.black,
-                              ),
-                            )
-                          : const SizedBox(),
-                      widget.report.payment.method == 3
-                          ? Text(
-                              "Jatuh Tempo : ${widget.report.payment.giroDate}",
-                              style: TextStyle(
-                                fontFamily: FontColor.fontPoppins,
-                                color: FontColor.black,
-                              ),
-                            )
-                          : const SizedBox(),
-                      Text(
-                        "Nominal : ${Util.convertToIdr(widget.report.payment.amount, 0)}",
-                        style: TextStyle(
-                          fontFamily: FontColor.fontPoppins,
-                          color: FontColor.black,
-                        ),
-                      ),
-                      widget.report.note.isNotEmpty ? SizedBox(height: 8,) : SizedBox(),
-                      widget.report.note.isNotEmpty ? Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black12)
-                        ),
-                        child: Text(
-                        widget.report.note,
-                          style: TextStyle(
-                            fontFamily: FontColor.fontPoppins,
-                            color: FontColor.black,
-                          ),
-                        ),
-                      ): SizedBox(),
-                      widget.report.note.isNotEmpty ? SizedBox(height: 8,): SizedBox(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            height: 30,
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.orange),
-                            child: Text(
-                              widget.report.status == 0
-                                  ? "Sedang Pengecekan"
-                                  : "Laporan Diterima",
-                              style: TextStyle(
-                                  fontFamily: FontColor.fontPoppins,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            widget.report.payment.method == 1
-                ? const SizedBox()
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      widget.report.payment.method == 2
-                          ? "Bukti Transfer"
-                          : "Foto Cek/Giro",
+                    ),
+                    widget.report.note.isNotEmpty ? const SizedBox(height: 8,) : const SizedBox(),
+                    widget.report.note.isNotEmpty ?  Text(
+                      "Keterangan",
                       style: TextStyle(
                           fontFamily: FontColor.fontPoppins,
-                          color: FontColor.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15),
+                          color: Colors.red,
+                          fontWeight: FontWeight.w500
+                      ),
+                    ) : const SizedBox(),
+                    widget.report.note.isNotEmpty ? Text(
+                      widget.report.note,
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        color: FontColor.black,
+                      ),
+                    ) : const SizedBox(),
+                    widget.report.note.isNotEmpty ? const SizedBox(height: 8,): const SizedBox(),
+                    
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8,),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+          
+                    borderRadius: BorderRadius.circular(15)
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: widget.report.status == 0 ? Colors.red : Colors.green
+                              ),
+                            ),
+                            const SizedBox(width: 8,),
+                            Text(widget.report.status == 0 ? 'Pengecekan' : 'Selesai Pengecekan', style: TextStyle(
+                                fontFamily: FontColor.fontPoppins,
+                                color: FontColor.black,
+                                fontSize: 14
+                            ),),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Text(widget.report.checkDate.checkDate.isNotEmpty ? widget.report.checkDate.checkDate : '-', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              color: FontColor.black,
+                              fontSize: 12
+                          ),),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Text(widget.report.checkDate.note, style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              color: FontColor.black,
+                              fontSize: 12
+                          ),),
+                        ),
+                      ],
                     ),
-                  ),
-            widget.report.payment.method == 1
-                ? const SizedBox()
-                : Expanded(
-                  child: ListView.builder(
-                      itemCount: widget.report.payment.pictures.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ViewPicScreen(
-                                          url: widget.report.payment
-                                              .pictures[index].image,
-                                        )));
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: double.infinity,
-                                height: 200,
-                                margin: EdgeInsets.only(top: 8),
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: Colors.black12,
-                                    )),
-                                child: Center(
-                                    child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        '${ApiService.imageUrlPayment}${widget.report.payment.pictures[index].image}',
-                                    height: 200,
-                                    fit: BoxFit.fitHeight,
-                                  ),
+                    const SizedBox(height: 8,),
+                    widget.report.status == 1 || widget.report.status == 2  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: widget.report.status == 2 ? Colors.green : Colors.red
+                              ),
+                            ),
+                            const SizedBox(width: 8,),
+                            Text(widget.report.status == 2 ? 'Selesai Penginputan' : 'Penginputan', style: TextStyle(
+                                fontFamily: FontColor.fontPoppins,
+                                color: FontColor.black,
+                                fontSize: 14
+                            ),),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Text(widget.report.inputDate.inputDate.isNotEmpty ? widget.report.inputDate.inputDate : '-', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              color: FontColor.black,
+                              fontSize: 12
+                          ),),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Text(widget.report.inputDate.note, style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              color: FontColor.black,
+                              fontSize: 12
+                          ),),
+                        ),
+                      ],
+                    ) :const SizedBox()
+          
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8,),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+          
+                    borderRadius: BorderRadius.circular(15)
+                ),
+                child: widget.report.payment.pictures.isEmpty
+                    ? const SizedBox()
+                    : ListView.builder(
+                        itemCount: widget.report.payment.pictures.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ViewPicScreen(
+                                        url: widget.report.payment
+                                            .pictures[index],
+                                      )));
+                            },
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 200,
+                                  margin: const EdgeInsets.only(top: 8),
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black12,
+                                      )),
+                                  child: Center(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                          '${ApiService.imageUrlPayment}${widget.report.payment.pictures[index]}',
+                                          height: 200,
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      )),
                                 )),
-                              )),
-                        );
-                      }),
-                )
-          ],
+                          );
+                        }),
+              ),
+          
+          
+            ],
+          ),
         ),
       ),
     );

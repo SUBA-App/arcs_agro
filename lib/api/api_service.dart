@@ -1,8 +1,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +9,7 @@ import 'package:sales_app/api/body/report_body.dart';
 import 'package:sales_app/api/response/absen_response.dart';
 import 'package:sales_app/api/response/active_absen_response.dart';
 import 'package:sales_app/api/response/check_status_response.dart';
+import 'package:sales_app/api/response/create_pin_response.dart';
 import 'package:sales_app/api/response/customer_response.dart';
 import 'package:sales_app/api/response/default_response.dart';
 import 'package:sales_app/api/response/invoice_response.dart';
@@ -118,6 +117,7 @@ class ApiService {
   }
 
   static Future<Object> addAbsen(List<File> files, double latitude, double longitude, String kios) async {
+    print('cca');
     try {
       var request =  http.MultipartRequest("POST", Uri.parse('${_baseUrl}absensi/add'));
       request.headers.addAll(_headers);
@@ -299,11 +299,12 @@ class ApiService {
           ));
         }
       }
+      request.fields['pay_date'] = body.payDate.toString();
       request.fields['store_name'] = body.storeName;
       request.fields['invoice'] = body.invoice;
       request.fields['payment_method'] = body.paymentMethod;
       request.fields['no_giro'] = body.noGiro;
-      request.fields['giro_date'] = body.giroDate;
+      request.fields['giro_date'] = body.giroDate.toString();
       request.fields['bank_name'] = body.bankName;
       request.fields['amount'] = body.amount.toString();
       request.fields['note'] = body.note;
@@ -382,12 +383,107 @@ class ApiService {
     }
   }
 
+  static Future<Object> changePw2(String password, String email) async {
+    try {
+      final response = await http.post(
+          Uri.parse('${_baseUrl}auth/change-pw'),headers: _headers, body: {'password': password, 'email': email});
+      if (kDebugMode) {
+        print('response change pw : ${response.body}');
+      }
+      return DefaultResponse.fromJson(jsonDecode(response.body) as Map<String,dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
   static Future<Object> logout() async {
     try {
       final response = await http.post(
           Uri.parse('${_baseUrl}auths/logout'), headers: _headers);
       if (kDebugMode) {
         print('response logout : ${response.body}');
+      }
+      return DefaultResponse.fromJson(jsonDecode(response.body) as Map<String,dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
+  static Future<Object> verifyPin(String pin) async {
+    try {
+      final response = await http.post(
+          Uri.parse('${_baseUrl}auths/verify-pin'), headers: _headers, body: {'pin': pin});
+      if (kDebugMode) {
+        print('response verify pin : ${response.body}');
+      }
+      return DefaultResponse.fromJson(jsonDecode(response.body) as Map<String,dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
+  static Future<Object> createPin(String pin) async {
+    try {
+      final response = await http.post(
+          Uri.parse('${_baseUrl}auths/create-pin'), headers: _headers, body: {'pin': pin});
+      if (kDebugMode) {
+        print('response create pin : ${response.body}');
+      }
+      return CreatePinResponse.fromJson(jsonDecode(response.body) as Map<String,dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
+  static Future<Object> sendOtpEmail(String email) async {
+    try {
+      final response = await http.post(
+          Uri.parse('${_baseUrl}auth/send-otp-email'), headers: _headers, body: {'email': email});
+      if (kDebugMode) {
+        print('response send otp : ${response.body}');
+      }
+      return DefaultResponse.fromJson(jsonDecode(response.body) as Map<String,dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
+  static Future<Object> verifyOTP(String otp, String email) async {
+    try {
+      final response = await http.post(
+          Uri.parse('${_baseUrl}auth/verify-otp'), headers: _headers, body: {'otp': otp, 'email': email});
+      if (kDebugMode) {
+        print('response verify otp : ${response.body}');
+      }
+      return DefaultResponse.fromJson(jsonDecode(response.body) as Map<String,dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+  static Future<Object> checkEmail(String email) async {
+    try {
+      final response = await http.post(
+          Uri.parse('${_baseUrl}auth/check-email'), headers: _headers, body: {'email': email});
+      if (kDebugMode) {
+        print('response check email : ${response.body}');
       }
       return DefaultResponse.fromJson(jsonDecode(response.body) as Map<String,dynamic>);
     } catch (e) {

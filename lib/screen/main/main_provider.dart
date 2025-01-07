@@ -95,6 +95,31 @@ class MainProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> changePw2(BuildContext context,String password, String email) async {
+    showLoading(context);
+    final response = await ApiService.changePw2(password, email);
+    if (response.runtimeType == DefaultResponse) {
+      final resp = response as DefaultResponse;
+      if (!resp.error) {
+        if(context.mounted) {
+          Navigator.pop(context);
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (e) => false);
+        }
+      } else {
+        if(context.mounted) {
+          Navigator.pop(context);
+        }
+        Fluttertoast.showToast(msg: resp.message);
+      }
+    } else {
+      if(context.mounted) {
+        Navigator.pop(context);
+      }
+      Fluttertoast.showToast(msg: response.toString());
+    }
+  }
+
+
   Future<void> logout(BuildContext context) async {
     showLoading(context);
     final response = await ApiService.logout();

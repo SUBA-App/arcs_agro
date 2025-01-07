@@ -36,10 +36,10 @@ class ReportResult {
   String invoice;
   Payment payment;
   String created_at;
-  String time_at;
   String note;
   int status;
-  String checkDate;
+  CheckDate checkDate;
+  InputDate inputDate;
 
 
   ReportResult({
@@ -50,10 +50,9 @@ class ReportResult {
     required this.invoice,
     required this.payment,
     required this.created_at,
-    required this.time_at,
     required this.note,
     required this.status,
-    required this.checkDate});
+    required this.checkDate, required this.inputDate});
 
   factory ReportResult.fromJson(Map<String, dynamic> json) => ReportResult(
     id: json["id"],
@@ -65,8 +64,8 @@ class ReportResult {
     note: json['note'] ?? '',
     payment: Payment.fromJson(json['payment']),
     created_at: json['created_at'],
-    time_at: json['time_at'],
-    checkDate: json['check_date']
+    checkDate: CheckDate.fromJson(json['check']),
+    inputDate: InputDate.fromJson(json['input']),
   );
 
   Map<String, dynamic> toJson() => {
@@ -79,8 +78,8 @@ class ReportResult {
     'note': note,
     'payment':payment.toJson(),
     'created_at': created_at,
-    'time_at': time_at,
-    'check_date': checkDate,
+    'check': checkDate.toJson(),
+    'input': inputDate.toJson()
 
   };
 }
@@ -90,7 +89,7 @@ class Payment {
   String methodName;
   String noGiro;
   String giroDate;
-  List<ImageS> pictures;
+  List<String> pictures;
   String bankName;
   int amount;
 
@@ -103,7 +102,7 @@ class Payment {
       methodName: json['method_name'] ?? '',
     noGiro: json['no_giro'] ?? '',
     giroDate: json['giro_date'] ?? '',
-    pictures: List<ImageS>.from(json['pictures'].map((e) => ImageS.fromJson(e))),
+    pictures: List<String>.from(json['pictures'].map((e) => e)),
     bankName: json['bank_name'] ?? '',
     amount: json['amount'] ?? 0,
 
@@ -114,8 +113,46 @@ class Payment {
     "method_name": methodName,
     'no_giro': noGiro,
     'giro_date': giroDate,
-    'pictures':List<dynamic>.from(pictures.map((e) => e.toJson())),
+    'pictures':List<dynamic>.from(pictures.map((e) => e)),
     'bank_name': bankName,
     'amount': amount
+  };
+}
+
+class CheckDate {
+  String note;
+  String checkDate;
+
+
+  CheckDate({required this.note, required this.checkDate});
+
+  factory CheckDate.fromJson(Map<String, dynamic> json) => CheckDate(
+    note: json["note"] ?? '',
+    checkDate: json['check_date'] ?? '',
+
+  );
+
+  Map<String, dynamic> toJson() => {
+    "note": note,
+    "check_date": checkDate,
+  };
+}
+
+class InputDate {
+  String note;
+  String inputDate;
+
+
+  InputDate({required this.note, required this.inputDate});
+
+  factory InputDate.fromJson(Map<String, dynamic> json) => InputDate(
+    note: json["note"] ?? '',
+    inputDate: json['input_date'] ?? '',
+
+  );
+
+  Map<String, dynamic> toJson() => {
+    "note": note,
+    "input_date": inputDate,
   };
 }

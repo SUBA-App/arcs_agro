@@ -16,9 +16,14 @@ class Preferences {
   }
 
   static Future<void> saveSession(String token, User user) async {
+
     await _preferences?.setString(_tokenKey, token);
     await _preferences?.setString(_userKey, jsonEncode(user.toJson()));
   }
+  static Future<void> saveUser(User user) async {
+    await _preferences?.setString(_userKey, jsonEncode(user.toJson()));
+  }
+
 
   static String token() {
     return _preferences?.getString(_tokenKey) ?? '';

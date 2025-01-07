@@ -1,6 +1,7 @@
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 import 'package:sales_app/api/response/product_response.dart';
+import 'package:sales_app/font_color.dart';
 
 import '../../api/api_service.dart';
 
@@ -22,16 +23,57 @@ class ProductProvider extends ChangeNotifier {
   }
 
 
-  Future<void> getProducts(int page) async {
+  Future<void> getProducts(BuildContext context,int page) async {
     products.clear();
     notifyListeners();
     final response = await ApiService.products(page);
     if (response.runtimeType == ProductResponse) {
       final resp = response as ProductResponse;
       if (!resp.error) {
-
         products = resp.result?.data ?? [];
         notifyListeners();
+      } else {
+        if (resp.message == 'key_failed') {
+          showDialog(context: context,barrierDismissible: false, builder: (context) {
+            return Dialog(
+              backgroundColor: Colors.white,
+
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Tidak Ada Token API', style: TextStyle(
+                      fontFamily: FontColor.fontPoppins,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: FontColor.black
+                    ),),
+                    SizedBox(height: 8,),
+                    Text('Hubungi Administrator', style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: FontColor.black
+                    ),),
+                    SizedBox(height: 8,),
+                    ElevatedButton(onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(FontColor.black)
+                    ), child: Text('OK',style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white
+                    ),))
+                  ],
+                ),
+              ),
+            );
+          });
+        }
       }
     }
   }

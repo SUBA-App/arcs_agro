@@ -36,36 +36,33 @@ class ReportItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(report.storeName, style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black
-                  ),),
-                  Text(Util.convertToIdr(report.payment.amount, 0), style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black
-                  ),),
-                  Text(report.created_at, style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black.withOpacity(0.5)
-                  ),),
-                  Text(report.time_at, style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black.withOpacity(0.5)
-                  ),),
-                ],
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(report.storeName, style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black
+                    ),),
+                    Text(Util.convertToIdr(report.payment.amount, 0), style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black
+                    ),),
+                    Text(report.created_at, style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black.withOpacity(0.5)
+                    ),),
+                  ],
+                ),
               ),
+              SizedBox(width: 8,),
               Container(
                 alignment: Alignment.center,
                 height: 30,

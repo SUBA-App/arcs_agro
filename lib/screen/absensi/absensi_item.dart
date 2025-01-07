@@ -33,30 +33,33 @@ class AbsensiItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(result?.storeName ?? "", style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black
-                  ),),
-                  Text(result?.status == 1 ? result?.checkIn ?? '' : result?.checkOut ?? '', style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black.withOpacity(0.5)
-                  ),),
-                  Text(result?.status == 1 ? result?.checkInTime ?? '' : result?.checkOutTime ?? '', style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black.withOpacity(0.5)
-                  ),),
-                ],
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(result?.storeName ?? "", style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black
+                    ),),
+                    Text(result?.status == 1 ? result?.checkIn ?? '' : result?.checkOut ?? '', style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black.withOpacity(0.5)
+                    ),),
+                    Text(result?.status == 1 ? result?.checkInTime ?? '' : result?.checkOutTime ?? '', style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black.withOpacity(0.5)
+                    ),),
+                  ],
+                ),
               ),
+              SizedBox(width: 8,),
               Container(
                 alignment: Alignment.center,
                 height: 30,

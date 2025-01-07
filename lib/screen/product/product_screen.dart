@@ -21,7 +21,7 @@ class _LaporanKerjaScreenState extends State<ProductScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ProductProvider>(context, listen: false)
-          .getProducts(1);
+          .getProducts(context,1);
     });
     super.initState();
   }
