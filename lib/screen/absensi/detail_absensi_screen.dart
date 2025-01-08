@@ -1,13 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/api/api_service.dart';
 import 'package:sales_app/api/response/absen_response.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
 
+import '../../configuration.dart';
 import '../../font_color.dart';
 
 class DetailAbsensiScreen extends StatefulWidget {
@@ -51,7 +49,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
           child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: provider.isLoadingDetail
-            ? Center(child: const CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -146,7 +144,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500),
                           ),
-                          SizedBox(height: 8,),
+                          const SizedBox(height: 8,),
                           Expanded(
                             child: MasonryGridView.count(
                               itemCount:
@@ -156,7 +154,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
                                       imageUrl:
-                                          '${ApiService.imageUrl}${provider.absenResult?.pictures[index]}',height: 200,fit: BoxFit.fill,),
+                                          '${Configuration.imageUrl}${provider.absenResult?.pictures[index]}',height: 200,fit: BoxFit.fill,),
                                 );
                               }, crossAxisCount: 3,
                               crossAxisSpacing: 4,
@@ -190,7 +188,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                                 color: Colors.white,
                                 fontSize: 14),
                           ))
-                      : SizedBox()
+                      : const SizedBox()
                 ],
               ),
       )),

@@ -23,6 +23,9 @@ class _TakePictureAbsensiScreenState extends State<TakePictureAbsensiScreen2> {
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+      SystemUiOverlay.bottom
+    ]);
     _controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
@@ -30,6 +33,12 @@ class _TakePictureAbsensiScreenState extends State<TakePictureAbsensiScreen2> {
 
     _initializeControllerFuture = _controller.initialize();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    super.dispose();
   }
 
   @override

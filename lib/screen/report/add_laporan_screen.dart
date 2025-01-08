@@ -84,14 +84,16 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
 
   late CameraDescription cameraDescription;
 
-
+  late ReportProvider pro;
 
   @override
   void initState() {
+    pro = Provider.of<ReportProvider>(context, listen: false);
     availableCameras().then((e) {
       cameraDescription = e.first;
     });
     WidgetsBinding.instance.addPostFrameCallback((e) {
+      Provider.of<ReportProvider>(context, listen: false).initController();
       Provider.of<ReportProvider>(context, listen: false).loadBanks(context);
       final dateTime = DateTime.now();
       final format = DateFormat('dd MMMM yyyy').format(dateTime);
@@ -103,8 +105,17 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
   }
 
   @override
-  void didChangeDependencies() {
+  void dispose() {
+    pro.ket.dispose();
+    pro.noGiro.dispose();
+    pro.amount.dispose();
+    pro.giroDate.dispose();
+    super.dispose();
+  }
 
+  @override
+  void didChangeDependencies() {
+    pro = Provider.of<ReportProvider>(context, listen: false);
     super.didChangeDependencies();
   }
 
@@ -524,6 +535,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                     InkWell(
                       borderRadius: BorderRadius.circular(10),
                       onTap: () {
+                        FocusScope.of(context).unfocus();
                         showModalBottomSheet(context: context, builder: (context) {
                           return Container(
                             width: double.infinity,
@@ -543,6 +555,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                         files.add(XFile(i));
                                       }
                                       Provider.of<ReportProvider>(context, listen: false).setImage(files);
+                                      FocusScope.of(context).unfocus();
                                       Navigator.pop(context);
                                     }
                                   },

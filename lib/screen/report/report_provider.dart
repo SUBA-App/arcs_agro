@@ -44,10 +44,10 @@ class ReportProvider extends ChangeNotifier {
   int selectedInvoiceId = 0;
   String invoice = '';
 
-  TextEditingController noGiro = TextEditingController();
-  TextEditingController giroDate = TextEditingController();
-  TextEditingController amount = TextEditingController();
-  TextEditingController ket = TextEditingController();
+  late TextEditingController noGiro;
+  late TextEditingController giroDate;
+  late TextEditingController amount;
+  late TextEditingController ket;
   Bank? selectedBank;
   Method? selectedMethod;
   String selectedGiroDate = '';
@@ -61,6 +61,13 @@ class ReportProvider extends ChangeNotifier {
     Method('Transfer', 2),
     Method('Cek/Giro', 3)
   ];
+
+  void initController() {
+    noGiro = TextEditingController();
+    giroDate = TextEditingController();
+    amount = TextEditingController();
+    ket = TextEditingController();
+  }
 
   Future<void> loadBanks(BuildContext context) async {
     String data = await DefaultAssetBundle.of(context).loadString("assets/json/banks.json");

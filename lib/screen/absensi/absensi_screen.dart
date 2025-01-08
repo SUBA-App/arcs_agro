@@ -1,11 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/screen/absensi/detail_absensi_screen.dart';
 import 'package:sales_app/screen/absensi/absensi_item.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
 import 'package:sales_app/screen/absensi/take_picture_absensi_screen.dart';
+import 'package:sales_app/show_camera_permission.dart';
 
 import '../../font_color.dart';
 
@@ -50,8 +52,29 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
         ),),
       ),
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureAbsensiScreen(camera: cameraDescription)));
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        await Permission.camera
+            .onDeniedCallback(() {
+
+        })
+            .onGrantedCallback(() {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureAbsensiScreen(camera: cameraDescription)));
+        })
+            .onPermanentlyDeniedCallback(() {
+          showDialog(context: context, builder: (context) {
+            return ShowCameraPermission(message: 'Camera permissions are permanently denied, we cannot request permissions.');
+          });
+        })
+            .onRestrictedCallback(() {
+
+        })
+            .onLimitedCallback(() {
+
+        })
+            .onProvisionalCallback(() {
+
+        })
+            .request();
       }, child: Icon(Icons.camera),backgroundColor: FontColor.yellow72,),
       body: SafeArea(
         child: Column(

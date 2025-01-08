@@ -81,11 +81,13 @@ class AbsensiProvider extends ChangeNotifier {
       final result = await _determinePosition();
 
       if (result.type == 1) {
+        Navigator.pop(context);
         showCheckFailed(context, result.message, result.type);
       } else if (result.type == 2) {
         Navigator.pop(context);
         Fluttertoast.showToast(msg: result.message.toString());
       } else if (result.type == 4) {
+        Navigator.pop(context);
         showCheckFailed(context, result.message, result.type);
       } else {
         final response = await ApiService.addAbsen(
@@ -194,6 +196,7 @@ class AbsensiProvider extends ChangeNotifier {
                       Expanded(
                         child: ElevatedButton(
                             onPressed: () async {
+                              Navigator.pop(context);
                               if (type == 1) {
                                 AppSettings.openAppSettings(
                                     type: AppSettingsType.location);
@@ -222,6 +225,7 @@ class AbsensiProvider extends ChangeNotifier {
                             ),
                             child: Text(
                               'Pengaturan',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: FontColor.fontPoppins,
                                   color: FontColor.black),
@@ -232,7 +236,9 @@ class AbsensiProvider extends ChangeNotifier {
                       ),
                       Expanded(
                         child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                             style: ButtonStyle(
                               backgroundColor:
                                   WidgetStatePropertyAll(Colors.white),

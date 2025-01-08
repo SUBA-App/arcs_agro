@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/api/api_service.dart';
+import 'package:sales_app/configuration.dart';
 
 import 'package:sales_app/list_product_screen.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
@@ -26,6 +27,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterForegroundTask.initCommunicationPort();
   await Preferences.init();
+  await Configuration.current();
   ApiService.init();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

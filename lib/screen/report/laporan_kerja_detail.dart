@@ -6,6 +6,8 @@ import 'package:sales_app/font_color.dart';
 import 'package:sales_app/util.dart';
 import 'package:sales_app/view_pic_screen.dart';
 
+import '../../configuration.dart';
+
 class LaporanKerjaDetail extends StatefulWidget {
   const LaporanKerjaDetail({super.key, required this.report});
 
@@ -342,7 +344,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: CachedNetworkImage(
                                           imageUrl:
-                                          '${ApiService.imageUrlPayment}${widget.report.payment.pictures[index]}',
+                                          '${Configuration.imageUrlPayment}${widget.report.payment.pictures[index]}',
                                           height: 200,
                                           fit: BoxFit.fitHeight,
                                         ),

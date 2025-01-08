@@ -61,6 +61,7 @@ dependencies:
   pinput: ^5.0.0
   android_intent_plus: ^5.2.1
   app_settings: ^5.1.1
+  package_info_plus: ^8.1.2
 
 dev_dependencies:
   flutter_test:

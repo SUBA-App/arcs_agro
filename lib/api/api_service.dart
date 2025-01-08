@@ -16,17 +16,13 @@ import 'package:sales_app/api/response/invoice_response.dart';
 import 'package:sales_app/api/response/login_response.dart';
 import 'package:sales_app/api/response/product_response.dart';
 import 'package:sales_app/api/response/report_response.dart';
+import 'package:sales_app/configuration.dart';
 import 'package:sales_app/screen/login_screen/login_screen.dart';
 
 import '../util/preferences.dart';
 
 
 class ApiService {
-
-  static const _baseUrl = 'https://weles.my.id/api/';
-
-  static const imageUrl = 'https://weles.my.id/storage/images/absensi/';
-  static const imageUrlPayment = 'https://weles.my.id/storage/images/payment/';
 
   static Map<String,String> _headers = {};
 
@@ -42,7 +38,7 @@ class ApiService {
     try {
 
       final response = await http.post(
-          Uri.parse('${_baseUrl}auth/login'), headers: {
+          Uri.parse('${Configuration.apiUrl}auth/login'), headers: {
             'X-API-KEY':'Pz6dWj6XiZRTcgRYJlqmRZ'
       }, body: {
         'email': email,
@@ -65,7 +61,7 @@ class ApiService {
     try {
 
       final response = await http.get(
-          Uri.parse('${_baseUrl}absensi'), headers: _headers);
+          Uri.parse('${Configuration.apiUrl}absensi'), headers: _headers);
       if (kDebugMode) {
 
         print('response absensi : ${response.body}');
@@ -83,7 +79,7 @@ class ApiService {
 
     try {
       final response = await http.get(
-          Uri.parse('${_baseUrl}absensi/active'), headers: _headers);
+          Uri.parse('${Configuration.apiUrl}absensi/active'), headers: _headers);
 
       if (kDebugMode) {
         print('cc ${_headers.toString()}' );
@@ -103,7 +99,7 @@ class ApiService {
 
     try {
       final response = await http.get(
-          Uri.parse('${_baseUrl}absensi/detail/$id'), headers: _headers);
+          Uri.parse('${Configuration.apiUrl}absensi/detail/$id'), headers: _headers);
       if (kDebugMode) {
         print('response absensi detail: ${response.body}');
       }
@@ -119,7 +115,7 @@ class ApiService {
   static Future<Object> addAbsen(List<File> files, double latitude, double longitude, String kios) async {
     print('cca');
     try {
-      var request =  http.MultipartRequest("POST", Uri.parse('${_baseUrl}absensi/add'));
+      var request =  http.MultipartRequest("POST", Uri.parse('${Configuration.apiUrl}absensi/add'));
       request.headers.addAll(_headers);
       for(var i in files) {
         print(i.path);
@@ -167,7 +163,7 @@ class ApiService {
   static Future<Object> checkOut(String id, double latitude, double longitude) async {
     try {
       final response = await http.put(
-          Uri.parse('${_baseUrl}absensi/update/$id'), headers: _headers, body: CoordinateBody(latitude, longitude).toJson());
+          Uri.parse('${Configuration.apiUrl}absensi/update/$id'), headers: _headers, body: CoordinateBody(latitude, longitude).toJson());
       if (kDebugMode) {
         print('response absensi update : ${response.body}');
       }
@@ -184,7 +180,7 @@ class ApiService {
 
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}absensi/update-coordinate'), headers: _headers, body: body.toJson());
+          Uri.parse('${Configuration.apiUrl}absensi/update-coordinate'), headers: _headers, body: body.toJson());
       if (kDebugMode) {
         print(_headers.toString());
         printWrapped('response absensi coordinate : ${response.body}');
@@ -206,7 +202,7 @@ class ApiService {
   static Future<Object> reports() async {
     try {
       final response = await http.get(
-          Uri.parse('${_baseUrl}report'), headers: _headers);
+          Uri.parse('${Configuration.apiUrl}report'), headers: _headers);
       if (kDebugMode) {
         print('response report : ${response.body}');
       }
@@ -224,7 +220,7 @@ class ApiService {
   static Future<Object> customers(int page) async {
     try {
       final response = await http.get(
-          Uri.parse('${_baseUrl}report/customers?page=$page'), headers: _headers, );
+          Uri.parse('${Configuration.apiUrl}report/customers?page=$page'), headers: _headers, );
       if (kDebugMode) {
         print('response customers : ${response.body}');
       }
@@ -240,7 +236,7 @@ class ApiService {
   static Future<Object> invoices(int page, String customerId ) async {
     try {
       final response = await http.get(
-        Uri.parse('${_baseUrl}report/invoices?page=$page&customer_id=$customerId'), headers: _headers, );
+        Uri.parse('${Configuration.apiUrl}report/invoices?page=$page&customer_id=$customerId'), headers: _headers, );
       if (kDebugMode) {
         print('response invoices : ${response.body}');
       }
@@ -256,7 +252,7 @@ class ApiService {
   static Future<Object> products(int page) async {
     try {
       final response = await http.get(
-        Uri.parse('${_baseUrl}product?page=$page'), headers: _headers, );
+        Uri.parse('${Configuration.apiUrl}product?page=$page'), headers: _headers, );
       if (kDebugMode) {
         print('response product : ${response.body}');
       }
@@ -272,7 +268,7 @@ class ApiService {
   static Future<Object> search(int page, String keywords) async {
     try {
       final response = await http.get(
-        Uri.parse('${_baseUrl}product/search?page=$page&keywords=$keywords'), headers: _headers, );
+        Uri.parse('${Configuration.apiUrl}product/search?page=$page&keywords=$keywords'), headers: _headers, );
       if (kDebugMode) {
         print('response search : ${response.body}');
       }
@@ -289,7 +285,7 @@ class ApiService {
 
   static Future<Object> addReport(List<File> files, ReportBody body) async {
     try {
-      var request =  http.MultipartRequest("POST", Uri.parse('${_baseUrl}report/add'));
+      var request =  http.MultipartRequest("POST", Uri.parse('${Configuration.apiUrl}report/add'));
       request.headers.addAll(_headers);
       if (files.isNotEmpty) {
         for (var e in files) {
@@ -345,7 +341,7 @@ class ApiService {
   static Future<Object> checkStatus(BuildContext context) async {
     try {
       final response = await http.get(
-          Uri.parse('${_baseUrl}auths/check'), headers: _headers);
+          Uri.parse('${Configuration.apiUrl}auths/check'), headers: _headers);
       if (kDebugMode) {
         print('response check : ${response.body}');
       }
@@ -370,7 +366,7 @@ class ApiService {
   static Future<Object> changePw(String password) async {
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}auths/change-pw'), headers: _headers, body: {'password': password});
+          Uri.parse('${Configuration.apiUrl}auths/change-pw'), headers: _headers, body: {'password': password});
       if (kDebugMode) {
         print('response change pw : ${response.body}');
       }
@@ -386,7 +382,7 @@ class ApiService {
   static Future<Object> changePw2(String password, String email) async {
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}auth/change-pw'),headers: _headers, body: {'password': password, 'email': email});
+          Uri.parse('${Configuration.apiUrl}auth/change-pw'),headers: _headers, body: {'password': password, 'email': email});
       if (kDebugMode) {
         print('response change pw : ${response.body}');
       }
@@ -402,7 +398,7 @@ class ApiService {
   static Future<Object> logout() async {
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}auths/logout'), headers: _headers);
+          Uri.parse('${Configuration.apiUrl}auths/logout'), headers: _headers);
       if (kDebugMode) {
         print('response logout : ${response.body}');
       }
@@ -418,7 +414,7 @@ class ApiService {
   static Future<Object> verifyPin(String pin) async {
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}auths/verify-pin'), headers: _headers, body: {'pin': pin});
+          Uri.parse('${Configuration.apiUrl}auths/verify-pin'), headers: _headers, body: {'pin': pin});
       if (kDebugMode) {
         print('response verify pin : ${response.body}');
       }
@@ -434,7 +430,7 @@ class ApiService {
   static Future<Object> createPin(String pin) async {
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}auths/create-pin'), headers: _headers, body: {'pin': pin});
+          Uri.parse('${Configuration.apiUrl}auths/create-pin'), headers: _headers, body: {'pin': pin});
       if (kDebugMode) {
         print('response create pin : ${response.body}');
       }
@@ -450,7 +446,7 @@ class ApiService {
   static Future<Object> sendOtpEmail(String email) async {
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}auth/send-otp-email'), headers: _headers, body: {'email': email});
+          Uri.parse('${Configuration.apiUrl}auth/send-otp-email'), headers: _headers, body: {'email': email});
       if (kDebugMode) {
         print('response send otp : ${response.body}');
       }
@@ -466,7 +462,7 @@ class ApiService {
   static Future<Object> verifyOTP(String otp, String email) async {
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}auth/verify-otp'), headers: _headers, body: {'otp': otp, 'email': email});
+          Uri.parse('${Configuration.apiUrl}auth/verify-otp'), headers: _headers, body: {'otp': otp, 'email': email});
       if (kDebugMode) {
         print('response verify otp : ${response.body}');
       }
@@ -481,7 +477,7 @@ class ApiService {
   static Future<Object> checkEmail(String email) async {
     try {
       final response = await http.post(
-          Uri.parse('${_baseUrl}auth/check-email'), headers: _headers, body: {'email': email});
+          Uri.parse('${Configuration.apiUrl}auth/check-email'), headers: _headers, body: {'email': email});
       if (kDebugMode) {
         print('response check email : ${response.body}');
       }
