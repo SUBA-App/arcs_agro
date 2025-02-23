@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:sales_app/api/api_service.dart';
+
 import 'package:sales_app/api/response/report_response.dart';
 import 'package:sales_app/font_color.dart';
 import 'package:sales_app/util.dart';
@@ -11,7 +11,7 @@ import '../../configuration.dart';
 class LaporanKerjaDetail extends StatefulWidget {
   const LaporanKerjaDetail({super.key, required this.report});
 
-  final ReportResult report;
+  final ReportData report;
 
   @override
   State<LaporanKerjaDetail> createState() => _LaporanKerjaDetailState();

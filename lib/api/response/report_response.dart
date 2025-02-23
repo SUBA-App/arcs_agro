@@ -1,13 +1,10 @@
 
 
-import 'dart:ui';
-
-import 'absen_response.dart';
 
 class ReportResponse {
   bool error;
   String message;
-  List<ReportResult> result;
+  ReportResult result;
 
   ReportResponse({
     required this.error,
@@ -18,17 +15,43 @@ class ReportResponse {
   factory ReportResponse.fromJson(Map<String, dynamic> json) => ReportResponse(
     error: json["error"],
     message: json["message"],
-    result: List<ReportResult>.from(json['result'].map((e) => ReportResult.fromJson(e)))
+    result:ReportResult.fromJson(json['result'])
   );
 
   Map<String, dynamic> toJson() => {
     "error": error,
     "message": message,
-    'result': List<dynamic>.from(result.map((e) => e.toJson()))
+    'result': result.toJson()
   };
 }
 
 class ReportResult {
+
+  List<ReportData> results;
+  int currentPage;
+  int total;
+  int lastPage;
+
+  ReportResult({required this.results, required this.currentPage, required this.total, required this.lastPage});
+
+  factory ReportResult.fromJson(Map<String, dynamic> json) => ReportResult(
+      results:  List<ReportData>.from(json['data'].map((e) => ReportData.fromJson(e))),
+      currentPage: json['current_page'],
+      total: json['total'],
+      lastPage: json['last_page']
+  );
+
+  Map<String,dynamic> toJson() => {
+    'data':List<dynamic>.from(results.map((e) => e.toJson())),
+    'current_page': currentPage,
+    'total': total,
+    'last_page': lastPage
+  };
+
+
+}
+
+class ReportData {
   String id;
   String salesName;
   String salesCompany;
@@ -42,8 +65,8 @@ class ReportResult {
   InputDate inputDate;
 
 
-  ReportResult({
-      required this.id,
+  ReportData({
+    required this.id,
     required this.salesName,
     required this.salesCompany,
     required this.storeName,
@@ -54,13 +77,13 @@ class ReportResult {
     required this.status,
     required this.checkDate, required this.inputDate});
 
-  factory ReportResult.fromJson(Map<String, dynamic> json) => ReportResult(
+  factory ReportData.fromJson(Map<String, dynamic> json) => ReportData(
     id: json["id"],
     status: json['status'],
     salesName: json['sales_name'],
     salesCompany: json['sales_company'],
-      storeName: json['store_name'],
-      invoice: json['invoice'],
+    storeName: json['store_name'],
+    invoice: json['invoice'],
     note: json['note'] ?? '',
     payment: Payment.fromJson(json['payment']),
     created_at: json['created_at'],

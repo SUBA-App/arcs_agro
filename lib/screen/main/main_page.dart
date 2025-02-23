@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/change_pw_screen.dart';
+import 'package:sales_app/screen/absensi/absensi_provider.dart';
 import 'package:sales_app/screen/absensi/absensi_screen.dart';
 import 'package:sales_app/font_color.dart';
 import 'package:sales_app/home_page.dart';
@@ -37,17 +38,32 @@ class _MainPageState extends State<MainPage> {
       } else {
         await Permission.storage.request();
       }
+    } else {
+      await Permission.camera.request();
+      await Permission.location.request();
+      await Permission.photos.request();
+      await Permission.notification.request();
+      await Permission.storage.request();
     }
-    LocationForegroundService.initService();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<MainProvider>(context, listen: false).getActiveAbsensi();
-      Provider.of<MainProvider>(context, listen: false).checkStatus(context);
-    });
   }
 
   @override
   void initState() {
-    requestPermission();
+    requestPermission().whenComplete(() {
+      LocationForegroundService.initService();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        print('24');
+        Provider.of<MainProvider>(context, listen: false).getActiveAbsensi(context);
+        Provider.of<AbsensiProvider>(context, listen: false).checkPermiss(context);
+      });
+    }).catchError((e) {
+      LocationForegroundService.initService();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        print('23');
+        Provider.of<MainProvider>(context, listen: false).getActiveAbsensi(context);
+        Provider.of<AbsensiProvider>(context, listen: false).checkPermiss(context);
+      });
+    });
     super.initState();
   }
 
@@ -70,7 +86,7 @@ class _MainPageState extends State<MainPage> {
             surfaceTintColor: Colors.white,
             color: Colors.white,
             onSelected: (e) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePwScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ChangePwScreen()));
             },
             itemBuilder: (BuildContext context) {
               return {'Ganti Sandi'}.map((String choice) {

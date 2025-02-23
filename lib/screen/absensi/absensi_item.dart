@@ -7,7 +7,7 @@ import '../../font_color.dart';
 class AbsensiItem extends StatelessWidget {
   const AbsensiItem({super.key, required this.result});
 
-  final AbsenResult? result;
+  final AbsenData? result;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class AbsensiItem extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 8,),
+              const SizedBox(width: 8,),
               Container(
                 alignment: Alignment.center,
                 height: 30,

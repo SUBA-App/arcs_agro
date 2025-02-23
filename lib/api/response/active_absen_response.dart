@@ -28,13 +28,13 @@ class ActiveAbsenResponse {
 
 class ActiveResult {
   int status;
-  AbsenResult? absen;
+  AbsenData? absen;
 
   ActiveResult({required this.status, required this.absen});
 
   factory ActiveResult.fromJson(Map<String, dynamic> json) => ActiveResult(
       status: json['status'],
-      absen: json['ab'] == null ? null : AbsenResult.fromJson(json['ab'])
+      absen: json['ab'] == null ? null : AbsenData.fromJson(json['ab'])
   );
 
   Map<String, dynamic> toJson() => {

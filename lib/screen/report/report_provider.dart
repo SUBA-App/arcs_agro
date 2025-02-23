@@ -16,32 +16,36 @@ import 'package:sales_app/api/response/report_response.dart';
 import 'package:sales_app/bank.dart';
 import 'package:sales_app/util.dart';
 
+import '../../font_color.dart';
+
 
 class ReportProvider extends ChangeNotifier {
 
   bool isLoading = false;
-  List<ReportResult> reports = [];
-  List<ReportResult> reports2 = [];
+  List<ReportData> reports = [];
 
   List<Bank> banks = [];
   List<Bank> banks2 = [];
 
   List<CustData> customers = [];
-  List<CustData> customers2 = [];
   bool isCustLoading = false;
 
   List<InvoiceData> invoices = [];
-  List<InvoiceData> invoices2 = [];
   bool isInvoiceLoading = false;
 
   EnhancedStatus enhancedStatus = EnhancedStatus.loaded;
   bool isMaxReached = false;
+
+  EnhancedStatus enhancedStatus1 = EnhancedStatus.loaded;
+  bool isMaxReached1 = false;
 
   String selectedKios = 'Pilih Kios';
   int selectedKiosId = 0;
 
   String selectedInvoice = 'Pilih Invoice';
   int selectedInvoiceId = 0;
+  String selectedInvoiceNumber = '';
+  int selectedInvoiceNominal = 0;
   String invoice = '';
 
   late TextEditingController noGiro;
@@ -61,6 +65,8 @@ class ReportProvider extends ChangeNotifier {
     Method('Transfer', 2),
     Method('Cek/Giro', 3)
   ];
+
+
 
   void initController() {
     noGiro = TextEditingController();
@@ -145,11 +151,16 @@ class ReportProvider extends ChangeNotifier {
   void setKios(String value, int id) {
     selectedKios = value;
     selectedKiosId = id;
+
+    selectedInvoiceId = 0;
+    selectedInvoiceNumber = '';
     notifyListeners();
   }
 
-  void setInvoice(int id) {
+  void setInvoice(int id, String number, int nominal) {
     selectedInvoiceId = id;
+    selectedInvoiceNumber = number;
+    selectedInvoiceNominal = nominal;
     notifyListeners();
   }
 
@@ -168,48 +179,108 @@ class ReportProvider extends ChangeNotifier {
           );
         });
   }
-  
-  Future<void> getReports() async {
+
+  Future<void> getReports(BuildContext context,int page, String search) async {
     isLoading = true;
+    reports = [];
     notifyListeners();
-    final response = await ApiService.reports();
+    isMaxReached = false;
+    final response = await ApiService.reports(context,page, search);
     if (response.runtimeType == ReportResponse) {
       final resp = response as ReportResponse;
       if (!resp.error) {
         isLoading = false;
-        reports = resp.result;
-        reports2 = resp.result;
-        print(reports2.length);
+        reports = resp.result.results;
         notifyListeners();
       }
     }
   }
 
-  Future<void> getCustomers(int page) async {
+  Future<void> loadMoreReports(BuildContext context,int page, String search) async {
+    enhancedStatus = EnhancedStatus.loading;
+    notifyListeners();
+    final response = await ApiService.reports(context,page, search);
+    if (response.runtimeType == ReportResponse) {
+      final resp = response as ReportResponse;
+      if (!resp.error) {
+        reports.addAll(resp.result.results);
+        enhancedStatus = EnhancedStatus.loaded;
+        if (reports.length >= resp.result.total) {
+          isMaxReached = true;
+          notifyListeners();
+        }
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> getCustomers(BuildContext context,int page, String keyword) async {
     isCustLoading = true;
     notifyListeners();
-    final response = await ApiService.customers(page);
+    isMaxReached = true;
+    final response = await ApiService.customers(context,page, keyword);
     if (response.runtimeType == CustomerResponse) {
       final resp = response as CustomerResponse;
       if (!resp.error) {
         isCustLoading = false;
-
         customers = resp.result?.data ?? [];
-        customers2 = resp.result?.data ?? [];
         notifyListeners();
+      } else {
+        if (resp.message == 'key_failed') {
+          showDialog(context: context,barrierDismissible: false, builder: (context) {
+            return Dialog(
+              backgroundColor: Colors.white,
+
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Tidak Ada Token API', style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black
+                    ),),
+                    const SizedBox(height: 8,),
+                    Text('Hubungi Administrator', style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: FontColor.black
+                    ),),
+                    const SizedBox(height: 8,),
+                    ElevatedButton(onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },style: const ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(FontColor.black)
+                    ), child: Text('OK',style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white
+                    ),))
+                  ],
+                ),
+              ),
+            );
+          });
+        }
       }
     }
   }
 
-  Future<void> loadMoreCust(int page) async {
+  Future<void> loadMoreCust(BuildContext context,int page, String keyword) async {
     enhancedStatus = EnhancedStatus.loading;
     notifyListeners();
-    final response = await ApiService.customers(page);
+    final response = await ApiService.customers(context,page, keyword);
     if (response.runtimeType == CustomerResponse) {
       final resp = response as CustomerResponse;
       if (!resp.error) {
         customers.addAll(resp.result?.data ?? []);
-        customers2.addAll(resp.result?.data ?? []);
+        print('lgth : ${customers.length}');
+        print('lgth : ${resp.result?.data.length}');
         enhancedStatus = EnhancedStatus.loaded;
         if (customers.length >= resp.result!.sp!.rowCount) {
           isMaxReached = true;
@@ -220,62 +291,89 @@ class ReportProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getInvoices(int page, String customerId) async {
+  Future<void> getInvoices(BuildContext context,int page, String customerId,String keyword) async {
     isInvoiceLoading = true;
     invoices = [];
-    invoices2 = [];
     notifyListeners();
-    final response = await ApiService.invoices(page, customerId);
+    isMaxReached1 = false;
+    print('check1');
+    final response = await ApiService.invoices(context,page, customerId,keyword);
     if (response.runtimeType == InvoiceResponse) {
       final resp = response as InvoiceResponse;
       if (!resp.error) {
         isInvoiceLoading = false;
-
         invoices = resp.result?.data ?? [];
-        invoices2 = resp.result?.data ?? [];
         notifyListeners();
+      } else {
+        if (resp.message == 'key_failed') {
+          showDialog(context: context,barrierDismissible: false, builder: (context) {
+            return Dialog(
+              backgroundColor: Colors.white,
+
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Tidak Ada Token API', style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: FontColor.black
+                    ),),
+                    const SizedBox(height: 8,),
+                    Text('Hubungi Administrator', style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: FontColor.black
+                    ),),
+                    const SizedBox(height: 8,),
+                    ElevatedButton(onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },style: const ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(FontColor.black)
+                    ), child: Text('OK',style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white
+                    ),))
+                  ],
+                ),
+              ),
+            );
+          });
+        }
       }
     }
   }
 
-  Future<void> loadMoreInvoice(int page,String customerId) async {
-    enhancedStatus = EnhancedStatus.loading;
+  Future<void> loadMoreInvoice(BuildContext context,int page,String customerId, String keyword) async {
+    enhancedStatus1 = EnhancedStatus.loading;
     notifyListeners();
-    final response = await ApiService.invoices(page, customerId);
+    print('check2');
+    final response = await ApiService.invoices(context,page, customerId,keyword);
     if (response.runtimeType == InvoiceResponse) {
       final resp = response as InvoiceResponse;
       if (!resp.error) {
         invoices.addAll(resp.result?.data ?? []);
-        invoices2.addAll(resp.result?.data ?? []);
-        enhancedStatus = EnhancedStatus.loaded;
+        enhancedStatus1 = EnhancedStatus.loaded;
         if (invoices.length >= resp.result!.sp!.rowCount) {
-          isMaxReached = true;
+          isMaxReached1 = true;
           notifyListeners();
         }
         notifyListeners();
       }
     }
   }
-  
-  void filter(String value) {
-    reports = [];
-    if (value.isNotEmpty) {
-      for (var e in reports2) {
-        if (e.storeName.toLowerCase().contains(value.toLowerCase())) {
-          reports.add(e);
-        }
-      }
-    } else {
-
-      reports.addAll(reports2);
-    }
-    notifyListeners();
-  }
 
   void clearData() {
     selectedMethod = null;
     amount.clear();
     selectedKios = 'Pilih Kios';
+    selectedKiosId = 0;
     selectedInvoiceId = 0;
     selectedListImage = [];
     selectedBank = null;
@@ -325,10 +423,10 @@ class ReportProvider extends ChangeNotifier {
 
     if (!error) {
       print(selectedPayDate);
-      final body = ReportBody(selectedPayMillis,selectedKios, selectedInvoiceId.toString(), selectedMethod!.id.toString(), noGiro.text, selectedGiroMillis, selectedBank?.name ?? '', int.parse(Util.toClearNumber(amount.text)), ket.text);
+      final body = ReportBody(selectedPayMillis,selectedKios, selectedInvoiceNumber.toString(), selectedMethod!.id.toString(), noGiro.text, selectedGiroMillis, selectedBank?.name ?? '', int.parse(Util.toClearNumber(amount.text)), ket.text);
 
       showLoading(context);
-      final response = await ApiService.addReport(selectedListImage, body);
+      final response = await ApiService.addReport(context,selectedListImage, body);
       if (response.runtimeType == DefaultResponse) {
         final resp = response as DefaultResponse;
         if (!resp.error) {

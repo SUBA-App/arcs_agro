@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sales_app/api/response/absen_response.dart';
+
 import 'package:sales_app/api/response/product_response.dart';
 
 import '../../font_color.dart';
@@ -39,7 +39,7 @@ class ProductItem extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                             color: FontColor.black
                         ),),
-                        SizedBox(width: 8,),
+                        const SizedBox(width: 8,),
                         Text('Ukuran ${result.size}', style: TextStyle(
                             fontFamily: FontColor.fontPoppins,
                             fontSize: 12,
@@ -69,7 +69,7 @@ class ProductItem extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: FontColor.black
-              ),) : SizedBox(),
+              ),) : const SizedBox(),
             ],
           ),
         ),

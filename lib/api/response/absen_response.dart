@@ -3,7 +3,7 @@
 class AbsenResponse {
   bool error;
   String message;
-  List<AbsenResult> result;
+  AbsenResult result;
 
   AbsenResponse({
     required this.error,
@@ -14,17 +14,40 @@ class AbsenResponse {
   factory AbsenResponse.fromJson(Map<String, dynamic> json) => AbsenResponse(
     error: json["error"],
     message: json["message"],
-    result: List<AbsenResult>.from(json['result'].map((e) => AbsenResult.fromJson(e)))
+    result: AbsenResult.fromJson(json['result'])
   );
 
   Map<String, dynamic> toJson() => {
     "error": error,
     "message": message,
-    'result': List<dynamic>.from(result.map((e) => e.toJson()))
+    'result': result
   };
 }
 
 class AbsenResult {
+  List<AbsenData> results;
+  int currentPage;
+  int total;
+  int lastPage;
+
+  AbsenResult({required this.results, required this.currentPage, required this.total, required this.lastPage});
+
+  factory AbsenResult.fromJson(Map<String, dynamic> json) => AbsenResult(
+      results:  List<AbsenData>.from(json['data'].map((e) => AbsenData.fromJson(e))),
+      currentPage: json['current_page'],
+      total: json['total'],
+      lastPage: json['last_page']
+  );
+
+  Map<String,dynamic> toJson() => {
+    'data':List<dynamic>.from(results.map((e) => e.toJson())),
+    'current_page': currentPage,
+    'total': total,
+    'last_page': lastPage
+  };
+}
+
+class AbsenData {
   String id;
   int status;
   String checkIn;
@@ -34,15 +57,15 @@ class AbsenResult {
   List<String> pictures;
   String storeName;
 
-  AbsenResult({required this.id, required this.status, required this.checkIn, required this.checkOut,required this.checkInTime, required this.checkOutTime, required this.pictures, required this.storeName});
+  AbsenData({required this.id, required this.status, required this.checkIn, required this.checkOut,required this.checkInTime, required this.checkOutTime, required this.pictures, required this.storeName});
 
-  factory AbsenResult.fromJson(Map<String, dynamic> json) => AbsenResult(
+  factory AbsenData.fromJson(Map<String, dynamic> json) => AbsenData(
     id: json["id"],
     status: json['status'],
     checkIn: json['check_in'],
     checkOut: json['check_out'],
-      checkInTime: json['check_in_time'],
-      checkOutTime: json['check_out_time'],
+    checkInTime: json['check_in_time'],
+    checkOutTime: json['check_out_time'],
     storeName: json['store_name'],
     pictures: List<String>.from(json['pictures'].map((e) => e)),
 

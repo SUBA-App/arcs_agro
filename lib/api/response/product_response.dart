@@ -59,14 +59,14 @@ class ProductData {
       required this.composition});
 
   factory ProductData.fromJson(Map<String, dynamic> json) => ProductData(
-      id: json['id'],
-      productName: json['product_name'],
-      productNo: json['product_no'],
-      price: json['price'],
-      size: json['size'],
+      id: json['id'] ?? 0,
+      productName: json['product_name'] ?? '',
+      productNo: json['product_no'] ?? '',
+      price: json['price'] ?? 0,
+      size: json['size'] ?? 0,
       show: json['show'] ?? 1,
-      qty: json['qty'],
-      composition: json['composition']);
+      qty: json['qty'] ?? '',
+      composition: json['composition'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "id": id,

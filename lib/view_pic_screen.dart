@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sales_app/configuration.dart';
 
-import 'api/api_service.dart';
 
 class ViewPicScreen extends StatefulWidget {
   const ViewPicScreen({super.key, required this.url});

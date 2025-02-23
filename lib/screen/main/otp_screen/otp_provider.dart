@@ -6,14 +6,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sales_app/api/response/default_response.dart';
-import 'package:sales_app/change_pw_screen.dart';
 import 'package:sales_app/screen/forgot_password/change_pw2_screen.dart';
-import 'package:sales_app/screen/login_screen/login_screen.dart';
-import 'package:sales_app/screen/main/main_page.dart';
 import 'package:sales_app/screen/main/pin_screen/pin_screen.dart';
 
 import '../../../api/api_service.dart';
-import '../../../util/preferences.dart';
 
 class OtpProvider extends ChangeNotifier {
 

@@ -25,12 +25,15 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> getProducts(BuildContext context,int page) async {
     products.clear();
+    isMaxReached = false;
+    searchLoading = true;
     notifyListeners();
-    final response = await ApiService.products(page);
+    final response = await ApiService.products(context,page);
     if (response.runtimeType == ProductResponse) {
       final resp = response as ProductResponse;
       if (!resp.error) {
         products = resp.result?.data ?? [];
+        searchLoading = false;
         notifyListeners();
       } else {
         if (resp.message == 'key_failed') {
@@ -49,18 +52,18 @@ class ProductProvider extends ChangeNotifier {
                       fontWeight: FontWeight.w500,
                       color: FontColor.black
                     ),),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8,),
                     Text('Hubungi Administrator', style: TextStyle(
                         fontFamily: FontColor.fontPoppins,
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: FontColor.black
                     ),),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8,),
                     ElevatedButton(onPressed: () {
                       Navigator.pop(context);
                       Navigator.pop(context);
-                    },style: ButtonStyle(
+                    },style: const ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(FontColor.black)
                     ), child: Text('OK',style: TextStyle(
                         fontFamily: FontColor.fontPoppins,
@@ -79,10 +82,11 @@ class ProductProvider extends ChangeNotifier {
   }
 
 
-  Future<void> loadMoreCust(int page) async {
+  Future<void> loadMoreCust(BuildContext context,int page) async {
     enhancedStatus = EnhancedStatus.loading;
+    print('aaaa');
     notifyListeners();
-    final response = await ApiService.products(page);
+    final response = await ApiService.products(context,page);
     if (response.runtimeType == ProductResponse) {
       final resp = response as ProductResponse;
       if (!resp.error) {
@@ -97,10 +101,10 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> search(int page, String keywords) async {
+  Future<void> search(BuildContext context,int page, String keywords) async {
     enhancedStatus = EnhancedStatus.loading;
     notifyListeners();
-    final response = await ApiService.search(page, keywords);
+    final response = await ApiService.search(context,page, keywords);
     if (response.runtimeType == ProductResponse) {
       final resp = response as ProductResponse;
       if (!resp.error) {
@@ -115,10 +119,10 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> searchFirst(int page, String keywords) async {
+  Future<void> searchFirst(BuildContext context,int page, String keywords) async {
     searchLoading = true;
     notifyListeners();
-    final response = await ApiService.search(page,keywords);
+    final response = await ApiService.search(context,page,keywords);
     if (response.runtimeType == ProductResponse) {
       final resp = response as ProductResponse;
       if (!resp.error) {

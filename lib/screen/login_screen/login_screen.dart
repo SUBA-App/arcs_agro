@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/font_color.dart';
 import 'package:sales_app/screen/login_screen/forgot_password_screen/forgot_password_screen.dart';
-import 'package:sales_app/screen/main/main_page.dart';
 import 'package:sales_app/screen/login_screen/login_provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -132,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
                               }, child: Text('Lupa Sandi', style: TextStyle(
                                   color: FontColor.black,
                                   fontFamily: FontColor.fontPoppins,fontSize: 12

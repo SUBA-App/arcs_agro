@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sales_app/api/api_service.dart';
-import 'package:sales_app/screen/main/main_page.dart';
 import 'package:sales_app/screen/main/pin_screen/pin_screen.dart';
 
 import '../../api/response/login_response.dart';

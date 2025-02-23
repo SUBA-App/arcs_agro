@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/screen/absensi/absensi_item.dart';
-import 'package:sales_app/screen/absensi/absensi_provider.dart';
-import 'package:sales_app/screen/main/main_page.dart';
+
+
 import 'package:sales_app/screen/main/main_provider.dart';
 import 'package:sales_app/screen/product/product_screen.dart';
 import 'package:sales_app/shimmer_n.dart';
 import 'package:sales_app/util/preferences.dart';
 
 import 'screen/absensi/absensi_screen.dart';
-import 'screen/absensi/detail_absensi_screen.dart';
+
 import 'font_color.dart';
 import 'screen/report/laporan_kerja_screen.dart';
 
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AbsensiScreen(drawer: false,)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AbsensiScreen(drawer: false)));
                         },
                         child: Container(
                           width: 130,

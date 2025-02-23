@@ -1,10 +1,8 @@
-import 'dart:io';
+
 
 import 'package:camera/camera.dart';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -12,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:sales_app/screen/report/choose_customer_screen.dart';
 import 'package:sales_app/screen/report/choose_invoice_screen.dart';
 import 'package:sales_app/screen/report/report_provider.dart';
+import 'package:sales_app/util.dart';
 
 import '../../currency_formatter.dart';
 import '../../font_color.dart';
@@ -216,9 +215,9 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                     InkWell(
                       borderRadius: BorderRadius.circular(15),
                       onTap: () async {
-                        final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseInvoiceScreen(customerId: provider.selectedKiosId.toString())));
+                        final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseInvoiceScreen(customerId: provider.selectedKiosId.toString(), customerName: provider.selectedKios,)));
                         if (result != null) {
-                          Provider.of<ReportProvider>(context, listen: false).setInvoice(result['id']);
+                          Provider.of<ReportProvider>(context, listen: false).setInvoice(result['id'], result['number'], result['nominal']);
                         }
                       },
                       child: Card(
@@ -239,11 +238,16 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 8,),
-                                Text(provider.selectedInvoiceId == 0 ? 'Pilih Invoice' : provider.selectedInvoiceId.toString(), style: TextStyle(
+                                Text(provider.selectedInvoiceId == 0 ? 'Pilih Invoice' : provider.selectedInvoiceNumber.toString(), style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: FontColor.fontPoppins,
                                   fontWeight: FontWeight.w400,
                                 ),),
+                        provider.selectedInvoiceId != 0 ? Text('Rp ${Util.convertToIdr(provider.selectedInvoiceNominal, 0)}', style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: FontColor.fontPoppins,
+                                  fontWeight: FontWeight.w400,
+                                ),) : SizedBox()
                               ],
                             ),
                           )
@@ -535,7 +539,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                     InkWell(
                       borderRadius: BorderRadius.circular(10),
                       onTap: () {
-                        FocusScope.of(context).unfocus();
+                        FocusScope.of(context).requestFocus(new FocusNode());
                         showModalBottomSheet(context: context, builder: (context) {
                           return Container(
                             width: double.infinity,
@@ -587,10 +591,10 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                       },
                       child: Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color(0xFFfcfcfc),
+                          color: const Color(0xFFfcfcfc),
                           border: Border.all(color: Colors.black26)
                         ),
                         child: Row(

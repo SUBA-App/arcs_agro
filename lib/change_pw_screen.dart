@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/screen/main/main_page.dart';
 import 'package:sales_app/screen/main/main_provider.dart';
 
 import 'font_color.dart';

@@ -16,12 +16,11 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _LaporanKerjaScreenState extends State<ProductScreen> {
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ProductProvider>(context, listen: false)
-          .getProducts(context,1);
+          .getProducts(context, 1);
     });
     super.initState();
   }
@@ -30,17 +29,19 @@ class _LaporanKerjaScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     final provider = Provider.of<ProductProvider>(context);
     return Scaffold(
-      appBar: widget.drawer ? null :  AppBar(
-        backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(
-          color: FontColor.black
-        ),
-        title: Text("Produk",style: TextStyle(
-          fontFamily: FontColor.fontPoppins,
-          color: FontColor.black,
-          fontSize: 16
-        ),),
-      ),
+      appBar: widget.drawer
+          ? null
+          : AppBar(
+              backgroundColor: FontColor.yellow72,
+              iconTheme: const IconThemeData(color: FontColor.black),
+              title: Text(
+                "Produk",
+                style: TextStyle(
+                    fontFamily: FontColor.fontPoppins,
+                    color: FontColor.black,
+                    fontSize: 16),
+              ),
+            ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
@@ -55,17 +56,15 @@ class _LaporanKerjaScreenState extends State<ProductScreen> {
                     fontFamily: FontColor.fontPoppins,
                     fontWeight: FontWeight.w400,
                     color: FontColor.black,
-                    fontSize: 14
-                ),
+                    fontSize: 14),
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     labelText: "Pencarian",
                     labelStyle: TextStyle(
                         fontFamily: FontColor.fontPoppins,
                         fontWeight: FontWeight.w400,
                         color: FontColor.black,
-                      fontSize: 14
-                    ),
+                        fontSize: 14),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
@@ -76,76 +75,93 @@ class _LaporanKerjaScreenState extends State<ProductScreen> {
                         borderRadius: BorderRadius.circular(10),
                         borderSide: const BorderSide(
                           color: FontColor.yellow72,
-                        )
-                    ),
-                  contentPadding: EdgeInsets.all(8)
-                ),
+                        )),
+                    contentPadding: const EdgeInsets.all(8)),
                 onSubmitted: (e) {
                   if (e.isNotEmpty) {
                     Provider.of<ProductProvider>(context, listen: false)
-                        .searchFirst(1, e);
-                    Provider.of<ProductProvider>(context, listen: false).setMode(true);
+                        .searchFirst(context, 1, e);
+                    Provider.of<ProductProvider>(context, listen: false)
+                        .setMode(true);
                   }
                 },
                 onChanged: (e) {
                   if (e.isEmpty) {
                     print('adwa');
-                    Provider.of<ProductProvider>(context, listen: false).setMode(false);
+                    Provider.of<ProductProvider>(context, listen: false)
+                        .setMode(false);
                   }
                 },
               ),
             ),
-            provider.searchLoading ? Expanded(child: Center(child: CircularProgressIndicator(color: Colors.black,),)) :
-            !provider.inSearch ?
-            Expanded(
-              child: EnhancedPaginatedView(
-                builder: (items,physics,reverse, shrinkWrap) {
-                  return ListView.builder(
-                    physics: physics,
-                    shrinkWrap: shrinkWrap,
-                    itemCount: items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ProductItem(result: items[index]);
-                    },
-                  );
-                },itemsPerPage: 20, onLoadMore: (e) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Provider.of<ProductProvider>(context, listen: false)
-                        .loadMoreCust(e);
-                  });
-              }, hasReachedMax: provider.isMaxReached, delegate: EnhancedDelegate(
-                listOfData: provider.products,
-                status: provider.enhancedStatus,
-                header:Container(),
-              ),
-              ),
-            ): Expanded(
-              child: EnhancedPaginatedView(
-                builder: (items,physics,reverse, shrinkWrap) {
-                  return ListView.builder(
-                    physics: physics,
-                    shrinkWrap: shrinkWrap,
-                    itemCount: items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ProductItem(result: items[index]);
-                    },
-                  );
-                },itemsPerPage: 20, onLoadMore: (e) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Provider.of<ProductProvider>(context, listen: false)
-                      .search(e, provider.searchC.text);
-                });
-              }, hasReachedMax: provider.isMaxReached, delegate: EnhancedDelegate(
-                listOfData: provider.products2,
-                status: provider.enhancedStatus,
-                header:Container(),
-              ),
-              ),
-            )
+            provider.searchLoading
+                ? const Expanded(
+                    child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                    ),
+                  ))
+                : !provider.inSearch
+                    ? Expanded(
+                        child: EnhancedPaginatedView(
+                          builder: (items, physics, reverse, shrinkWrap) {
+                            return ListView.builder(
+                              physics: physics,
+                              shrinkWrap: shrinkWrap,
+                              itemCount: items.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProductItem(result: items[index]);
+                              },
+                            );
+                          },
+                          itemsPerPage: 20,
+                          onLoadMore: (e) {
+                            print("product page : $e");
+                            if (e > 1) {
+                              Provider.of<ProductProvider>(context,
+                                      listen: false)
+                                  .loadMoreCust(context, e);
+                            }
+                          },
+                          hasReachedMax: provider.isMaxReached,
+                          delegate: EnhancedDelegate(
+                            listOfData: provider.products,
+                            status: provider.enhancedStatus,
+                            header: Container(),
+                          ),
+                        ),
+                      )
+                    : Expanded(
+                        child: EnhancedPaginatedView(
+                          builder: (items, physics, reverse, shrinkWrap) {
+                            return ListView.builder(
+                              physics: physics,
+                              shrinkWrap: shrinkWrap,
+                              itemCount: items.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProductItem(result: items[index]);
+                              },
+                            );
+                          },
+                          itemsPerPage: 20,
+                          onLoadMore: (e) {
+                            if (e > 1) {
+                              Provider.of<ProductProvider>(context,
+                                      listen: false)
+                                  .search(context, e, provider.searchC.text);
+                            }
+                          },
+                          hasReachedMax: provider.isMaxReached,
+                          delegate: EnhancedDelegate(
+                            listOfData: provider.products2,
+                            status: provider.enhancedStatus,
+                            header: Container(),
+                          ),
+                        ),
+                      )
           ],
         ),
       ),
     );
   }
-
 }

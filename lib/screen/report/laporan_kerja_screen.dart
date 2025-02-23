@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
+
+import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/screen/report/add_laporan_screen.dart';
-import 'package:sales_app/screen/report/laporan_kerja_detail.dart';
 import 'package:sales_app/screen/report/report_item.dart';
 import 'package:sales_app/screen/report/report_provider.dart';
-import 'package:sales_app/util.dart';
+
 
 import '../../font_color.dart';
 
@@ -21,10 +20,12 @@ class LaporanKerjaScreen extends StatefulWidget {
 
 class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
 
+  String search = '';
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ReportProvider>(context, listen: false).getReports();
+      Provider.of<ReportProvider>(context, listen: false).getReports(context, 1, '');
     });
     super.initState();
   }
@@ -49,9 +50,9 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
 
         final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddLaporanScreen()));
         if (result != null) {
-          Provider.of<ReportProvider>(context, listen: false).getReports();
+          Provider.of<ReportProvider>(context, listen: false).getReports(context, 1, '');
         }
-      }, child: const Icon(Icons.add),backgroundColor: FontColor.yellow72,),
+      },backgroundColor: FontColor.yellow72, child: const Icon(Icons.add),),
       body: SafeArea(
         child: Column(
           children: [
@@ -86,22 +87,46 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
                           color: FontColor.yellow72,
                         )
                     ),
-                  contentPadding: EdgeInsets.all(8)
+                  contentPadding: const EdgeInsets.all(8)
                 ),
                 onChanged: (e) {
-                  Provider.of<ReportProvider>(context, listen: false).filter(e);
+                  search = e;
+                  Provider.of<ReportProvider>(context, listen: false).getReports(context,1,e);
                 },
               ),
             ),
-            provider.isLoading ? const Expanded(child: Center(child: CircularProgressIndicator(color: Colors.black,),)): provider.reports.isEmpty ? Expanded(child: Center(child: Image.asset('assets/images/empty.png', width: 170,height: 170,),)) :
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: ListView.builder(
-                    itemCount: provider.reports.length,
-                    itemBuilder: (context, index) {
-                  return ReportItem(report: provider.reports[index]);
-                }),
+            provider.isLoading
+                ? const Expanded(
+                child: Center(
+                    child: CircularProgressIndicator(
+                      color: FontColor.black,
+                    )))
+                : Expanded(
+              child: EnhancedPaginatedView(
+                builder: (items, physics, reverse, shrinkWrap) {
+                  return ListView.builder(
+                    physics: physics,
+                    shrinkWrap: shrinkWrap,
+                    itemCount: items.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ReportItem(report: provider.reports[index]);
+                    },
+                  );
+                },
+                itemsPerPage: 20,
+                onLoadMore: (e) {
+                  if(e > 1) {
+                    Provider.of<ReportProvider>(context, listen: false)
+                        .loadMoreReports(
+                        context, e, search);
+                  }
+                },
+                hasReachedMax: provider.isMaxReached,
+                delegate: EnhancedDelegate(
+                  listOfData: provider.reports,
+                  status: provider.enhancedStatus,
+                  header: Container(),
+                ),
               ),
             )
           ],

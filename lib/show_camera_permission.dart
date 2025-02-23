@@ -15,7 +15,7 @@ class ShowCameraPermission extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: EdgeInsets.all(16),
+      insetPadding: const EdgeInsets.all(16),
       backgroundColor: Colors.white,
       shape:
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -29,7 +29,7 @@ class ShowCameraPermission extends StatelessWidget {
               width: 80,
               height: 80,
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Text(
@@ -39,7 +39,7 @@ class ShowCameraPermission extends StatelessWidget {
                   fontFamily: FontColor.fontPoppins,
                   color: FontColor.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Row(
@@ -63,7 +63,7 @@ class ShowCameraPermission extends StatelessWidget {
                         },
                       style: ButtonStyle(
                         backgroundColor:
-                        WidgetStatePropertyAll(FontColor.yellow72),
+                        const WidgetStatePropertyAll(FontColor.yellow72),
                         shape:
                         WidgetStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -77,7 +77,7 @@ class ShowCameraPermission extends StatelessWidget {
                             color: FontColor.black),
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 Expanded(
@@ -87,7 +87,7 @@ class ShowCameraPermission extends StatelessWidget {
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                        WidgetStatePropertyAll(Colors.white),
+                        const WidgetStatePropertyAll(Colors.white),
                         shape:
                         WidgetStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),

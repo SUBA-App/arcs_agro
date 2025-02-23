@@ -36,7 +36,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     fontFamily: FontColor.fontPoppins,
                     color: FontColor.black
                   ),),
-                  SizedBox(height: 32,),
+                  const SizedBox(height: 32,),
                   TextField(
                     controller: emailC,
                     cursorColor: FontColor.black,

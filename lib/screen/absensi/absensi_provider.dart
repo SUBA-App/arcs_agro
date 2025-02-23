@@ -2,6 +2,7 @@ import 'dart:io' show File, Platform;
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_foreground_task/models/service_request_result.dart';
@@ -18,15 +19,18 @@ import 'package:sales_app/screen/main/main_page.dart';
 import 'package:sales_app/util/preferences.dart';
 
 import '../../service/location_foreground_service.dart';
+import '../../util.dart';
 
 class AbsensiProvider extends ChangeNotifier {
-  List<AbsenResult> absens = [];
+  List<AbsenData> absens = [];
   String selected = "Semua";
   String fromDate = "";
   String toDate = "";
   bool isLoading = false;
+  bool isMaxReached = false;
+  EnhancedStatus enhancedStatus = EnhancedStatus.loaded;
 
-  AbsenResult? absenResult;
+  AbsenData? absenResult;
   bool isLoadingDetail = false;
 
   void showLoading(BuildContext context) {
@@ -45,24 +49,45 @@ class AbsensiProvider extends ChangeNotifier {
         });
   }
 
-  Future<void> getAbsensi() async {
+  Future<void> getAbsensi(BuildContext context,int page) async {
     isLoading = true;
+    absens = [];
     notifyListeners();
-    final response = await ApiService.getAbsensi();
+    isMaxReached = false;
+    final response = await ApiService.getAbsensi(context,page);
     if (response.runtimeType == AbsenResponse) {
       final resp = response as AbsenResponse;
       if (!resp.error) {
         isLoading = false;
-        absens = resp.result;
+        print('cccc');
+        absens = resp.result.results;
         notifyListeners();
       }
     }
   }
 
-  Future<void> getDetailAbsensi(String id) async {
+  Future<void> loadMoreAbsensi(BuildContext context,int page) async {
+    enhancedStatus = EnhancedStatus.loading;
+    notifyListeners();
+    final response = await ApiService.getAbsensi(context,page);
+    if (response.runtimeType == AbsenResponse) {
+      final resp = response as AbsenResponse;
+      if (!resp.error) {
+        absens.addAll(resp.result.results);
+        enhancedStatus = EnhancedStatus.loaded;
+        if (absens.length >= resp.result.total) {
+          isMaxReached = true;
+          notifyListeners();
+        }
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> getDetailAbsensi(String id, BuildContext context) async {
     isLoadingDetail = true;
     notifyListeners();
-    final response = await ApiService.getDetailAbsensi(id);
+    final response = await ApiService.getDetailAbsensi(context,id);
     if (response.runtimeType == ActiveAbsenResponse) {
       final resp = response as ActiveAbsenResponse;
       if (!resp.error) {
@@ -78,6 +103,7 @@ class AbsensiProvider extends ChangeNotifier {
     if (files.isNotEmpty && kios != 'Pilih Kios') {
       showLoading(context);
 
+      final s = await Util.watermarkImage(files);
       final result = await _determinePosition();
 
       if (result.type == 1) {
@@ -90,8 +116,8 @@ class AbsensiProvider extends ChangeNotifier {
         Navigator.pop(context);
         showCheckFailed(context, result.message, result.type);
       } else {
-        final response = await ApiService.addAbsen(
-            files, result.position!.latitude, result.position!.longitude, kios);
+        final response = await ApiService.addAbsen(context,
+            s, result.position!.latitude, result.position!.longitude, kios);
 
         if (response.runtimeType == DefaultResponse) {
           final resp = response as DefaultResponse;
@@ -99,9 +125,9 @@ class AbsensiProvider extends ChangeNotifier {
             await Preferences.saveStatusCheckIn(1);
             if (context.mounted) {
               Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                  context, MaterialPageRoute(builder: (context) => const MainPage()), (e) => false);
               await _startService();
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => MainPage()));
             }
             Fluttertoast.showToast(msg: 'Absensi Berhasil');
           } else {
@@ -122,6 +148,19 @@ class AbsensiProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> checkPermiss(BuildContext context) async {
+    final result = await _determinePosition();
+
+    if (result.type == 1) {
+      showCheckFailed(context, result.message, result.type);
+    } else if (result.type == 2) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: result.message.toString());
+    } else if (result.type == 4) {
+      showCheckFailed(context, result.message, result.type);
+    }
+  }
+
   Future<void> checkOut(BuildContext context, String id) async {
     showLoading(context);
     final result = await _determinePosition();
@@ -134,7 +173,7 @@ class AbsensiProvider extends ChangeNotifier {
     } else if (result.type == 4) {
       showCheckFailed(context, result.message, result.type);
     } else {
-      final response = await ApiService.checkOut(
+      final response = await ApiService.checkOut(context,
           id, result.position!.latitude, result.position!.longitude);
 
       if (response.runtimeType == DefaultResponse) {
@@ -145,7 +184,7 @@ class AbsensiProvider extends ChangeNotifier {
             await _stopService();
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => MainPage()),
+                MaterialPageRoute(builder: (context) => const MainPage()),
                     (e) => false);
           }
           Fluttertoast.showToast(msg: 'Check Out Absensi');
@@ -178,7 +217,7 @@ class AbsensiProvider extends ChangeNotifier {
                     width: 80,
                     height: 80,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Text(
@@ -188,74 +227,45 @@ class AbsensiProvider extends ChangeNotifier {
                         fontFamily: FontColor.fontPoppins,
                         color: FontColor.black),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              if (type == 1) {
-                                AppSettings.openAppSettings(
-                                    type: AppSettingsType.location);
-                              } else {
-                                if (Platform.isAndroid) {
-                                  const AndroidIntent intent = AndroidIntent(
-                                    action:
-                                        'action_application_details_settings',
-                                    data:
-                                        'package:com.example.sales_app', // replace com.example.app with your applicationId
-                                  );
-                                  await intent.launch();
-                                } else {
-                                  AppSettings.openAppSettings(
-                                      type: AppSettingsType.settings);
-                                }
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStatePropertyAll(FontColor.yellow72),
-                              shape:
-                                  WidgetStatePropertyAll(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              )),
-                            ),
-                            child: Text(
-                              'Pengaturan',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: FontColor.fontPoppins,
-                                  color: FontColor.black),
-                            )),
+                  ElevatedButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        if (type == 1) {
+                          AppSettings.openAppSettings(
+                              type: AppSettingsType.location);
+                        } else {
+                          if (Platform.isAndroid) {
+                            const AndroidIntent intent = AndroidIntent(
+                              action:
+                                  'action_application_details_settings',
+                              data:
+                                  'package:com.example.sales_app', // replace com.example.app with your applicationId
+                            );
+                            await intent.launch();
+                          } else {
+                            AppSettings.openAppSettings(
+                                type: AppSettingsType.settings);
+                          }
+                        }
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            const WidgetStatePropertyAll(FontColor.yellow72),
+                        shape:
+                            WidgetStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
                       ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStatePropertyAll(Colors.white),
-                              shape:
-                                  WidgetStatePropertyAll(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              )),
-                            ),
-                            child: Text(
-                              'Tutup',
-                              style: TextStyle(
-                                  fontFamily: FontColor.fontPoppins,
-                                  color: FontColor.black),
-                            )),
-                      )
-                    ],
-                  )
+                      child: Text(
+                        'Pengaturan',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            color: FontColor.black),
+                      ))
                 ],
               ),
             ),

@@ -9,12 +9,12 @@ import 'laporan_kerja_detail.dart';
 class ReportItem extends StatelessWidget {
   const ReportItem({super.key, required this.report});
 
-  final ReportResult report;
+  final ReportData report;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ElevatedButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => LaporanKerjaDetail(report: report,)));
@@ -32,7 +32,7 @@ class ReportItem extends StatelessWidget {
         ),
         child: Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -62,11 +62,11 @@ class ReportItem extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 8,),
+              const SizedBox(width: 8,),
               Container(
                 alignment: Alignment.center,
                 height: 30,
-                padding: EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: report.payment.method == 1 ? Colors.green : report.payment.method == 2 ? Colors.black54 : Colors.red

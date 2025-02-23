@@ -26,13 +26,16 @@ class CheckStatusResponse {
 
 class CheckResult {
   int status;
+  int deleted;
 
   CheckResult({
       required this.status,
+    required this.deleted
   });
 
   factory CheckResult.fromJson(Map<String, dynamic> json) => CheckResult(
     status: json['status'],
+    deleted: json['deleted']
   );
 
   Map<String, dynamic> toJson() => {

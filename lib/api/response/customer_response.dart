@@ -42,7 +42,6 @@ class CustomerResult {
 
 class Sp {
   int page;
-  dynamic sort;
   int pageSize;
   int pageCount;
   int rowCount;
@@ -51,7 +50,6 @@ class Sp {
 
   Sp({
     required this.page,
-    required this.sort,
     required this.pageSize,
     required this.pageCount,
     required this.rowCount,
@@ -60,18 +58,16 @@ class Sp {
   });
 
   factory Sp.fromJson(Map<String, dynamic> json) => Sp(
-    page: json["page"],
-    sort: json["sort"],
-    pageSize: json["pageSize"],
-    pageCount: json["pageCount"],
-    rowCount: json["rowCount"],
-    start: json["start"],
-    limit: json["limit"],
+    page: json["page"] ?? 1,
+    pageSize: json["pageSize"] ?? 0,
+    pageCount: json["pageCount"] ?? 0,
+    rowCount: json["rowCount"] ?? 0,
+    start: json["start"] ?? 0,
+    limit: json["limit"] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
     "page": page,
-    "sort": sort,
     "pageSize": pageSize,
     "pageCount": pageCount,
     "rowCount": rowCount,

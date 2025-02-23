@@ -5,7 +5,6 @@ import 'package:sales_app/screen/main/otp_screen/otp_screen.dart';
 import 'package:sales_app/screen/main/pin_screen/pin_provider.dart';
 import 'package:sales_app/util/preferences.dart';
 
-import '../main_provider.dart';
 
 class PinScreen extends StatefulWidget {
   const PinScreen({super.key, required this.mode, this.pin});
@@ -19,19 +18,13 @@ class PinScreen extends StatefulWidget {
 
 class _PinScreenState extends State<PinScreen> {
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<MainProvider>(context, listen: false).checkStatus(context);
-    });
-    super.initState();
-  }
+
 
   List<int> pin = [];
 
   bool error = false;
 
-  Future<void> action(int number) async {
+  Future<void> action(BuildContext context,int number) async {
     error = false;
     if (pin.length < 6) {
       setState(() {
@@ -59,7 +52,6 @@ class _PinScreenState extends State<PinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PinProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -174,7 +166,7 @@ class _PinScreenState extends State<PinScreen> {
                               children: [
                                 TextButton(
                                     onPressed: () async {
-                                        await action(1);
+                                        await action(context,1);
                                     },
                                     style: const ButtonStyle(
                                       overlayColor:
@@ -191,7 +183,7 @@ class _PinScreenState extends State<PinScreen> {
                                 TextButton(
                                     onPressed: () async {
 
-                                       await action(2);
+                                       await action(context,2);
 
                                     },
                                     style: const ButtonStyle(
@@ -208,7 +200,7 @@ class _PinScreenState extends State<PinScreen> {
                                 TextButton(
                                     onPressed: ()async {
 
-                                        await action(3);
+                                        await action(context,3);
 
                                     },
                                     style: const ButtonStyle(
@@ -232,13 +224,13 @@ class _PinScreenState extends State<PinScreen> {
                               children: [
                                 TextButton(
                                     onPressed: () async {
-
-                                        await action(4);
-
+                                      await action(context,4);
                                     },
                                     style: const ButtonStyle(
                                         overlayColor:
-                                        WidgetStatePropertyAll(Colors.black12)),
+                                        WidgetStatePropertyAll(Colors.black12),
+                                      tapTargetSize: MaterialTapTargetSize.padded
+                                    ),
                                     child: Text(
                                       '4',
                                       style: TextStyle(
@@ -250,7 +242,7 @@ class _PinScreenState extends State<PinScreen> {
                                 TextButton(
                                     onPressed: () async {
 
-                                        await action(5);
+                                        await action(context,5);
 
                                     },
                                     style: const ButtonStyle(
@@ -267,7 +259,7 @@ class _PinScreenState extends State<PinScreen> {
                                 TextButton(
                                     onPressed: () async {
 
-                                        await action(6);
+                                        await action(context,6);
 
                                     },
                                     style: const ButtonStyle(
@@ -292,7 +284,7 @@ class _PinScreenState extends State<PinScreen> {
                                 TextButton(
                                     onPressed: () async {
 
-                                        await action(7);
+                                        await action(context,7);
 
                                     },
                                     style: const ButtonStyle(
@@ -309,7 +301,7 @@ class _PinScreenState extends State<PinScreen> {
                                 TextButton(
                                     onPressed: () async {
 
-                                       await action(8);
+                                       await action(context,8);
 
                                     },
                                     style: const ButtonStyle(
@@ -326,7 +318,7 @@ class _PinScreenState extends State<PinScreen> {
                                 TextButton(
                                     onPressed: () async {
 
-                                        await action(9);
+                                        await action(context,9);
 
                                     },
                                     style: const ButtonStyle(
@@ -364,7 +356,7 @@ class _PinScreenState extends State<PinScreen> {
                                 TextButton(
                                     onPressed: () async {
 
-                                        await action(0);
+                                        await action(context,0);
 
                                     },
                                     style: const ButtonStyle(

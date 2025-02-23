@@ -11,7 +11,7 @@ import '../../font_color.dart';
 class DetailAbsensiScreen extends StatefulWidget {
   const DetailAbsensiScreen({super.key, required this.result});
 
-  final AbsenResult? result;
+  final AbsenData? result;
 
   @override
   State<DetailAbsensiScreen> createState() => _DetailAbsensiScreenState();
@@ -22,7 +22,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AbsensiProvider>(context, listen: false)
-          .getDetailAbsensi(widget.result?.id ?? '');
+          .getDetailAbsensi(widget.result?.id ?? '',context);
     });
     super.initState();
   }

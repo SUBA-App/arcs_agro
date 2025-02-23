@@ -10,7 +10,7 @@ import '../../../util/preferences.dart';
 
 class PinProvider extends ChangeNotifier {
   Future<void> createPin(BuildContext context, String pin) async {
-    final response = await ApiService.createPin(pin);
+    final response = await ApiService.createPin(context,pin);
 
     if (response.runtimeType == CreatePinResponse) {
       final resp = response as CreatePinResponse;
@@ -34,7 +34,7 @@ class PinProvider extends ChangeNotifier {
   }
 
   Future<void> verifyPin(BuildContext context, String pin) async {
-    final response = await ApiService.verifyPin(pin);
+    final response = await ApiService.verifyPin(context,pin);
 
     if (response.runtimeType == DefaultResponse) {
       final resp = response as DefaultResponse;

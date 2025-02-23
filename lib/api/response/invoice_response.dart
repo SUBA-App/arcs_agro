@@ -82,11 +82,14 @@ class Sp {
 
 class InvoiceData {
   int id;
+  int totalAmount;
+  String taxDateView;
+  String number;
 
-  InvoiceData({required this.id});
+  InvoiceData({required this.id, required this.totalAmount,required this.taxDateView,required this.number,});
 
   factory InvoiceData.fromJson(Map<String, dynamic> json) => InvoiceData(
-    id: json['id']
+    id: json['id'], totalAmount: json['primeOwing'], taxDateView: json['taxDate'], number: json['number']
   );
 
   Map<String, dynamic> toJson() => {

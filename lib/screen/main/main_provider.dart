@@ -1,18 +1,14 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:flutter_foreground_task/models/service_request_result.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sales_app/api/api_service.dart';
-import 'package:sales_app/api/response/absen_response.dart';
 import 'package:sales_app/api/response/active_absen_response.dart';
 import 'package:sales_app/api/response/check_status_response.dart';
 import 'package:sales_app/api/response/default_response.dart';
 import 'package:sales_app/screen/login_screen/login_screen.dart';
-import 'package:sales_app/screen/main/main_page.dart';
 import 'package:sales_app/util/preferences.dart';
 
 import '../../service/location_foreground_service.dart';
@@ -38,10 +34,11 @@ class MainProvider extends ChangeNotifier {
         });
   }
 
-  Future<void> getActiveAbsensi() async {
+  Future<void> getActiveAbsensi(BuildContext context) async {
+    print('25');
     isLoading = true;
     notifyListeners();
-    final response = await ApiService.getActiveAbsensi();
+    final response = await ApiService.getActiveAbsensi(context);
     if (response.runtimeType == ActiveAbsenResponse) {
       final resp = response as ActiveAbsenResponse;
       if (!resp.error) {
@@ -55,25 +52,11 @@ class MainProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> checkStatus(BuildContext context) async {
-    final response = await ApiService.checkStatus(context);
-    if (response.runtimeType == CheckStatusResponse) {
-      final resp = response as CheckStatusResponse;
-      if (!resp.error) {
-        if (resp.result.status == 0) {
-          Preferences.clear();
-          if (context.mounted) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()));
-          }
-        }
-      }
-    }
-  }
+
 
   Future<void> changePw(BuildContext context,String password) async {
     showLoading(context);
-    final response = await ApiService.changePw(password);
+    final response = await ApiService.changePw(context,password);
     if (response.runtimeType == DefaultResponse) {
       final resp = response as DefaultResponse;
       if (!resp.error) {
@@ -103,7 +86,7 @@ class MainProvider extends ChangeNotifier {
       if (!resp.error) {
         if(context.mounted) {
           Navigator.pop(context);
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (e) => false);
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (e) => false);
         }
       } else {
         if(context.mounted) {
@@ -129,7 +112,7 @@ class MainProvider extends ChangeNotifier {
         Preferences.clear();
         if(context.mounted) {
           Navigator.pop(context);
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (e) => false);
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (e) => false);
         }
       } else {
         if(context.mounted) {
@@ -138,18 +121,18 @@ class MainProvider extends ChangeNotifier {
         Fluttertoast.showToast(msg: resp.message);
       }
     } else {
+      Preferences.clear();
       if(context.mounted) {
         Navigator.pop(context);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (e) => false);
       }
       Fluttertoast.showToast(msg: response.toString());
     }
   }
 
-  Future<ServiceRequestResult> _startService() async {
-    if (await FlutterForegroundTask.isRunningService) {
-      return FlutterForegroundTask.restartService();
-    } else {
-      return FlutterForegroundTask.startService(
+  Future<void> _startService() async {
+    if (!await FlutterForegroundTask.isRunningService) {
+      FlutterForegroundTask.startService(
         serviceId: 256,
         notificationTitle: 'Kamu Sedang Check In',
         notificationText: 'Lokasi akan di update setiap 10 menit',
