@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_watermark/image_watermark.dart';
+
 import 'package:intl/intl.dart';
-import 'package:image/image.dart' as img;
-import 'package:path_provider/path_provider.dart';
+import 'package:watermark_unique/image_format.dart' as format;
+import 'package:watermark_unique/watermark_unique.dart';
 
 extension DateTimeFromTimeOfDay on DateTime {
   DateTime appliedFromTimeOfDay(TimeOfDay timeOfDay) {
@@ -36,25 +36,32 @@ class Util {
     return "$minutesStr:$secondsStr";
   }
 
-  static Future<List<File>> watermarkImage(List<File> files) async {
-    List<File> s = [];
+
+
+  static Future<File> watermarkImageF(File files) async {
     final current = DateTime.now();
     final dateFormat = DateFormat('dd MMM yyyy, hh:mm:ss').format(current);
-
-    for(var e in files) {
-      final watermarkedImg =
-      await ImageWatermark.addTextWatermark(
-        imgBytes: e.readAsBytesSync(),
-        dstX: 20,
-        dstY: 20,
-        color: Colors.black, watermarkText: dateFormat,
+    final watermarkPlugin = WatermarkUnique();
+      final image = await watermarkPlugin.addTextWatermark(
+        filePath: files.path,
+        text: dateFormat,
+        x: 0,
+        y: 40,
+        textSize: 25,
+        color: Colors.white,
+        isNeedRotateToPortrait: true,
+        backgroundTextColor: Colors.black.withValues(alpha: 0.3),
+        quality: 100,
+        backgroundTextPaddingLeft: 0,
+        backgroundTextPaddingTop: 16,
+        backgroundTextPaddingRight: 0,
+        backgroundTextPaddingBottom: 0,
+        imageFormat: format.ImageFormat.png,
       );
-      final tempDir = await getTemporaryDirectory();
-      File file = await File('${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.png').create();
-      file.writeAsBytesSync(watermarkedImg);
-      s.add(file);
-    }
-
-    return s;
+      if (image != null) {
+        File file = File(image);
+        return file;
+      }
+    return Future.error('null');
   }
 }

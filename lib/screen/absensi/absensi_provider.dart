@@ -33,6 +33,38 @@ class AbsensiProvider extends ChangeNotifier {
   AbsenData? absenResult;
   bool isLoadingDetail = false;
 
+  String search = '';
+  String sort = 'DESC';
+  String start = '';
+  String end = '';
+
+  void setSearch(String value) {
+    search = value;
+    notifyListeners();
+  }
+  void setSort(String value) {
+    sort = value;
+    notifyListeners();
+  }
+
+  void setStart(String value) {
+    start = value;
+    notifyListeners();
+  }
+
+  void setEnd(String value) {
+    end = value;
+    notifyListeners();
+  }
+
+
+  void clear() {
+    sort = 'DESC';
+    start = '';
+    end = '';
+    notifyListeners();
+  }
+
   void showLoading(BuildContext context) {
     showDialog(
         context: context,
@@ -54,12 +86,11 @@ class AbsensiProvider extends ChangeNotifier {
     absens = [];
     notifyListeners();
     isMaxReached = false;
-    final response = await ApiService.getAbsensi(context,page);
+    final response = await ApiService.getAbsensi(context,page,search,sort,start,end);
     if (response.runtimeType == AbsenResponse) {
       final resp = response as AbsenResponse;
       if (!resp.error) {
         isLoading = false;
-        print('cccc');
         absens = resp.result.results;
         notifyListeners();
       }
@@ -69,7 +100,7 @@ class AbsensiProvider extends ChangeNotifier {
   Future<void> loadMoreAbsensi(BuildContext context,int page) async {
     enhancedStatus = EnhancedStatus.loading;
     notifyListeners();
-    final response = await ApiService.getAbsensi(context,page);
+    final response = await ApiService.getAbsensi(context,page,search,sort,start,end);
     if (response.runtimeType == AbsenResponse) {
       final resp = response as AbsenResponse;
       if (!resp.error) {
@@ -102,8 +133,6 @@ class AbsensiProvider extends ChangeNotifier {
       BuildContext context, List<File> files, String kios) async {
     if (files.isNotEmpty && kios != 'Pilih Kios') {
       showLoading(context);
-
-      final s = await Util.watermarkImage(files);
       final result = await _determinePosition();
 
       if (result.type == 1) {
@@ -117,7 +146,7 @@ class AbsensiProvider extends ChangeNotifier {
         showCheckFailed(context, result.message, result.type);
       } else {
         final response = await ApiService.addAbsen(context,
-            s, result.position!.latitude, result.position!.longitude, kios);
+            files, result.position!.latitude, result.position!.longitude, kios);
 
         if (response.runtimeType == DefaultResponse) {
           final resp = response as DefaultResponse;

@@ -19,7 +19,7 @@ import '../report/choose_customer_screen.dart';
 class NextAbsensiScreen extends StatefulWidget {
   const NextAbsensiScreen({super.key, required this.paths});
 
-  final List<String> paths;
+  final List<File> paths;
 
   @override
   State<NextAbsensiScreen> createState() => _NextAbsensiScreenState();
@@ -83,9 +83,6 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                         setState(() {
                           widget.paths.addAll(result);
                           selectedPage = 0;
-                          controller.animateToPage(0,
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.bounceIn);
                         });
                       }
                     },
@@ -127,8 +124,8 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.file(
-                                  File(widget.paths[index]),
-                                  fit: BoxFit.contain,
+                                  widget.paths[index],
+                                  fit: BoxFit.fill,
                                 )),
                           ),
                         ),
@@ -239,7 +236,7 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                     onPressed: () async {
                       List<File> files = [];
                       for (var i in widget.paths) {
-                        files.add(File(i));
+                        files.add(i);
                       }
                         await Provider.of<AbsensiProvider>(
                             context, listen: false)

@@ -27,7 +27,7 @@ class _ViewPicScreenState extends State<ViewPicScreen> {
             Expanded(
               child: PhotoView(
                   imageProvider: NetworkImage(
-              '${Configuration.imageUrlPayment}${widget.url}'),
+              widget.url),
               ),
             ),
           ],

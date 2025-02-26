@@ -158,6 +158,15 @@ class _ChooseCustomerScreenState extends State<ChooseCustomerScreen> {
                                               fontWeight: FontWeight.w400,
                                               color: FontColor.black),
                                         ),
+                                        Text(
+                                          'Penjual : ${provider.customers[index].salesman}',
+                                          style: TextStyle(
+                                              fontFamily:
+                                              FontColor.fontPoppins,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.redAccent),
+                                        ),
                                       ],
                                     ),
                                   )),

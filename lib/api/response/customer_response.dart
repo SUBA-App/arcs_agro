@@ -79,16 +79,19 @@ class Sp {
 class CustData {
   String name;
   int id;
+  String salesman;
 
-  CustData({required this.name, required this.id});
+  CustData({required this.name, required this.id, required this.salesman});
 
   factory CustData.fromJson(Map<String, dynamic> json) => CustData(
       name: json['name'],
-    id: json['id']
+    id: json['id'],
+    salesman:json['salesmanNameList'],
   );
 
   Map<String, dynamic> toJson() => {
     "name": name,
     "id": id,
+    "salesman": salesman
   };
 }

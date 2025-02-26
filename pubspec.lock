@@ -425,10 +425,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: "8346ad4b5173924b5ddddab782fc7d8a6300178c8b1dc427775405a01701c4a6"
+      sha256: "13d3349ace88f12f4a0d175eb5c12dcdd39d35c4c109a8a13dfeb6d0bd9e31c3"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.2"
+    version: "4.5.3"
   image_picker:
     dependency: "direct main"
     description:
@@ -493,14 +493,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
-  image_watermark:
-    dependency: "direct main"
-    description:
-      name: image_watermark
-      sha256: "3c7d79d4915328ba3eb5d91bfec930cdcadc4797264b7f862c14f98ff89aa0da"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   intl:
     dependency: "direct main"
     description:
@@ -1026,6 +1018,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.3.0"
+  watermark_unique:
+    dependency: "direct main"
+    description:
+      name: watermark_unique
+      sha256: a928ba1253588508bb5a65748ae4bcbfbe82acfe623763954a2763e8d8b09bd6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.8"
   web:
     dependency: transitive
     description:

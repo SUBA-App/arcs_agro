@@ -66,6 +66,38 @@ class ReportProvider extends ChangeNotifier {
     Method('Cek/Giro', 3)
   ];
 
+  String search = '';
+  String sort = 'DESC';
+  String start = '';
+  String end = '';
+
+  void setSearch(String value) {
+    search = value;
+    notifyListeners();
+  }
+  void setSort(String value) {
+    sort = value;
+    notifyListeners();
+  }
+
+  void setStart(String value) {
+    start = value;
+    notifyListeners();
+  }
+
+  void setEnd(String value) {
+    end = value;
+    notifyListeners();
+  }
+
+
+  void clear() {
+    sort = 'DESC';
+    start = '';
+    end = '';
+    notifyListeners();
+  }
+
 
 
   void initController() {
@@ -180,12 +212,12 @@ class ReportProvider extends ChangeNotifier {
         });
   }
 
-  Future<void> getReports(BuildContext context,int page, String search) async {
+  Future<void> getReports(BuildContext context,int page) async {
     isLoading = true;
     reports = [];
     notifyListeners();
     isMaxReached = false;
-    final response = await ApiService.reports(context,page, search);
+    final response = await ApiService.reports(context,page, search,sort,start,end);
     if (response.runtimeType == ReportResponse) {
       final resp = response as ReportResponse;
       if (!resp.error) {
@@ -196,10 +228,10 @@ class ReportProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> loadMoreReports(BuildContext context,int page, String search) async {
+  Future<void> loadMoreReports(BuildContext context,int page) async {
     enhancedStatus = EnhancedStatus.loading;
     notifyListeners();
-    final response = await ApiService.reports(context,page, search);
+    final response = await ApiService.reports(context,page,search,sort,start,end);
     if (response.runtimeType == ReportResponse) {
       final resp = response as ReportResponse;
       if (!resp.error) {

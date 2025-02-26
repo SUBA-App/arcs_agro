@@ -52,10 +52,10 @@ class ApiService {
     }
   }
 
-  static Future<Object> getAbsensi(BuildContext context, int page) async {
+  static Future<Object> getAbsensi(BuildContext context, int page, String search,String sort, String start, String end) async {
     try {
       final response = await http
-          .get(Uri.parse('${Configuration.apiUrl}absensi?page=$page'), headers: _headers);
+          .get(Uri.parse('${Configuration.apiUrl}absensi?page=$page&search=$search&sort=$sort&start=$start&end=$end'), headers: _headers);
       if (kDebugMode) {
         print('response absensi : ${response.body}');
       }
@@ -244,10 +244,10 @@ class ApiService {
     }
   }
 
-  static Future<Object> reports(BuildContext context, int page, String search) async {
+  static Future<Object> reports(BuildContext context, int page, String search,String sort, String start, String end) async {
     try {
       final response = await http
-          .get(Uri.parse('${Configuration.apiUrl}report?page=$page&search=$search'), headers: _headers);
+          .get(Uri.parse('${Configuration.apiUrl}report?page=$page&search=$search&sort=$sort&start=$start&end=$end'), headers: _headers);
       if (kDebugMode) {
         print('response report : ${response.body}');
       }

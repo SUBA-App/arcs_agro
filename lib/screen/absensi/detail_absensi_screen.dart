@@ -7,6 +7,7 @@ import 'package:sales_app/screen/absensi/absensi_provider.dart';
 
 import '../../configuration.dart';
 import '../../font_color.dart';
+import '../../view_pic_screen.dart';
 
 class DetailAbsensiScreen extends StatefulWidget {
   const DetailAbsensiScreen({super.key, required this.result});
@@ -22,7 +23,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AbsensiProvider>(context, listen: false)
-          .getDetailAbsensi(widget.result?.id ?? '',context);
+          .getDetailAbsensi(widget.result?.id ?? '', context);
     });
     super.initState();
   }
@@ -106,8 +107,8 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                               alignment: Alignment.center,
                               width: 100,
                               height: 30,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 4),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: provider.absenResult?.status == 1
@@ -144,19 +145,36 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500),
                           ),
-                          const SizedBox(height: 8,),
+                          const SizedBox(
+                            height: 8,
+                          ),
                           Expanded(
                             child: MasonryGridView.count(
-                              itemCount:
-                                  provider.absenResult?.pictures.length,
+                              itemCount: provider.absenResult?.pictures.length,
                               itemBuilder: (context, index) {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ViewPicScreen(
+                                              url: '${Configuration.imageUrl}${provider.absenResult?.pictures[index] ?? ''}' ,
+                                            )));
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
                                       imageUrl:
-                                          '${Configuration.imageUrl}${provider.absenResult?.pictures[index]}',height: 200,fit: BoxFit.fill,),
+                                          '${Configuration.imageUrl}${provider.absenResult?.pictures[index]}',
+                                      placeholder: (_,__) => Image.asset('assets/images/placeholder.jpg',fit: BoxFit.fill,),
+                                      errorWidget: (_,__,___) => Image.asset('assets/images/placeholder.jpg', fit: BoxFit.fill,),
+                                      height: 200,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
                                 );
-                              }, crossAxisCount: 3,
+                              },
+                              crossAxisCount: 3,
                               crossAxisSpacing: 4,
                               mainAxisSpacing: 4,
                             ),

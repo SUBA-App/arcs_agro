@@ -41,7 +41,8 @@ dependencies:
   awesome_notifications: ^0.10.0
   camera_android: ^0.10.10
   carousel_slider: ^5.0.0
-  image_watermark: ^0.1.0
+  watermark_unique: ^1.0.8
+
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/screen/report/add_laporan_screen.dart';
 import 'package:sales_app/screen/report/report_item.dart';
@@ -8,6 +9,7 @@ import 'package:sales_app/screen/report/report_provider.dart';
 
 
 import '../../font_color.dart';
+import '../dialog/filter_dialog.dart';
 
 class LaporanKerjaScreen extends StatefulWidget {
   const LaporanKerjaScreen({super.key, required this.drawer});
@@ -20,14 +22,48 @@ class LaporanKerjaScreen extends StatefulWidget {
 
 class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
 
-  String search = '';
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ReportProvider>(context, listen: false).getReports(context, 1, '');
+      Provider.of<ReportProvider>(context, listen: false).clear();
+      Provider.of<ReportProvider>(context, listen: false).getReports(context, 1);
     });
     super.initState();
+  }
+
+  Future<void> startDate(BuildContext context, int mode) async {
+    final DateTime? picked = await showDatePicker(
+        builder: (context, child) {
+          return Theme(data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: FontColor.yellow72, // header background color
+              onPrimary: Colors.black, // header text color
+              onSurface: FontColor.black, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: FontColor.black, // button text color
+              ),
+            ),
+          ), child: child!);
+        },
+        context: context,
+        initialDate: mode == 1 ?
+        (Provider.of<ReportProvider>(context, listen: false).start.isEmpty ? null : DateTime.tryParse(Provider.of<ReportProvider>(context, listen: false).start))
+            :(Provider.of<ReportProvider>(context, listen: false).end.isEmpty ? null : DateTime.tryParse(Provider.of<ReportProvider>(context, listen: false).end)),
+        locale: const Locale("id"),
+        firstDate: DateTime(2000,1),
+        lastDate: DateTime(2100, 1));
+    if (picked != null) {
+      setState(() {
+        final format = DateFormat('yyyy-MM-dd').format(picked);
+        if (mode == 1) {
+          Provider.of<ReportProvider>(context, listen: false).setStart(format);
+        } else {
+          Provider.of<ReportProvider>(context, listen: false).setEnd(format);
+        }
+      });
+    }
   }
 
   @override
@@ -50,7 +86,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
 
         final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddLaporanScreen()));
         if (result != null) {
-          Provider.of<ReportProvider>(context, listen: false).getReports(context, 1, '');
+          Provider.of<ReportProvider>(context, listen: false).getReports(context, 1);
         }
       },backgroundColor: FontColor.yellow72, child: const Icon(Icons.add),),
       body: SafeArea(
@@ -58,41 +94,82 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                cursorColor: FontColor.black,
-                style: TextStyle(
-                    fontFamily: FontColor.fontPoppins,
-                    fontWeight: FontWeight.w400,
-                    color: FontColor.black,
-                    fontSize: 14
-                ),
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                    labelText: "Pencarian",
-                    labelStyle: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontWeight: FontWeight.w400,
-                        color: FontColor.black,
-                      fontSize: 14
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Colors.black26,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      cursorColor: FontColor.black,
+                      style: TextStyle(
+                          fontFamily: FontColor.fontPoppins,
+                          fontWeight: FontWeight.w400,
+                          color: FontColor.black,
+                          fontSize: 14
                       ),
+                      decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          labelText: "Pencarian",
+                          labelStyle: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontWeight: FontWeight.w400,
+                              color: FontColor.black,
+                              fontSize: 14
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.black26,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: FontColor.yellow72,
+                              )
+                          ),
+                          contentPadding: const EdgeInsets.all(8)
+                      ),
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: (e) {
+                        Provider.of<ReportProvider>(context, listen: false).clear();
+                        Provider.of<ReportProvider>(context, listen: false).setSearch(e);
+                        Provider.of<ReportProvider>(context, listen: false).getReports(context,1);
+
+                      },
+                      onChanged: (e) {
+                        if (e.isEmpty) {
+                          Provider.of<ReportProvider>(context, listen: false).clear();
+                          Provider.of<ReportProvider>(context, listen: false).setSearch(e);
+                          Provider.of<ReportProvider>(context, listen: false).getReports(context,1);
+
+                        }
+                      },
                     ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: FontColor.yellow72,
-                        )
+                  ),
+                  SizedBox(width: 16,),
+                  IconButton(
+                    icon: Image.asset('assets/images/filter-list.png', width: 20,height: 20,),
+                    style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            side: const BorderSide(color: Colors.black26),
+                            borderRadius: BorderRadius.circular(10)
+                        ))
                     ),
-                  contentPadding: const EdgeInsets.all(8)
-                ),
-                onChanged: (e) {
-                  search = e;
-                  Provider.of<ReportProvider>(context, listen: false).getReports(context,1,e);
-                },
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,isDismissible: false, builder: (context) {
+                        final provider1 = Provider.of<ReportProvider>(context);
+                        return FilterDialog(applyTap: () {
+                          Navigator.pop(context);
+                          Provider.of<ReportProvider>(context, listen: false).getReports(context,1);
+                        }, start: provider1.start, end: provider1.end, startTap: () {
+                          startDate(context, 1);
+                        }, endTap: () {startDate(context, 2);  }, sort: provider1.sort, sortChange: (String e) {
+                          Provider.of<ReportProvider>(context, listen: false).setSort(e);
+                        }, clear: () { Provider.of<ReportProvider>(context, listen: false).clear(); },);
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
             provider.isLoading
@@ -118,7 +195,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
                   if(e > 1) {
                     Provider.of<ReportProvider>(context, listen: false)
                         .loadMoreReports(
-                        context, e, search);
+                        context, e);
                   }
                 },
                 hasReachedMax: provider.isMaxReached,
