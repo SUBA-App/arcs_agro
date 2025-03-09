@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -48,10 +47,11 @@ class ReportProvider extends ChangeNotifier {
   int selectedInvoiceNominal = 0;
   String invoice = '';
 
-  late TextEditingController noGiro;
-  late TextEditingController giroDate;
-  late TextEditingController amount;
-  late TextEditingController ket;
+  static TextEditingController noGiro = TextEditingController();
+  static  TextEditingController giroDate = TextEditingController();
+  static  TextEditingController amount = TextEditingController();
+  static  TextEditingController ket = TextEditingController();
+
   Bank? selectedBank;
   Method? selectedMethod;
   String selectedGiroDate = '';
@@ -100,7 +100,7 @@ class ReportProvider extends ChangeNotifier {
 
 
 
-  void initController() {
+  static void initController() {
     noGiro = TextEditingController();
     giroDate = TextEditingController();
     amount = TextEditingController();
@@ -167,9 +167,9 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setImage(List<XFile> files) {
+  void setImage(List<File> files) {
     for(var i in files) {
-      selectedListImage.add(File(i.path));
+      selectedListImage.add(i);
     }
     notifyListeners();
   }
@@ -418,6 +418,8 @@ class ReportProvider extends ChangeNotifier {
   Future<void> addReport(BuildContext context) async {
 
     bool error = false;
+
+    print(selectedListImage.length);
 
     if (selectedMethod != null) {
       if (selectedMethod?.id == 1) {

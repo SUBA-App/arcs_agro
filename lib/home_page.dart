@@ -1,6 +1,13 @@
-import 'package:flutter/cupertino.dart';
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
+import 'package:sales_app/api/api_service.dart';
+import 'package:sales_app/api/response/default_response.dart';
+import 'package:sales_app/local_db.dart';
 import 'package:sales_app/screen/absensi/absensi_item.dart';
 
 
@@ -22,6 +29,60 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  late StreamSubscription<InternetConnectionStatus> subscription;
+
+  late AppDatabase? _database;
+
+  @override
+  void initState() {
+    final connectionChecker = InternetConnectionChecker.instance;
+
+   $FloorAppDatabase.databaseBuilder('app_database.db').build().then((e) {
+     _database = e;
+     connectionChecker.hasConnection.then((e) {
+       if (e) {
+         if (_database != null) {
+           _database?.locationDao.getCacheLocation().then((e) {
+             if (e.isNotEmpty) {
+               ApiService.updateCacheCoordinate(e).then((i) {
+                 if (i.runtimeType == DefaultResponse) {
+                   _database?.locationDao.clearCache();
+                 }
+               });
+             }
+           });
+         }
+       }
+     });
+   });
+
+    subscription = connectionChecker.onStatusChange.listen(
+          (InternetConnectionStatus status) {
+        if (status == InternetConnectionStatus.connected) {
+          if (_database != null) {
+            _database?.locationDao.getCacheLocation().then((e) {
+              if (e.isNotEmpty) {
+                ApiService.updateCacheCoordinate(e).then((i) {
+                  if (i.runtimeType == DefaultResponse) {
+                    _database?.locationDao.clearCache();
+                  }
+                });
+              }
+            });
+          }
+        }
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MainProvider>(context);

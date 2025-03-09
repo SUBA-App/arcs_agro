@@ -18,12 +18,11 @@ class _ChooseCustomerScreenState extends State<ChooseCustomerScreen> {
 
   String currentSearch = '';
 
-  late ReportProvider provid;
+
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      provid = Provider.of<ReportProvider>(context, listen: false);
       Provider.of<ReportProvider>(context, listen: false).getCustomers(context, 1, '');
     });
     super.initState();

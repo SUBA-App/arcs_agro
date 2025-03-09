@@ -35,14 +35,16 @@ class DateView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(value, style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: FontColor.fontPoppins,
-                    fontWeight: FontWeight.w500,
-                    color: FontColor.black
-                ),),
+                Expanded(
+                  child: Text(value, style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: FontColor.fontPoppins,
+                      fontWeight: FontWeight.w500,
+                      color: FontColor.black
+                  ),),
+                ),
                 SizedBox(width: 8,),
-                Image.asset('assets/images/calendar.png', width: 20,height: 20,)
+                Image.asset('assets/images/calendar.png', width: 15,height: 15,)
               ],
             ),
           ),

@@ -19,7 +19,6 @@ import 'package:sales_app/screen/main/main_page.dart';
 import 'package:sales_app/util/preferences.dart';
 
 import '../../service/location_foreground_service.dart';
-import '../../util.dart';
 
 class AbsensiProvider extends ChangeNotifier {
   List<AbsenData> absens = [];

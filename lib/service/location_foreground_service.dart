@@ -2,14 +2,17 @@ import 'dart:async';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sales_app/api/body/coordinate_body.dart';
+import 'package:sales_app/api/response/default_response.dart';
 import 'package:sales_app/configuration.dart';
+import 'package:sales_app/location_model.dart';
+import 'package:sales_app/util.dart';
 import 'package:sales_app/util/preferences.dart';
 
 import '../api/api_service.dart';
 import '../api/model/location_result.dart';
+import '../local_db.dart';
 
 class LocationForegroundService {
   static void initService() {
@@ -47,8 +50,8 @@ class MyTaskHandler extends TaskHandler {
 
   Future<void> updateCoordinate() async {
     try {
+      final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
       final result = await _determinePosition();
-
       if (result.type == 1) {
         AwesomeNotifications().createNotification(
             content: NotificationContent(
@@ -85,7 +88,16 @@ class MyTaskHandler extends TaskHandler {
       } else {
         CoordinateBody body = CoordinateBody(
             result.position!.latitude, result.position!.longitude);
-        await ApiService.updateCoordinate(body);
+        final response = await ApiService.updateCoordinate(body);
+        if (response.runtimeType == DefaultResponse) {
+          final resp = response as DefaultResponse;
+
+        } else {
+          database.locationDao.addLocation(
+              LocationModel('${result.position!.latitude}',
+                  '${result.position!.longitude}',
+                  DateTime.now().format('yyyy-MM-dd')));
+        }
       }
     } catch(e) {
       AwesomeNotifications().createNotification(
@@ -139,6 +151,7 @@ class MyTaskHandler extends TaskHandler {
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
     await Preferences.init();
     await Configuration.current();
+
     ApiService.init();
     _timer = Timer.periodic(Duration(minutes: 10), (e) async {
       await updateCoordinate();

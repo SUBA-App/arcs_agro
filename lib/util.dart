@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:intl/intl.dart';
 import 'package:watermark_unique/image_format.dart' as format;
@@ -9,6 +10,10 @@ import 'package:watermark_unique/watermark_unique.dart';
 extension DateTimeFromTimeOfDay on DateTime {
   DateTime appliedFromTimeOfDay(TimeOfDay timeOfDay) {
     return DateTime(year, month, day, timeOfDay.hour, timeOfDay.minute);
+  }
+
+  String format(String format) {
+    return DateFormat(format).format(this);
   }
 }
 
@@ -38,30 +43,39 @@ class Util {
 
 
 
-  static Future<File> watermarkImageF(File files) async {
+  static Future<List<File>> watermarkImageF(List<File> files) async {
+    List<File> filesM = [];
     final current = DateTime.now();
     final dateFormat = DateFormat('dd MMM yyyy, hh:mm:ss').format(current);
     final watermarkPlugin = WatermarkUnique();
+    for(var i in files) {
       final image = await watermarkPlugin.addTextWatermark(
-        filePath: files.path,
+        filePath: i.path,
         text: dateFormat,
-        x: 0,
+        x: 8,
         y: 40,
         textSize: 25,
         color: Colors.white,
         isNeedRotateToPortrait: true,
         backgroundTextColor: Colors.black.withValues(alpha: 0.3),
-        quality: 100,
+        quality: 80,
         backgroundTextPaddingLeft: 0,
         backgroundTextPaddingTop: 16,
         backgroundTextPaddingRight: 0,
         backgroundTextPaddingBottom: 0,
-        imageFormat: format.ImageFormat.png,
+        imageFormat: format.ImageFormat.jpeg,
       );
       if (image != null) {
         File file = File(image);
-        return file;
+        filesM.add(file);
       }
-    return Future.error('null');
+    }
+
+    if (filesM.length == files.length) {
+      return filesM;
+    } else {
+      Fluttertoast.showToast(msg: 'Terjadi Kesalahan');
+      return Future.error('null');
+    }
   }
 }

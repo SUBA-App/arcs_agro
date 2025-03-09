@@ -55,8 +55,8 @@ class FilterDialog extends StatelessWidget {
                   child: DateView(top: 'Start', value: start.isEmpty ? 'Pilih tanggal' : start, onTap: startTap,)
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
-                child: Image.asset('assets/images/arrow-alt-right.png', width: 24,height: 24,),
+                padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
+                child: Image.asset('assets/images/arrow-alt-right.png', width: 15,height: 15,),
               ),
               Expanded(
                 child: DateView(top: 'End', value: end.isEmpty ? 'Pilih tanggal' : end, onTap: endTap,),

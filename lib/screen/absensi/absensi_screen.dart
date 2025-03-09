@@ -103,7 +103,7 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
         } else {
           await Permission.camera.request();
         }
-      },backgroundColor: FontColor.yellow72, child: Image.asset('assets/images/camera2.png', width: 24,height: 24,),),
+      },backgroundColor: FontColor.yellow72, child: Image.asset('assets/images/camera2.png', width: 20,height: 20,),),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

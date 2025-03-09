@@ -46,13 +46,13 @@ void main() async {
   FlutterForegroundTask.initCommunicationPort();
   await Preferences.init();
   await Configuration.current();
+
   ApiService.init();
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
   ]);
-
-
 
 
   runApp(MultiProvider(
@@ -79,9 +79,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       themeMode: ThemeMode.light,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        canvasColor: Colors.white,
+      theme: ThemeData.light(
         useMaterial3: true,
       ),
       home: Preferences.token().isEmpty ? const LoginScreen() : (Preferences.getUser()?.hasPin ?? false) == true ? PinScreen(mode: 3) :  PinScreen(mode: 1),

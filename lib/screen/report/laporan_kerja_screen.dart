@@ -88,7 +88,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
         if (result != null) {
           Provider.of<ReportProvider>(context, listen: false).getReports(context, 1);
         }
-      },backgroundColor: FontColor.yellow72, child: const Icon(Icons.add),),
+      },backgroundColor: FontColor.yellow72, child: const Icon(Icons.add, color: FontColor.black,),),
       body: SafeArea(
         child: Column(
           children: [

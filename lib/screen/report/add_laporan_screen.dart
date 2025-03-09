@@ -1,4 +1,4 @@
-
+import 'dart:io';
 
 import 'package:camera/camera.dart';
 
@@ -83,16 +83,14 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
 
   late CameraDescription cameraDescription;
 
-  late ReportProvider pro;
 
   @override
   void initState() {
-    pro = Provider.of<ReportProvider>(context, listen: false);
+    ReportProvider.initController();
     availableCameras().then((e) {
       cameraDescription = e.first;
     });
     WidgetsBinding.instance.addPostFrameCallback((e) {
-      Provider.of<ReportProvider>(context, listen: false).initController();
       Provider.of<ReportProvider>(context, listen: false).loadBanks(context);
       final dateTime = DateTime.now();
       final format = DateFormat('dd MMMM yyyy').format(dateTime);
@@ -105,17 +103,11 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
 
   @override
   void dispose() {
-    pro.ket.dispose();
-    pro.noGiro.dispose();
-    pro.amount.dispose();
-    pro.giroDate.dispose();
+    ReportProvider.ket.dispose();
+    ReportProvider.amount.dispose();
+    ReportProvider.giroDate.dispose();
+    ReportProvider.noGiro.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    pro = Provider.of<ReportProvider>(context, listen: false);
-    super.didChangeDependencies();
   }
 
   bool isKet = false;
@@ -257,6 +249,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                       height: 8,
                     ),
                     DropdownButtonFormField(
+                      dropdownColor: Colors.white,
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: FontColor.fontPoppins,
@@ -303,14 +296,14 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                             fontFamily: FontColor.fontPoppins,
                             fontWeight: FontWeight.w400,
                           ),
-                          controller: provider.noGiro,
+                          controller: ReportProvider.noGiro,
                           cursorColor: FontColor.black,
                           decoration: InputDecoration(
                               labelText: "Masukkan Nomor Cek/Giro",
                               labelStyle: TextStyle(
                                   fontFamily: FontColor.fontPoppins,
                                   fontWeight: FontWeight.w400,
-                                  color: FontColor.black, fontSize: 14),
+                                  color: FontColor.black.withOpacity(0.7), fontSize: 14),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
@@ -334,14 +327,14 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                           ),
                           cursorColor: FontColor.black,
                           readOnly: true,
-                          controller: provider.giroDate,
+                          controller: ReportProvider.giroDate,
                           decoration: InputDecoration(
                               suffixIcon: const Icon(Icons.calendar_month_rounded),
                               hintText: "Pilih Tanggal Jatuh Tempo",
                               hintStyle: TextStyle(
                                   fontFamily: FontColor.fontPoppins,
                                   fontWeight: FontWeight.w400,
-                                  color: FontColor.black),
+                                  color:  FontColor.black.withOpacity(0.7)),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
@@ -378,7 +371,8 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                 Text("Pilih Bank", style: TextStyle(
                                     fontFamily: FontColor.fontPoppins,
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w500
+                                    fontWeight: FontWeight.w500,
+
                                 ),),
                                 const SizedBox(height: 16,),
                                 SearchBar(
@@ -442,6 +436,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                             Text(provider.selectedBank == null ?"Pilih Bank" : provider.selectedBank!.name, style: TextStyle(
                               fontFamily: FontColor.fontPoppins,
                               fontSize: 14,
+                                color:provider.selectedBank == null ? FontColor.black.withOpacity(0.7) : FontColor.black,
                               fontWeight: FontWeight.w400
                             ),),
                             const Icon(Icons.arrow_drop_down, color: Colors.black54,)
@@ -461,7 +456,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                         FilteringTextInputFormatter.digitsOnly,
                         CurrencyInputFormatter()
                       ],
-                      controller: provider.amount,
+                      controller: ReportProvider.amount,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           labelText: "Masukkan Nominal",
@@ -493,7 +488,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                   setState(() {
                                     isKet = v!;
                                   });
-                                  Provider.of<ReportProvider>(context, listen: false).ket.clear();
+                                  ReportProvider.ket.clear();
                                 }, activeColor: FontColor.black,shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5)
                                 ),)),
@@ -511,7 +506,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                             fontWeight: FontWeight.w400,
                           ),
                           cursorColor: FontColor.black,
-                          controller: provider.ket,
+                          controller: ReportProvider.ket,
 
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
@@ -552,15 +547,10 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                               children: [
                                 TextButton(
                                   onPressed: () async {
-                                    List<XFile> files = [];
-                                    final result =await  Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureAbsensiScreen2(camera: cameraDescription)));
+                                    final result =await  Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureAbsensiScreen2(camera: cameraDescription, mode: 2,)));
                                     if (result != null) {
-                                      for(var i in result) {
-                                        files.add(XFile(i));
-                                      }
-                                      Provider.of<ReportProvider>(context, listen: false).setImage(files);
-                                      FocusScope.of(context).unfocus();
                                       Navigator.pop(context);
+                                      Provider.of<ReportProvider>(context, listen: false).setImage(result);
                                     }
                                   },
                                   child: Text('Kamera', style: TextStyle(
@@ -571,10 +561,15 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                    final picker = await ImagePicker().pickMultiImage();
+                                    List<File> files = [];
+                                    final picker = await ImagePicker().pickMultiImage(maxWidth: 1080, maxHeight: 1920);
                                     if (picker.isNotEmpty) {
-                                      Provider.of<ReportProvider>(context, listen: false).setImage(picker);
+                                      for(var i in picker) {
+                                        files.add(File(i.path));
+                                      }
                                       Navigator.pop(context);
+                                      Provider.of<ReportProvider>(context, listen: false).setImage(files);
+
                                     }
                                   },
                                   child: Text('Galeri', style: TextStyle(

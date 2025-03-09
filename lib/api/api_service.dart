@@ -17,6 +17,7 @@ import 'package:sales_app/api/response/login_response.dart';
 import 'package:sales_app/api/response/product_response.dart';
 import 'package:sales_app/api/response/report_response.dart';
 import 'package:sales_app/configuration.dart';
+import 'package:sales_app/location_model.dart';
 import 'package:sales_app/screen/login_screen/login_screen.dart';
 
 import '../util/preferences.dart';
@@ -244,6 +245,28 @@ class ApiService {
     }
   }
 
+  static Future<Object> updateCacheCoordinate(List<LocationModel> models) async {
+    try {
+      final response = await http.post(
+          Uri.parse('${Configuration.apiUrl}absensi/update-cache-coordinate'),
+          headers: _headers,
+          body: {
+            'coordinates': jsonEncode(List<dynamic>.from(models.map((e) => e.toJson())))
+          });
+
+      if (kDebugMode) {
+        print('response absensi coordinate : ${response.body}');
+      }
+      return DefaultResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
   static Future<Object> reports(BuildContext context, int page, String search,String sort, String start, String end) async {
     try {
       final response = await http
@@ -385,6 +408,14 @@ class ApiService {
       request.headers.addAll(_headers);
       if (files.isNotEmpty) {
         for (var e in files) {
+         http.MultipartFile.fromPath(
+            'images[]',
+            e.path,
+          ).then((e) {
+           print(e.filename);
+         }).catchError((e) {
+           print(e);
+         });
           request.files.add(await http.MultipartFile.fromPath(
             'images[]',
             e.path,

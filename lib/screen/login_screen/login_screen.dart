@@ -37,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  Image.asset('', width: 200,height: 200,),
                   const SizedBox(height: 24,),
                   Text("Login App Sales",style: TextStyle(
                       fontFamily: FontColor.fontPoppins,

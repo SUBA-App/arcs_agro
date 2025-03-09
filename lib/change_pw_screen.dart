@@ -130,6 +130,7 @@ class _ChangePwScreenState extends State<ChangePwScreen> {
                     .text.isEmpty) {
                       Fluttertoast.showToast(msg: 'Data Masih Kosong');
                     }else {
+                      print('aa123');
                       await Provider.of<MainProvider>(context, listen: false).changePw(context, password.text);
                     }
                   },

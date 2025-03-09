@@ -323,7 +323,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ViewPicScreen(
-                                        url: '${Configuration.imageUrl}${widget.report.payment
+                                        url: '${Configuration.imageUrlPayment}${widget.report.payment
                                             .pictures[index]}' ,
                                       )));
                             },

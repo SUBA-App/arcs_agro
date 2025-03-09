@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
 import 'package:sales_app/screen/absensi/next_absensi_provider.dart';
 import 'package:sales_app/screen/absensi/take_picture_absensi_screen2.dart';
-import 'package:sales_app/util.dart';
 
 import '../../font_color.dart';
 import '../report/choose_customer_screen.dart';
@@ -29,7 +26,8 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
   int selectedPage = 0;
 
   late CameraDescription cameraDescription;
-  final controller = PageController();
+
+  PageController controller = PageController();
 
   @override
   void initState() {
@@ -78,11 +76,12 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => TakePictureAbsensiScreen2(
-                                  camera: cameraDescription)));
+                                  camera: cameraDescription, mode: 1,)));
                       if (result != null) {
                         setState(() {
                           widget.paths.addAll(result);
-                          selectedPage = 0;
+                          selectedPage = widget.paths.length - 1;
+                          controller.animateToPage(selectedPage, duration: Duration(milliseconds: 100), curve: Curves.fastOutSlowIn);
                         });
                       }
                     },
@@ -104,6 +103,7 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
               child: AspectRatio(
     aspectRatio: 9/16,
                 child: PageView.builder(
+                  controller: controller,
                   itemCount: widget.paths.length,
                   onPageChanged: (i) {
                     setState(() {
@@ -136,7 +136,8 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                                 onPressed: () {
                                   setState(() {
                                     widget.paths.remove(widget.paths[index]);
-                                    selectedPage = 0;
+                                    selectedPage = index == 0 ? 0 : index-1;
+                                    controller.animateToPage(selectedPage, duration: Duration(milliseconds: 100), curve: Curves.fastOutSlowIn);
                                   });
                                 },
                                 style: ButtonStyle(

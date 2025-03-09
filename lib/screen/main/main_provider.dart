@@ -6,7 +6,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sales_app/api/api_service.dart';
 import 'package:sales_app/api/response/active_absen_response.dart';
-import 'package:sales_app/api/response/check_status_response.dart';
 import 'package:sales_app/api/response/default_response.dart';
 import 'package:sales_app/screen/login_screen/login_screen.dart';
 import 'package:sales_app/util/preferences.dart';

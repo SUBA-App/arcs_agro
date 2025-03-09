@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sales_app/util.dart';
 
 import 'font_color.dart';
 
@@ -118,6 +117,14 @@ class _CustomCameraState extends State<CustomCamera>
                     Center(
                       child: CameraPreview(
                         _controller,
+                        child: LayoutBuilder(
+                            builder: (BuildContext context, BoxConstraints constraints) {
+                              return GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTapDown: (TapDownDetails details) =>
+                                    onViewFinderTap(details, constraints),
+                              );
+                            }),
                       ),
                     ),
                     Container(
@@ -173,9 +180,9 @@ class _CustomCameraState extends State<CustomCamera>
                               if (_controller.value.isInitialized) {
                                 final image = await _controller.takePicture();
                                 if (!context.mounted) return;
-                                final file = await Util.watermarkImageF(File(image.path));
+                                
                                 setState(() {
-                                  paths.insert(0, file);
+                                  paths.insert(0, File(image.path));
                                 });
                               }
                             } catch (e) {
