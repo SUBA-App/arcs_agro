@@ -42,7 +42,6 @@ class _MainPageState extends State<MainPage> {
       await Permission.camera.request();
       await Permission.location.request();
       await Permission.photos.request();
-      await Permission.notification.request();
       await Permission.storage.request();
     }
   }
