@@ -51,14 +51,12 @@ class _MainPageState extends State<MainPage> {
     requestPermission().whenComplete(() {
       LocationForegroundService.initService();
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        print('24');
         Provider.of<MainProvider>(context, listen: false).getActiveAbsensi(context);
         Provider.of<AbsensiProvider>(context, listen: false).checkPermiss(context);
       });
     }).catchError((e) {
       LocationForegroundService.initService();
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        print('23');
         Provider.of<MainProvider>(context, listen: false).getActiveAbsensi(context);
         Provider.of<AbsensiProvider>(context, listen: false).checkPermiss(context);
       });
