@@ -83,7 +83,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                               "${provider.absenResult?.checkIn ?? ''} - ${provider.absenResult?.checkInTime ?? ''}",
                               style: TextStyle(
                                 fontFamily: FontColor.fontPoppins,
-                                color: FontColor.black.withOpacity(0.8),
+                                color: FontColor.black.withValues(alpha: 0.8),
                               ),
                             ),
                             Text(
@@ -97,7 +97,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                               "${provider.absenResult?.checkOut ?? ''} - ${provider.absenResult?.checkOutTime ?? ''}",
                               style: TextStyle(
                                 fontFamily: FontColor.fontPoppins,
-                                color: FontColor.black.withOpacity(0.8),
+                                color: FontColor.black.withValues(alpha: 0.8),
                               ),
                             ),
                             const SizedBox(

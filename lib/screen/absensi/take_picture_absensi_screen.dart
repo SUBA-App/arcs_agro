@@ -39,11 +39,16 @@ class _TakePictureAbsensiScreenState extends State<TakePictureAbsensiScreen> {
       showLoading(context);
       try {
         final files = await Util.watermarkImageF(e);
-        Navigator.pop(context);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => NextAbsensiScreen(paths: files)));
+        if (context.mounted) {
+          Navigator.pop(context);
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(
+                  builder: (context) => NextAbsensiScreen(paths: files)));
+        }
       } catch(_) {
-        Navigator.pop(context);
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
       }
 
     }, camera: widget.camera,);

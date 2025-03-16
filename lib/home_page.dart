@@ -2,7 +2,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/api/api_service.dart';
@@ -120,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                               fontFamily: FontColor.fontPoppins,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: FontColor.black.withOpacity(0.5)
+                              color: FontColor.black.withValues(alpha: 0.5)
                           ),),
                           const SizedBox(height: 8,),
                           provider.isLoading ? ShimmerN(enabled: provider.isLoading) :

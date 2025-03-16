@@ -2,7 +2,6 @@ import 'package:camera/camera.dart';
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -95,11 +94,17 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
       floatingActionButton: FloatingActionButton(onPressed: () async {
         const c = Permission.camera;
         if (await c.isGranted){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureAbsensiScreen(camera: cameraDescription)));
+          if (context.mounted) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                TakePictureAbsensiScreen(camera: cameraDescription)));
+          }
         } else if(await c.isPermanentlyDenied) {
-          showDialog(context: context, builder: (context) {
-            return const ShowCameraPermission(message: 'Camera permissions are permanently denied, we cannot request permissions.');
-          });
+          if (context.mounted) {
+            showDialog(context: context, builder: (context) {
+              return const ShowCameraPermission(
+                  message: 'Camera permissions are permanently denied, we cannot request permissions.');
+            });
+          }
         } else {
           await Permission.camera.request();
         }
@@ -159,12 +164,12 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
                       },
                     ),
                   ),
-                  SizedBox(width: 16,),
+                  const SizedBox(width: 16,),
                   IconButton(
                     icon: Image.asset('assets/images/filter-list.png', width: 20,height: 20,),
                     style: ButtonStyle(
                       shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.black26),
+                        side: const BorderSide(color: Colors.black26),
                         borderRadius: BorderRadius.circular(10)
                       ))
                     ),

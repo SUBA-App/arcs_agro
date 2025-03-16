@@ -90,7 +90,7 @@ class MyTaskHandler extends TaskHandler {
             result.position!.latitude, result.position!.longitude);
         final response = await ApiService.updateCoordinate(body);
         if (response.runtimeType == DefaultResponse) {
-          final resp = response as DefaultResponse;
+
 
         } else {
           database.locationDao.addLocation(
@@ -153,14 +153,13 @@ class MyTaskHandler extends TaskHandler {
     await Configuration.current();
 
     ApiService.init();
-    _timer = Timer.periodic(Duration(minutes: 10), (e) async {
+    _timer = Timer.periodic(const Duration(minutes: 10), (e) async {
       await updateCoordinate();
     });
   }
 
   @override
   void onRepeatEvent(DateTime timestamp) async {
-    print('cc');
 
     FlutterForegroundTask.sendDataToMain({});
   }

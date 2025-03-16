@@ -37,45 +37,50 @@ class ProductProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         if (resp.message == 'key_failed') {
-          showDialog(context: context,barrierDismissible: false, builder: (context) {
-            return Dialog(
-              backgroundColor: Colors.white,
+          if (context.mounted) {
+            showDialog(context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return Dialog(
+                    backgroundColor: Colors.white,
 
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Tidak Ada Token API', style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: FontColor.black
-                    ),),
-                    const SizedBox(height: 8,),
-                    Text('Hubungi Administrator', style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: FontColor.black
-                    ),),
-                    const SizedBox(height: 8,),
-                    ElevatedButton(onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },style: const ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(FontColor.black)
-                    ), child: Text('OK',style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white
-                    ),))
-                  ],
-                ),
-              ),
-            );
-          });
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Tidak Ada Token API', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: FontColor.black
+                          ),),
+                          const SizedBox(height: 8,),
+                          Text('Hubungi Administrator', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: FontColor.black
+                          ),),
+                          const SizedBox(height: 8,),
+                          ElevatedButton(onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }, style: const ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                  FontColor.black)
+                          ), child: Text('OK', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white
+                          ),))
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          }
         }
       }
     }
@@ -84,7 +89,6 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> loadMoreCust(BuildContext context,int page) async {
     enhancedStatus = EnhancedStatus.loading;
-    print('aaaa');
     notifyListeners();
     final response = await ApiService.products(context,page);
     if (response.runtimeType == ProductResponse) {

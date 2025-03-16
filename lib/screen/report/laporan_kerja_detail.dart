@@ -111,7 +111,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                       ),
                     ),
                     Text(
-                      widget.report.created_at,
+                      widget.report.createdAt,
                       style: TextStyle(
                         fontFamily: FontColor.fontPoppins,
                         color: FontColor.black,

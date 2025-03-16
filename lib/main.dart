@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.light(
         useMaterial3: true,
       ),
-      home: Preferences.token().isEmpty ? const LoginScreen() : (Preferences.getUser()?.hasPin ?? false) == true ? PinScreen(mode: 3) :  PinScreen(mode: 1),
+      home: Preferences.token().isEmpty ? const LoginScreen() : (Preferences.getUser()?.hasPin ?? false) == true ? const PinScreen(mode: 3) :  const PinScreen(mode: 1),
       localizationsDelegates: const [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

@@ -45,7 +45,7 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
       systemNavigationBarContrastEnforced: true,
       systemNavigationBarDividerColor: Colors.transparent,
@@ -76,12 +76,16 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => TakePictureAbsensiScreen2(
-                                  camera: cameraDescription, mode: 1,)));
+                                    camera: cameraDescription,
+                                    mode: 1,
+                                  )));
                       if (result != null) {
                         setState(() {
                           widget.paths.addAll(result);
                           selectedPage = widget.paths.length - 1;
-                          controller.animateToPage(selectedPage, duration: Duration(milliseconds: 100), curve: Curves.fastOutSlowIn);
+                          controller.animateToPage(selectedPage,
+                              duration: const Duration(milliseconds: 100),
+                              curve: Curves.fastOutSlowIn);
                         });
                       }
                     },
@@ -101,7 +105,7 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: AspectRatio(
-    aspectRatio: 9/16,
+                aspectRatio: 9 / 16,
                 child: PageView.builder(
                   controller: controller,
                   itemCount: widget.paths.length,
@@ -114,12 +118,13 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                     return Stack(
                       children: [
                         AspectRatio(
-                          aspectRatio: 9/16,
+                          aspectRatio: 9 / 16,
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(blurRadius: 1, color: Colors.black12)
+                                boxShadow: const [
+                                  BoxShadow(
+                                      blurRadius: 1, color: Colors.black12)
                                 ]),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
@@ -136,35 +141,38 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                                 onPressed: () {
                                   setState(() {
                                     widget.paths.remove(widget.paths[index]);
-                                    selectedPage = index == 0 ? 0 : index-1;
-                                    controller.animateToPage(selectedPage, duration: Duration(milliseconds: 100), curve: Curves.fastOutSlowIn);
+                                    selectedPage = index == 0 ? 0 : index - 1;
+                                    controller.animateToPage(selectedPage,
+                                        duration:
+                                            const Duration(milliseconds: 100),
+                                        curve: Curves.fastOutSlowIn);
                                   });
                                 },
-                                style: ButtonStyle(
+                                style: const ButtonStyle(
                                     backgroundColor:
-                                    WidgetStatePropertyAll(Colors.black87),
+                                        WidgetStatePropertyAll(Colors.black87),
                                     visualDensity: VisualDensity(),
                                     padding:
-                                    WidgetStatePropertyAll(EdgeInsets.zero),
+                                        WidgetStatePropertyAll(EdgeInsets.zero),
                                     elevation: WidgetStatePropertyAll(0),
                                     minimumSize:
-                                    WidgetStatePropertyAll(Size(40, 40)),
+                                        WidgetStatePropertyAll(Size(40, 40)),
                                     tapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
+                                        MaterialTapTargetSize.shrinkWrap,
                                     shape: WidgetStatePropertyAll(
                                         RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
                                                 topRight: Radius.circular(10),
                                                 bottomLeft:
-                                                Radius.circular(20))))),
-                                child: Icon(
+                                                    Radius.circular(20))))),
+                                child: const Icon(
                                   Icons.close,
                                   color: Colors.white,
                                 )))
                       ],
                     );
                   },
-                    ),
+                ),
               ),
             ),
           ),
@@ -187,8 +195,10 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                   MaterialPageRoute(
                       builder: (context) => const ChooseCustomerScreen()));
               if (result != null) {
-                Provider.of<NextAbsensiProvider>(context, listen: false)
-                    .setKios(result['name'], result['id']);
+                if (context.mounted) {
+                  Provider.of<NextAbsensiProvider>(context, listen: false)
+                      .setKios(result['name'], result['id']);
+                }
               }
             },
             child: Padding(
@@ -197,15 +207,14 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                 height: 45,
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 0.5,
-                      color: Colors.black26,
-                    )
-                  ]
-                ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 0.5,
+                        color: Colors.black26,
+                      )
+                    ]),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -213,11 +222,12 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                       child: Text(
                         provider.selectedKios,
                         style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: FontColor.fontPoppins,
-                          fontWeight: FontWeight.w400,
-                          color: provider.selectedKios == "Pilih Kios" ? Colors.black45 : FontColor.black
-                        ),
+                            fontSize: 14,
+                            fontFamily: FontColor.fontPoppins,
+                            fontWeight: FontWeight.w400,
+                            color: provider.selectedKios == "Pilih Kios"
+                                ? Colors.black45
+                                : FontColor.black),
                       ),
                     ),
                     const Icon(
@@ -239,16 +249,13 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                       for (var i in widget.paths) {
                         files.add(i);
                       }
-                        await Provider.of<AbsensiProvider>(
-                            context, listen: false)
-                            .addAbsen(
-                            context,
-                            files,
-                            Provider
-                                .of<NextAbsensiProvider>(context,
-                                listen: false)
-                                .selectedKios);
-
+                      await Provider.of<AbsensiProvider>(context, listen: false)
+                          .addAbsen(
+                              context,
+                              files,
+                              Provider.of<NextAbsensiProvider>(context,
+                                      listen: false)
+                                  .selectedKios);
                     },
                     style: ButtonStyle(
                         backgroundColor:

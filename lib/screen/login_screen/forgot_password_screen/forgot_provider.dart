@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -42,7 +41,9 @@ class ForgotProvider extends ChangeNotifier {
                 MaterialPageRoute(builder: (context) =>  OtpScreen(mode: 2, email: email,)),);
           }
         } else {
-          Navigator.pop(context);
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
           Fluttertoast.showToast(msg: resp.message);
         }
       }

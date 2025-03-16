@@ -107,7 +107,7 @@ class FilterDialog extends StatelessWidget {
         ), child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.clear),
+            const Icon(Icons.clear),
             Text('Clear', style: TextStyle(
               fontFamily: FontColor.fontPoppins,
               fontWeight: FontWeight.w500,

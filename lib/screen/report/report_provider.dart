@@ -259,45 +259,50 @@ class ReportProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         if (resp.message == 'key_failed') {
-          showDialog(context: context,barrierDismissible: false, builder: (context) {
-            return Dialog(
-              backgroundColor: Colors.white,
+          if (context.mounted) {
+            showDialog(context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return Dialog(
+                    backgroundColor: Colors.white,
 
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Tidak Ada Token API', style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: FontColor.black
-                    ),),
-                    const SizedBox(height: 8,),
-                    Text('Hubungi Administrator', style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: FontColor.black
-                    ),),
-                    const SizedBox(height: 8,),
-                    ElevatedButton(onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(FontColor.black)
-                    ), child: Text('OK',style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white
-                    ),))
-                  ],
-                ),
-              ),
-            );
-          });
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Tidak Ada Token API', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: FontColor.black
+                          ),),
+                          const SizedBox(height: 8,),
+                          Text('Hubungi Administrator', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: FontColor.black
+                          ),),
+                          const SizedBox(height: 8,),
+                          ElevatedButton(onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }, style: const ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                  FontColor.black)
+                          ), child: Text('OK', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white
+                          ),))
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          }
         }
       }
     }
@@ -311,8 +316,6 @@ class ReportProvider extends ChangeNotifier {
       final resp = response as CustomerResponse;
       if (!resp.error) {
         customers.addAll(resp.result?.data ?? []);
-        print('lgth : ${customers.length}');
-        print('lgth : ${resp.result?.data.length}');
         enhancedStatus = EnhancedStatus.loaded;
         if (customers.length >= resp.result!.sp!.rowCount) {
           isMaxReached = true;
@@ -328,7 +331,6 @@ class ReportProvider extends ChangeNotifier {
     invoices = [];
     notifyListeners();
     isMaxReached1 = false;
-    print('check1');
     final response = await ApiService.invoices(context,page, customerId,keyword);
     if (response.runtimeType == InvoiceResponse) {
       final resp = response as InvoiceResponse;
@@ -338,45 +340,50 @@ class ReportProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         if (resp.message == 'key_failed') {
-          showDialog(context: context,barrierDismissible: false, builder: (context) {
-            return Dialog(
-              backgroundColor: Colors.white,
+          if (context.mounted) {
+            showDialog(context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return Dialog(
+                    backgroundColor: Colors.white,
 
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Tidak Ada Token API', style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: FontColor.black
-                    ),),
-                    const SizedBox(height: 8,),
-                    Text('Hubungi Administrator', style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: FontColor.black
-                    ),),
-                    const SizedBox(height: 8,),
-                    ElevatedButton(onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(FontColor.black)
-                    ), child: Text('OK',style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white
-                    ),))
-                  ],
-                ),
-              ),
-            );
-          });
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Tidak Ada Token API', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: FontColor.black
+                          ),),
+                          const SizedBox(height: 8,),
+                          Text('Hubungi Administrator', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: FontColor.black
+                          ),),
+                          const SizedBox(height: 8,),
+                          ElevatedButton(onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }, style: const ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                  FontColor.black)
+                          ), child: Text('OK', style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white
+                          ),))
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          }
         }
       }
     }
@@ -385,7 +392,6 @@ class ReportProvider extends ChangeNotifier {
   Future<void> loadMoreInvoice(BuildContext context,int page,String customerId, String keyword) async {
     enhancedStatus1 = EnhancedStatus.loading;
     notifyListeners();
-    print('check2');
     final response = await ApiService.invoices(context,page, customerId,keyword);
     if (response.runtimeType == InvoiceResponse) {
       final resp = response as InvoiceResponse;
@@ -418,8 +424,6 @@ class ReportProvider extends ChangeNotifier {
   Future<void> addReport(BuildContext context) async {
 
     bool error = false;
-
-    print(selectedListImage.length);
 
     if (selectedMethod != null) {
       if (selectedMethod?.id == 1) {
@@ -456,7 +460,6 @@ class ReportProvider extends ChangeNotifier {
     }
 
     if (!error) {
-      print(selectedPayDate);
       final body = ReportBody(selectedPayMillis,selectedKios, selectedInvoiceNumber.toString(), selectedMethod!.id.toString(), noGiro.text, selectedGiroMillis, selectedBank?.name ?? '', int.parse(Util.toClearNumber(amount.text)), ket.text);
 
       showLoading(context);

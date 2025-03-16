@@ -87,7 +87,7 @@ class _LaporanKerjaScreenState extends State<ProductScreen> {
                 },
                 onChanged: (e) {
                   if (e.isEmpty) {
-                    print('adwa');
+
                     Provider.of<ProductProvider>(context, listen: false)
                         .setMode(false);
                   }
@@ -116,7 +116,6 @@ class _LaporanKerjaScreenState extends State<ProductScreen> {
                           },
                           itemsPerPage: 20,
                           onLoadMore: (e) {
-                            print("product page : $e");
                             if (e > 1) {
                               Provider.of<ProductProvider>(context,
                                       listen: false)

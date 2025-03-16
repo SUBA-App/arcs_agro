@@ -86,7 +86,10 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
 
         final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddLaporanScreen()));
         if (result != null) {
-          Provider.of<ReportProvider>(context, listen: false).getReports(context, 1);
+          if (context.mounted) {
+            Provider.of<ReportProvider>(context, listen: false).getReports(
+                context, 1);
+          }
         }
       },backgroundColor: FontColor.yellow72, child: const Icon(Icons.add, color: FontColor.black,),),
       body: SafeArea(
@@ -145,7 +148,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
                       },
                     ),
                   ),
-                  SizedBox(width: 16,),
+                  const SizedBox(width: 16,),
                   IconButton(
                     icon: Image.asset('assets/images/filter-list.png', width: 20,height: 20,),
                     style: ButtonStyle(

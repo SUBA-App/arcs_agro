@@ -58,7 +58,7 @@ class ProductItem extends StatelessWidget {
                         fontFamily: FontColor.fontPoppins,
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        color: FontColor.black.withOpacity(0.7)
+                        color: FontColor.black.withValues(alpha: 0.7)
                     ),),
                   ],
                 ),

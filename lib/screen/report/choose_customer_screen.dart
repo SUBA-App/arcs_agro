@@ -94,7 +94,7 @@ class _ChooseCustomerScreenState extends State<ChooseCustomerScreen> {
                 }
               },
             ),
-            SizedBox(height: 16,),
+            const SizedBox(height: 16,),
             provider.isCustLoading
                 ? const Expanded(
                     child: Center(
@@ -175,7 +175,6 @@ class _ChooseCustomerScreenState extends State<ChooseCustomerScreen> {
                       },
                       itemsPerPage: 20,
                       onLoadMore: (e) {
-                        print('load more : $e');
                         if(e > 1) {
                           Provider.of<ReportProvider>(context, listen: false)
                               .loadMoreCust(context, e, currentSearch);

@@ -143,7 +143,6 @@ class ApiService {
           "POST", Uri.parse('${Configuration.apiUrl}absensi/add'));
       request.headers.addAll(_headers);
       for (var i in files) {
-        print(i.path);
         request.files.add(await http.MultipartFile.fromPath(
           'images[]',
           i.path,
@@ -226,7 +225,6 @@ class ApiService {
   static Future<Object> updateCoordinate(
       CoordinateBody body) async {
     try {
-      print('Host Uri : ${Configuration.apiUrl}');
       final response = await http.post(
           Uri.parse('${Configuration.apiUrl}absensi/update-coordinate'),
           headers: _headers,
@@ -412,9 +410,9 @@ class ApiService {
             'images[]',
             e.path,
           ).then((e) {
-           print(e.filename);
+
          }).catchError((e) {
-           print(e);
+
          });
           request.files.add(await http.MultipartFile.fromPath(
             'images[]',

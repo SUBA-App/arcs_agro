@@ -58,7 +58,7 @@ class ReportData {
   String storeName;
   String invoice;
   Payment payment;
-  String created_at;
+  String createdAt;
   String note;
   int status;
   CheckDate checkDate;
@@ -72,7 +72,7 @@ class ReportData {
     required this.storeName,
     required this.invoice,
     required this.payment,
-    required this.created_at,
+    required this.createdAt,
     required this.note,
     required this.status,
     required this.checkDate, required this.inputDate});
@@ -86,7 +86,7 @@ class ReportData {
     invoice: json['invoice'],
     note: json['note'] ?? '',
     payment: Payment.fromJson(json['payment']),
-    created_at: json['created_at'],
+    createdAt: json['created_at'],
     checkDate: CheckDate.fromJson(json['check']),
     inputDate: InputDate.fromJson(json['input']),
   );
@@ -100,7 +100,7 @@ class ReportData {
     'invoice': invoice,
     'note': note,
     'payment':payment.toJson(),
-    'created_at': created_at,
+    'created_at': createdAt,
     'check': checkDate.toJson(),
     'input': inputDate.toJson()
 

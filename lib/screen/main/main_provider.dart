@@ -34,7 +34,6 @@ class MainProvider extends ChangeNotifier {
   }
 
   Future<void> getActiveAbsensi(BuildContext context) async {
-    print('25');
     isLoading = true;
     notifyListeners();
     final response = await ApiService.getActiveAbsensi(context);

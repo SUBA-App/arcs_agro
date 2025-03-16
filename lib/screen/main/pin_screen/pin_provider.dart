@@ -16,9 +16,9 @@ class PinProvider extends ChangeNotifier {
       final resp = response as CreatePinResponse;
       if (!resp.error) {
         await Preferences.saveUser(resp.result);
-        print('running');
+
         if (context.mounted) {
-          print('running2');
+
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const PinScreen(mode: 3)),

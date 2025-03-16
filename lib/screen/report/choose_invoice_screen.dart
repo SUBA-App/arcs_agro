@@ -1,5 +1,4 @@
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -96,7 +95,7 @@ class _ChooseCustomerScreenState extends State<ChooseInvoiceScreen> {
                 }
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Text(
@@ -115,7 +114,7 @@ class _ChooseCustomerScreenState extends State<ChooseInvoiceScreen> {
                   fontWeight: FontWeight.w400,
                   color: FontColor.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             provider.isInvoiceLoading

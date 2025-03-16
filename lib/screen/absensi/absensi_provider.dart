@@ -5,7 +5,6 @@ import 'package:app_settings/app_settings.dart';
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:flutter_foreground_task/models/service_request_result.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
@@ -135,29 +134,116 @@ class AbsensiProvider extends ChangeNotifier {
       final result = await _determinePosition();
 
       if (result.type == 1) {
-        Navigator.pop(context);
-        showCheckFailed(context, result.message, result.type);
+        if (context.mounted) {
+          Navigator.pop(context);
+          showCheckFailed(context, result.message, result.type);
+        }
       } else if (result.type == 2) {
-        Navigator.pop(context);
-        Fluttertoast.showToast(msg: result.message.toString());
+        if (context.mounted) {
+          Navigator.pop(context);
+          Fluttertoast.showToast(msg: result.message.toString());
+        }
       } else if (result.type == 4) {
-        Navigator.pop(context);
-        showCheckFailed(context, result.message, result.type);
+        if (context.mounted) {
+          Navigator.pop(context);
+          showCheckFailed(context, result.message, result.type);
+        }
       } else {
-        final response = await ApiService.addAbsen(context,
-            files, result.position!.latitude, result.position!.longitude, kios);
+        if (context.mounted) {
+          final response = await ApiService.addAbsen(context,
+              files, result.position!.latitude, result.position!.longitude,
+              kios);
+
+
+          if (response.runtimeType == DefaultResponse) {
+            final resp = response as DefaultResponse;
+            if (!resp.error) {
+              await Preferences.saveStatusCheckIn(1);
+              if (context.mounted) {
+                Navigator.pop(context);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainPage()), (
+                    e) => false);
+                await _startService();
+              }
+              Fluttertoast.showToast(msg: 'Absensi Berhasil');
+            } else {
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
+              Fluttertoast.showToast(msg: resp.message);
+            }
+          } else {
+            if (context.mounted) {
+              Navigator.pop(context);
+            }
+            Fluttertoast.showToast(msg: response.toString());
+          }
+        }
+      }
+    } else {
+      Fluttertoast.showToast(msg: 'Data Belum Lengkap');
+    }
+
+
+  }
+
+  Future<void> checkPermiss(BuildContext context) async {
+    final result = await _determinePosition();
+
+    if (result.type == 1) {
+      if (context.mounted) {
+        showCheckFailed(context, result.message, result.type);
+      }
+    } else if (result.type == 2) {
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+      Fluttertoast.showToast(msg: result.message.toString());
+    } else if (result.type == 4) {
+      if (context.mounted) {
+        showCheckFailed(context, result.message, result.type);
+      }
+    }
+  }
+
+  Future<void> checkOut(BuildContext context, String id) async {
+    showLoading(context);
+    final result = await _determinePosition();
+
+    if (result.type == 1) {
+      if (context.mounted) {
+        showCheckFailed(context, result.message, result.type);
+      }
+    } else if (result.type == 2) {
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+      Fluttertoast.showToast(msg: result.message.toString());
+    } else if (result.type == 4) {
+      if (context.mounted) {
+        showCheckFailed(context, result.message, result.type);
+      }
+    } else {
+      if (context.mounted) {
+        final response = await ApiService.checkOut(context,
+            id, result.position!.latitude, result.position!.longitude);
 
         if (response.runtimeType == DefaultResponse) {
           final resp = response as DefaultResponse;
           if (!resp.error) {
-            await Preferences.saveStatusCheckIn(1);
             if (context.mounted) {
               Navigator.pop(context);
-              Navigator.pushAndRemoveUntil(
-                  context, MaterialPageRoute(builder: (context) => const MainPage()), (e) => false);
-              await _startService();
+              await _stopService();
+              if (context.mounted) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainPage()),
+                        (e) => false);
+              }
             }
-            Fluttertoast.showToast(msg: 'Absensi Berhasil');
+            Fluttertoast.showToast(msg: 'Check Out Absensi');
           } else {
             if (context.mounted) {
               Navigator.pop(context);
@@ -170,59 +256,6 @@ class AbsensiProvider extends ChangeNotifier {
           }
           Fluttertoast.showToast(msg: response.toString());
         }
-      }
-    } else {
-      Fluttertoast.showToast(msg: 'Data Belum Lengkap');
-    }
-  }
-
-  Future<void> checkPermiss(BuildContext context) async {
-    final result = await _determinePosition();
-
-    if (result.type == 1) {
-      showCheckFailed(context, result.message, result.type);
-    } else if (result.type == 2) {
-      Navigator.pop(context);
-      Fluttertoast.showToast(msg: result.message.toString());
-    } else if (result.type == 4) {
-      showCheckFailed(context, result.message, result.type);
-    }
-  }
-
-  Future<void> checkOut(BuildContext context, String id) async {
-    showLoading(context);
-    final result = await _determinePosition();
-
-    if (result.type == 1) {
-      showCheckFailed(context, result.message, result.type);
-    } else if (result.type == 2) {
-      Navigator.pop(context);
-      Fluttertoast.showToast(msg: result.message.toString());
-    } else if (result.type == 4) {
-      showCheckFailed(context, result.message, result.type);
-    } else {
-      final response = await ApiService.checkOut(context,
-          id, result.position!.latitude, result.position!.longitude);
-
-      if (response.runtimeType == DefaultResponse) {
-        final resp = response as DefaultResponse;
-        if (!resp.error) {
-          if (context.mounted) {
-            Navigator.pop(context);
-            await _stopService();
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const MainPage()),
-                    (e) => false);
-          }
-          Fluttertoast.showToast(msg: 'Check Out Absensi');
-        } else {
-          Navigator.pop(context);
-          Fluttertoast.showToast(msg: resp.message);
-        }
-      } else {
-        Navigator.pop(context);
-        Fluttertoast.showToast(msg: response.toString());
       }
     }
   }
@@ -303,16 +336,17 @@ class AbsensiProvider extends ChangeNotifier {
 
   Future<void> checkLocation(BuildContext context) async {
     final result = await _determinePosition();
+    if (context.mounted) {
+      if (result.type == 1) {
+        showCheckFailed(context, result.message, result.type);
+      } else if (result.type == 2) {
+        Navigator.pop(context);
+        Fluttertoast.showToast(msg: result.message.toString());
+      } else if (result.type == 4) {
+        showCheckFailed(context, result.message, result.type);
+      } else {
 
-    if (result.type == 1) {
-      showCheckFailed(context, result.message, result.type);
-    } else if (result.type == 2) {
-      Navigator.pop(context);
-      Fluttertoast.showToast(msg: result.message.toString());
-    } else if (result.type == 4) {
-      showCheckFailed(context, result.message, result.type);
-    } else {
-      print(result.position!.longitude);
+      }
     }
   }
 

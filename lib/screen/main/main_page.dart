@@ -136,7 +136,7 @@ class _MainPageState extends State<MainPage> {
                             fontFamily: FontColor.fontPoppins,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: FontColor.black.withOpacity(0.7)
+                            color: FontColor.black.withValues(alpha: 0.7)
                         ),),
                       ],
                     ),

@@ -53,11 +53,11 @@ class ReportItem extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: FontColor.black
                     ),),
-                    Text(report.created_at, style: TextStyle(
+                    Text(report.createdAt, style: TextStyle(
                         fontFamily: FontColor.fontPoppins,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: FontColor.black.withOpacity(0.5)
+                        color: FontColor.black.withValues(alpha: 0.5)
                     ),),
                   ],
                 ),
