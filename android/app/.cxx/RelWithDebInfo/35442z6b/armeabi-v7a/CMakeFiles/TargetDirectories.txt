@@ -1,0 +1,2 @@
+C:/Users/anton/AndroidStudioProjects/sales-app/android/app/.cxx/RelWithDebInfo/35442z6b/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/anton/AndroidStudioProjects/sales-app/android/app/.cxx/RelWithDebInfo/35442z6b/armeabi-v7a/CMakeFiles/rebuild_cache.dir

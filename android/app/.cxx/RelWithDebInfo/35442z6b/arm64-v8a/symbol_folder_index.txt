@@ -1,0 +1,1 @@
+C:\Users\anton\AndroidStudioProjects\sales-app\build\app\intermediates\cxx\RelWithDebInfo\35442z6b\obj\arm64-v8a

@@ -6,7 +6,6 @@ import 'package:sales_app/font_color.dart';
 import 'package:sales_app/util.dart';
 import 'package:sales_app/view_pic_screen.dart';
 
-import '../../configuration.dart';
 
 class LaporanKerjaDetail extends StatefulWidget {
   const LaporanKerjaDetail({super.key, required this.report});
@@ -323,8 +322,8 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ViewPicScreen(
-                                        url: '${Configuration.imageUrlPayment}${widget.report.payment
-                                            .pictures[index]}' ,
+                                        url: widget.report.payment
+                                            .pictures[index] ,
                                       )));
                             },
                             child: Padding(
@@ -344,7 +343,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: CachedNetworkImage(
                                           imageUrl:
-                                          '${Configuration.imageUrlPayment}${widget.report.payment.pictures[index]}',
+                                          widget.report.payment.pictures[index],
                                           placeholder: (_,__) => Image.asset('assets/images/placeholder.jpg',fit: BoxFit.fill,),
                                           errorWidget: (_,__,___) => Image.asset('assets/images/placeholder.jpg', fit: BoxFit.fill,),
                                           height: 200,

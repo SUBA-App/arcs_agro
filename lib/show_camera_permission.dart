@@ -53,7 +53,7 @@ class ShowCameraPermission extends StatelessWidget {
                               action:
                               'action_application_details_settings',
                               data:
-                              'package:com.example.sales_app', // replace com.example.app with your applicationId
+                              'package:com.subagro.salesreport', // replace com.example.app with your applicationId
                             );
                             await intent.launch();
                           } else {

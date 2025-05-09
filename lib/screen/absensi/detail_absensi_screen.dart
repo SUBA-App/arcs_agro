@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:sales_app/api/response/absen_response.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
 
-import '../../configuration.dart';
 import '../../font_color.dart';
 import '../../view_pic_screen.dart';
 
@@ -158,14 +157,14 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ViewPicScreen(
-                                              url: '${Configuration.imageUrl}${provider.absenResult?.pictures[index] ?? ''}' ,
+                                              url: provider.absenResult?.pictures[index] ?? '' ,
                                             )));
                                   },
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                          '${Configuration.imageUrl}${provider.absenResult?.pictures[index]}',
+                                          '${provider.absenResult?.pictures[index]}',
                                       placeholder: (_,__) => Image.asset('assets/images/placeholder.jpg',fit: BoxFit.fill,),
                                       errorWidget: (_,__,___) => Image.asset('assets/images/placeholder.jpg', fit: BoxFit.fill,),
                                       height: 200,

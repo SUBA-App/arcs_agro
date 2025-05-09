@@ -1,4 +1,4 @@
-package com.example.sales_app
+package com.subagro.salesreport
 
 import io.flutter.embedding.android.FlutterActivity
 
