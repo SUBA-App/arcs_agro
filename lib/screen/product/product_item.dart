@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sales_app/api/response/product_response.dart';
+import 'package:sales_app/util.dart';
 
 import '../../font_color.dart';
 
@@ -63,8 +64,8 @@ class ProductItem extends StatelessWidget {
                   ],
                 ),
               ),
-              result.show == 1 ?
-              Text('16.000', style: TextStyle(
+              result.show == 1 && result.price != 0 ?
+              Text(Util.convertToIdr(result.price, 0), style: TextStyle(
                   fontFamily: FontColor.fontPoppins,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,

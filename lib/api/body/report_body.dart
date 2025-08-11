@@ -1,7 +1,9 @@
+import 'package:sales_app/api/response/invoice_response.dart';
+
 class ReportBody {
   int payDate;
   String storeName;
-  String invoice;
+  List<InvoiceData> invoice;
   String paymentMethod;
   String noGiro;
   int giroDate;
@@ -15,7 +17,7 @@ class ReportBody {
   Map<String, dynamic> toJson() => {
     'pay_date': payDate,
     'store_name': storeName,
-    'invoice': invoice,
+    'invoice': invoice.map((i) => i.toJson()).toList(),
     'payment_method': paymentMethod,
     'no_giro': noGiro,
     'giro_date': giroDate,

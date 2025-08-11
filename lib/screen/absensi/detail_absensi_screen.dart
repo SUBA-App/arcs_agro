@@ -52,6 +52,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     width: double.infinity,
@@ -129,6 +130,29 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 8,),
+                  widget.result!.note.isNotEmpty ?  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Text(
+                      "Keterangan",
+                      style: TextStyle(
+                          fontFamily: FontColor.fontPoppins,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w500
+                      ),
+                    ),
+                  ) : const SizedBox(),
+                  widget.result!.note.isNotEmpty ? Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Text(
+                      widget.result!.note,
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        color: FontColor.black,
+                      ),
+                    ),
+                  ) : const SizedBox(),
+                  SizedBox(height: 8,),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

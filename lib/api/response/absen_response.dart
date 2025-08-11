@@ -56,8 +56,9 @@ class AbsenData {
   String checkOutTime;
   List<String> pictures;
   String storeName;
+  String note;
 
-  AbsenData({required this.id, required this.status, required this.checkIn, required this.checkOut,required this.checkInTime, required this.checkOutTime, required this.pictures, required this.storeName});
+  AbsenData({required this.id,required this.note, required this.status, required this.checkIn, required this.checkOut,required this.checkInTime, required this.checkOutTime, required this.pictures, required this.storeName});
 
   factory AbsenData.fromJson(Map<String, dynamic> json) => AbsenData(
     id: json["id"],
@@ -68,6 +69,7 @@ class AbsenData {
     checkOutTime: json['check_out_time'],
     storeName: json['store_name'],
     pictures: List<String>.from(json['pictures'].map((e) => e)),
+    note: json['note']
 
   );
 
@@ -80,6 +82,7 @@ class AbsenData {
     'check_out_time': checkOutTime,
     'store_name': storeName,
     'pictures':List<dynamic>.from(pictures.map((e) => e)),
+    'note': note
   };
 }
 

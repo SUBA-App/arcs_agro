@@ -10,6 +10,7 @@ import 'package:sales_app/screen/absensi/absensi_item.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
 import 'package:sales_app/screen/absensi/take_picture_absensi_screen.dart';
 import 'package:sales_app/screen/dialog/filter_dialog.dart';
+import 'package:sales_app/screen/main/main_provider.dart';
 import 'package:sales_app/show_camera_permission.dart';
 
 import '../../font_color.dart';
@@ -28,6 +29,7 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
+      Provider.of<MainProvider>(context, listen: false).checkStatus(context);
       Provider.of<AbsensiProvider>(context, listen: false).clear();
       Provider.of<AbsensiProvider>(context, listen: false).getAbsensi(context, 1);
     });
@@ -78,6 +80,7 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AbsensiProvider>(context);
+    final mainProvider = Provider.of<MainProvider>(context);
     return Scaffold(
       appBar: widget.drawer ? null : AppBar(
         backgroundColor: FontColor.yellow72,
@@ -91,7 +94,7 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
         ),),
       ),
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(onPressed: () async {
+      floatingActionButton: mainProvider.isAbsenteeism == 2 ? FloatingActionButton(onPressed: () async {
         const c = Permission.camera;
         if (await c.isGranted){
           if (context.mounted) {
@@ -108,7 +111,7 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
         } else {
           await Permission.camera.request();
         }
-      },backgroundColor: FontColor.yellow72, child: Image.asset('assets/images/camera2.png', width: 20,height: 20,),),
+      },backgroundColor: FontColor.yellow72, child: Image.asset('assets/images/camera2.png', width: 20,height: 20,),) : null,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

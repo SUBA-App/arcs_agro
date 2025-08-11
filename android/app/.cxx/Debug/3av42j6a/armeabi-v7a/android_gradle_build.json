@@ -4,14 +4,14 @@
   ],
   "cleanCommandsComponents": [
     [
-      "C:\\Users\\anton\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "E:\\AndroidSdk\\cmake\\3.22.1\\bin\\ninja.exe",
       "-C",
       "C:\\Users\\anton\\AndroidStudioProjects\\sales-app\\android\\app\\.cxx\\Debug\\3av42j6a\\armeabi-v7a",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
-    "C:\\Users\\anton\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "E:\\AndroidSdk\\cmake\\3.22.1\\bin\\ninja.exe",
     "-C",
     "C:\\Users\\anton\\AndroidStudioProjects\\sales-app\\android\\app\\.cxx\\Debug\\3av42j6a\\armeabi-v7a",
     "{LIST_OF_TARGETS_TO_BUILD}"
@@ -19,8 +19,8 @@
   "libraries": {},
   "toolchains": {
     "toolchain": {
-      "cCompilerExecutable": "C:\\Users\\anton\\AppData\\Local\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
-      "cppCompilerExecutable": "C:\\Users\\anton\\AppData\\Local\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+      "cCompilerExecutable": "E:\\AndroidSdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+      "cppCompilerExecutable": "E:\\AndroidSdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
     }
   },
   "cFileExtensions": [],

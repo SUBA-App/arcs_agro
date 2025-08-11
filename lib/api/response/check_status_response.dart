@@ -1,5 +1,7 @@
 
 
+import '../model/user.dart';
+
 class CheckStatusResponse {
   bool error;
   String message;
@@ -25,20 +27,16 @@ class CheckStatusResponse {
 }
 
 class CheckResult {
-  int status;
-  int deleted;
+  User user;
 
-  CheckResult({
-      required this.status,
-    required this.deleted
-  });
+
+  CheckResult({required this.user});
 
   factory CheckResult.fromJson(Map<String, dynamic> json) => CheckResult(
-    status: json['status'],
-    deleted: json['deleted']
+    user: User.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
+    "user": user.toJson(),
   };
 }

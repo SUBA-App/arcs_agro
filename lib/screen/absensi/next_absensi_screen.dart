@@ -25,6 +25,8 @@ class NextAbsensiScreen extends StatefulWidget {
 class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
   int selectedPage = 0;
 
+  final TextEditingController _noteC = TextEditingController();
+
   late CameraDescription cameraDescription;
 
   PageController controller = PageController();
@@ -240,6 +242,41 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
             ),
           ),
           Padding(
+            padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
+            child: TextField(
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: FontColor.fontPoppins,
+                fontWeight: FontWeight.w400,
+              ),
+              cursorColor: FontColor.black,
+              controller: _noteC,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: InputDecoration(
+                labelText: "Keterangan",
+                labelStyle: TextStyle(
+                  fontFamily: FontColor.fontPoppins,
+                  fontWeight: FontWeight.w400,
+                  color: FontColor.black.withValues(alpha: 0.7),
+                  fontSize: 14,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Colors.black26,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: FontColor.yellow72,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
                 width: double.infinity,
@@ -255,7 +292,7 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
                               files,
                               Provider.of<NextAbsensiProvider>(context,
                                       listen: false)
-                                  .selectedKios);
+                                  .selectedKios,_noteC.text);
                     },
                     style: ButtonStyle(
                         backgroundColor:

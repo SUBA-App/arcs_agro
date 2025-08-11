@@ -95,6 +95,59 @@ class _ChooseCustomerScreenState extends State<ChooseCustomerScreen> {
               },
             ),
             const SizedBox(height: 16,),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context, {
+                      'name': 'Calon Customer Baru',
+                      'id': 0
+                    });
+                  },
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(1),
+                    decoration: BoxDecoration(
+                        boxShadow: const [
+                          BoxShadow(
+                              blurRadius: 0.1,
+                              spreadRadius: 0.1,
+                              color: Color(0xffeaeaea))
+                        ],
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                        border: Border.all(
+                            color: const Color(0xffeaeaea))),
+                    child: Column(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Nama Pelanggan*',
+                          style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: FontColor.black),
+                        ),
+                        Text(
+                          'Calon Customer Baru',
+                          style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: FontColor.black),
+                        ),
+                      ],
+                    ),
+                  )),
+            ),
             provider.isCustLoading
                 ? const Expanded(
                     child: Center(

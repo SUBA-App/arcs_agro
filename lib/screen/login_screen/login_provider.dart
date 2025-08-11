@@ -5,6 +5,7 @@ import 'package:sales_app/api/api_service.dart';
 import 'package:sales_app/screen/main/pin_screen/pin_screen.dart';
 
 import '../../api/response/login_response.dart';
+import '../../configuration.dart';
 import '../../util/preferences.dart';
 
 class LoginProvider extends ChangeNotifier {
@@ -29,7 +30,8 @@ class LoginProvider extends ChangeNotifier {
     } else {
       showLoading(context);
       FocusManager.instance.primaryFocus?.unfocus();
-      final response = await ApiService.login(email, password);
+      final response = await ApiService.login(email, password, Configuration.buildNumber);
+      print(Configuration.buildNumber);
 
       if (response.runtimeType == LoginResponse) {
         final resp = response as LoginResponse;

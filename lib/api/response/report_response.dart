@@ -1,6 +1,8 @@
 
 
 
+import 'package:sales_app/api/response/invoice_response.dart';
+
 class ReportResponse {
   bool error;
   String message;
@@ -57,6 +59,7 @@ class ReportData {
   String salesCompany;
   String storeName;
   String invoice;
+  List<InvoiceData> invoices;
   Payment payment;
   String createdAt;
   String note;
@@ -71,6 +74,7 @@ class ReportData {
     required this.salesCompany,
     required this.storeName,
     required this.invoice,
+    required this.invoices,
     required this.payment,
     required this.createdAt,
     required this.note,
@@ -83,12 +87,13 @@ class ReportData {
     salesName: json['sales_name'],
     salesCompany: json['sales_company'],
     storeName: json['store_name'],
-    invoice: json['invoice'],
+    invoice: json['invoice'] ?? '',
     note: json['note'] ?? '',
     payment: Payment.fromJson(json['payment']),
     createdAt: json['created_at'],
     checkDate: CheckDate.fromJson(json['check']),
-    inputDate: InputDate.fromJson(json['input']),
+    inputDate: InputDate.fromJson(json['input']), invoices: json['invoices'] == null ? [] : List<InvoiceData>.from(
+      json['invoices'].map((e) => InvoiceData.fromJson(e))),
   );
 
   Map<String, dynamic> toJson() => {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class InvoiceResponse {
   bool error;
   String message;
@@ -6,24 +8,27 @@ class InvoiceResponse {
   InvoiceResponse({
     required this.error,
     required this.message,
-    required this.result
+    required this.result,
   });
 
-  factory InvoiceResponse.fromJson(Map<String, dynamic> json) => InvoiceResponse(
-    error: json["error"],
-    message: json["message"],
-    result: json['result'] == null ? null : InvoiceResult.fromJson(json['result'])
-  );
+  factory InvoiceResponse.fromJson(Map<String, dynamic> json) =>
+      InvoiceResponse(
+        error: json["error"],
+        message: json["message"],
+        result:
+            json['result'] == null
+                ? null
+                : InvoiceResult.fromJson(json['result']),
+      );
 
   Map<String, dynamic> toJson() => {
     "error": error,
     "message": message,
-    'result': result?.toJson()
+    'result': result?.toJson(),
   };
 }
 
 class InvoiceResult {
-
   Sp? sp;
   List<InvoiceData> data;
 
@@ -31,7 +36,9 @@ class InvoiceResult {
 
   factory InvoiceResult.fromJson(Map<String, dynamic> json) => InvoiceResult(
     sp: json['sp'] == null ? null : Sp.fromJson(json['sp']),
-    data: List<InvoiceData>.from(json['data'].map((e) => InvoiceData.fromJson(e))),
+    data: List<InvoiceData>.from(
+      json['data'].map((e) => InvoiceData.fromJson(e)),
+    ),
   );
 
   Map<String, dynamic> toJson() => {
@@ -83,16 +90,34 @@ class Sp {
 class InvoiceData {
   int id;
   int totalAmount;
+  int piutang;
   String taxDateView;
   String number;
+  bool checked;
 
-  InvoiceData({required this.id, required this.totalAmount,required this.taxDateView,required this.number,});
+  InvoiceData({
+    required this.id,
+    required this.totalAmount,
+    required this.piutang,
+    required this.taxDateView,
+    required this.number,
+    required this.checked,
+  });
 
   factory InvoiceData.fromJson(Map<String, dynamic> json) => InvoiceData(
-    id: json['id'], totalAmount: json['primeOwing'], taxDateView: json['taxDate'], number: json['number']
+    id: json['id'],
+    totalAmount: json['totalAmount'] ?? 0,
+    piutang:json['primeOwing'],
+    taxDateView: json['taxDate'] ?? '',
+    number: json['number'],
+    checked: false,
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    'total_amount': totalAmount,
+    'prime_owing': piutang,
+    'tax_date_view': taxDateView,
+    'number': number,
   };
 }

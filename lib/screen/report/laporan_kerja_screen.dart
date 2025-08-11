@@ -10,6 +10,7 @@ import 'package:sales_app/screen/report/report_provider.dart';
 
 import '../../font_color.dart';
 import '../dialog/filter_dialog.dart';
+import '../main/main_provider.dart';
 
 class LaporanKerjaScreen extends StatefulWidget {
   const LaporanKerjaScreen({super.key, required this.drawer});
@@ -25,6 +26,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<MainProvider>(context, listen: false).checkStatus(context);
       Provider.of<ReportProvider>(context, listen: false).clear();
       Provider.of<ReportProvider>(context, listen: false).getReports(context, 1);
     });
@@ -69,6 +71,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ReportProvider>(context);
+    final mainProvider = Provider.of<MainProvider>(context);
     return Scaffold(
       appBar: widget.drawer ? null :  AppBar(
         backgroundColor: FontColor.yellow72,
@@ -82,7 +85,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
         ),),
       ),
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(onPressed: () async {
+      floatingActionButton: mainProvider.isReport == 2 ? FloatingActionButton(onPressed: () async {
 
         final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddLaporanScreen()));
         if (result != null) {
@@ -91,7 +94,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
                 context, 1);
           }
         }
-      },backgroundColor: FontColor.yellow72, child: const Icon(Icons.add, color: FontColor.black,),),
+      },backgroundColor: FontColor.yellow72, child: const Icon(Icons.add, color: FontColor.black,),) : null,
       body: SafeArea(
         child: Column(
           children: [

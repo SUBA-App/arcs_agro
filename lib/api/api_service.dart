@@ -33,12 +33,12 @@ class ApiService {
     };
   }
 
-  static Future<Object> login(String email, String password) async {
+  static Future<Object> login(String email, String password, String version) async {
     try {
       final response = await http.post(
           Uri.parse('${Configuration.apiUrl}auth/login'),
           headers: {'X-API-KEY': 'Pz6dWj6XiZRTcgRYJlqmRZ'},
-          body: {'email': email, 'password': password});
+          body: {'email': email, 'password': password, 'version_app': version});
 
       if (kDebugMode) {
         print('response login : ${response.body}');
@@ -137,7 +137,7 @@ class ApiService {
   }
 
   static Future<Object> addAbsen(BuildContext context, List<File> files,
-      double latitude, double longitude, String kios) async {
+      double latitude, double longitude, String kios, String note) async {
     try {
       var request = http.MultipartRequest(
           "POST", Uri.parse('${Configuration.apiUrl}absensi/add'));
@@ -149,6 +149,7 @@ class ApiService {
         ));
       }
       request.fields['store_name'] = kios;
+      request.fields['note'] = note;
       request.fields['latitude'] = latitude.toString();
       request.fields['longitude'] = longitude.toString();
       final response = await request.send();
@@ -422,7 +423,7 @@ class ApiService {
       }
       request.fields['pay_date'] = body.payDate.toString();
       request.fields['store_name'] = body.storeName;
-      request.fields['invoice'] = body.invoice;
+      request.fields['invoice'] = jsonEncode(body.invoice.map((i) => i.toJson()).toList());
       request.fields['payment_method'] = body.paymentMethod;
       request.fields['no_giro'] = body.noGiro;
       request.fields['giro_date'] = body.giroDate.toString();
@@ -463,10 +464,10 @@ class ApiService {
     }
   }
 
-  static Future<Object> checkStatus(BuildContext context) async {
+  static Future<Object> checkStatus(BuildContext context, String versionCode) async {
     try {
       final response = await http.get(
-          Uri.parse('${Configuration.apiUrl}auths/check'),
+          Uri.parse('${Configuration.apiUrl}auths/check?version_app=$versionCode'),
           headers: _headers);
       if (kDebugMode) {
         print('response check : ${response.body}');

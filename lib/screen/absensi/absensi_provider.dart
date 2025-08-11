@@ -128,7 +128,7 @@ class AbsensiProvider extends ChangeNotifier {
   }
 
   Future<void> addAbsen(
-      BuildContext context, List<File> files, String kios) async {
+      BuildContext context, List<File> files, String kios, String note) async {
     if (files.isNotEmpty && kios != 'Pilih Kios') {
       showLoading(context);
       final result = await _determinePosition();
@@ -152,7 +152,7 @@ class AbsensiProvider extends ChangeNotifier {
         if (context.mounted) {
           final response = await ApiService.addAbsen(context,
               files, result.position!.latitude, result.position!.longitude,
-              kios);
+              kios,note);
 
 
           if (response.runtimeType == DefaultResponse) {

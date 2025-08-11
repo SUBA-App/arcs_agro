@@ -41,10 +41,7 @@ class ReportProvider extends ChangeNotifier {
   String selectedKios = 'Pilih Kios';
   int selectedKiosId = 0;
 
-  String selectedInvoice = 'Pilih Invoice';
-  int selectedInvoiceId = 0;
-  String selectedInvoiceNumber = '';
-  int selectedInvoiceNominal = 0;
+
   String invoice = '';
 
   static TextEditingController noGiro = TextEditingController();
@@ -60,6 +57,8 @@ class ReportProvider extends ChangeNotifier {
   int selectedPayMillis = 0;
   List<File> selectedListImage = [];
 
+  List<InvoiceData> selectedInvoices = [];
+
   List<Method> methods = [
     Method('Tunai', 1),
     Method('Transfer', 2),
@@ -70,7 +69,10 @@ class ReportProvider extends ChangeNotifier {
   String sort = 'DESC';
   String start = '';
   String end = '';
-
+  void checkInvoice(int index) {
+    invoices[index].checked = !invoices[index].checked;
+    notifyListeners();
+  }
   void setSearch(String value) {
     search = value;
     notifyListeners();
@@ -184,15 +186,12 @@ class ReportProvider extends ChangeNotifier {
     selectedKios = value;
     selectedKiosId = id;
 
-    selectedInvoiceId = 0;
-    selectedInvoiceNumber = '';
+    selectedInvoices.clear();
     notifyListeners();
   }
 
-  void setInvoice(int id, String number, int nominal) {
-    selectedInvoiceId = id;
-    selectedInvoiceNumber = number;
-    selectedInvoiceNominal = nominal;
+  void setInvoice(List<InvoiceData> invoice) {
+    selectedInvoices = invoice;
     notifyListeners();
   }
 
@@ -412,7 +411,7 @@ class ReportProvider extends ChangeNotifier {
     amount.clear();
     selectedKios = 'Pilih Kios';
     selectedKiosId = 0;
-    selectedInvoiceId = 0;
+    selectedInvoices = [];
     selectedListImage = [];
     selectedBank = null;
     noGiro.clear();
@@ -429,7 +428,7 @@ class ReportProvider extends ChangeNotifier {
       if (selectedMethod?.id == 1) {
         if (amount.text.isEmpty
             || selectedKios == 'Pilih Kios'
-            || selectedInvoiceId == 0
+            || selectedInvoices.isEmpty
             || selectedListImage.isEmpty
         ) {
           error = true;
@@ -437,7 +436,7 @@ class ReportProvider extends ChangeNotifier {
       } else if (selectedMethod?.id == 2) {
         if (amount.text.isEmpty
             || selectedKios == 'Pilih Kios'
-            || selectedInvoiceId == 0
+            || selectedInvoices.isEmpty
         || selectedListImage.isEmpty
         || selectedBank == null
         ) {
@@ -446,7 +445,7 @@ class ReportProvider extends ChangeNotifier {
       } else if (selectedMethod?.id == 3) {
         if (amount.text.isEmpty
             || selectedKios == 'Pilih Kios'
-            || selectedInvoiceId == 0
+            || selectedInvoices.isEmpty
         || noGiro.text.isEmpty
         || giroDate.text.isEmpty
         || selectedListImage.isEmpty
@@ -460,7 +459,7 @@ class ReportProvider extends ChangeNotifier {
     }
 
     if (!error) {
-      final body = ReportBody(selectedPayMillis,selectedKios, selectedInvoiceNumber.toString(), selectedMethod!.id.toString(), noGiro.text, selectedGiroMillis, selectedBank?.name ?? '', int.parse(Util.toClearNumber(amount.text)), ket.text);
+      final body = ReportBody(selectedPayMillis,selectedKios, selectedInvoices, selectedMethod!.id.toString(), noGiro.text, selectedGiroMillis, selectedBank?.name ?? '', int.parse(Util.toClearNumber(amount.text)), ket.text);
 
       showLoading(context);
       final response = await ApiService.addReport(context,selectedListImage, body);

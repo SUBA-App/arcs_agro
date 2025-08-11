@@ -93,13 +93,88 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                           fontWeight: FontWeight.w700
                       ),
                     ),
-                    Text(
-                      widget.report.invoice,
-                      style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        color: FontColor.black,
+                    widget.report.invoice.isNotEmpty ?
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: FontColor.blackF9)
                       ),
-                    ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.report.invoice,
+                            style: TextStyle(
+                              fontFamily: FontColor.fontPoppins,
+                              color: FontColor.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ):
+                    ListView.builder(
+                      shrinkWrap: true,
+                        itemCount: widget.report.invoices.length,
+                        itemBuilder: (context, index) {
+                      return Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: FontColor.blackF9)
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.report.invoices[index].number,
+                              style: TextStyle(
+                                fontFamily: FontColor.fontPoppins,
+                                color: FontColor.black,
+                              ),
+                            ),
+                            Text(
+                              'Total',
+                              style: TextStyle(
+                                  fontFamily: FontColor.fontPoppins,
+                                  color: Colors.black45,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500
+                              ),
+                            ),
+                            Text(
+                              'Rp ${Util.convertToIdr(widget.report.invoices[index].totalAmount, 0)}',
+                              style: TextStyle(
+                                  fontFamily: FontColor.fontPoppins,
+                                  color: FontColor.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500
+                              ),
+                            ),
+                            Text(
+                              'Piutang',
+                              style: TextStyle(
+                                  fontFamily: FontColor.fontPoppins,
+                                  color: Colors.black45,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500
+                              ),
+                            ),
+                            Text(
+                              'Rp ${Util.convertToIdr(widget.report.invoices[index].piutang, 0)}',
+                              style: TextStyle(
+                                  fontFamily: FontColor.fontPoppins,
+                                  color: FontColor.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                     const SizedBox(height: 8,),
                     Text(
                       "Tanggal Pembayaran",
@@ -227,11 +302,11 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                               height: 8,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
-                                  color: widget.report.status == 0 ? Colors.red : Colors.green
+                                  color: widget.report.status == 3 ? Colors.red :widget.report.status == 0 ? Colors.orange : Colors.green
                               ),
                             ),
                             const SizedBox(width: 8,),
-                            Text(widget.report.status == 0 ? 'Pengecekan' : 'Selesai Pengecekan', style: TextStyle(
+                            Text(widget.report.status == 3 ? 'Dibatalkan' : widget.report.status == 0 ? 'Pengecekan' : 'Selesai Pengecekan', style: TextStyle(
                                 fontFamily: FontColor.fontPoppins,
                                 color: FontColor.black,
                                 fontSize: 14

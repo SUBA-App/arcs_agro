@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/change_pw_screen.dart';
+import 'package:sales_app/configuration.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
 import 'package:sales_app/screen/absensi/absensi_screen.dart';
 import 'package:sales_app/font_color.dart';
 import 'package:sales_app/home_page.dart';
+import 'package:sales_app/screen/item/drawer_item.dart';
 import 'package:sales_app/screen/product/product_screen.dart';
 import 'package:sales_app/screen/report/laporan_kerja_screen.dart';
 import 'package:sales_app/screen/main/main_provider.dart';
@@ -53,12 +55,14 @@ class _MainPageState extends State<MainPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Provider.of<MainProvider>(context, listen: false).getActiveAbsensi(context);
         Provider.of<AbsensiProvider>(context, listen: false).checkPermiss(context);
+        Provider.of<MainProvider>(context, listen: false).checkStatus(context);
       });
     }).catchError((e) {
       LocationForegroundService.initService();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Provider.of<MainProvider>(context, listen: false).getActiveAbsensi(context);
         Provider.of<AbsensiProvider>(context, listen: false).checkPermiss(context);
+        Provider.of<MainProvider>(context, listen: false).checkStatus(context);
       });
     });
     super.initState();
@@ -66,6 +70,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MainProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -106,7 +111,6 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
-          // Important: Remove any padding from the ListView.
           children: [
             Column(
               children: [
@@ -132,7 +136,13 @@ class _MainPageState extends State<MainPage> {
                             color: FontColor.black,
                             fontSize: 14
                         ),),
-                        Text("Sales - ${Preferences.getUser()?.companyName}", style: TextStyle(
+                        Text("${Preferences.getUser()?.role} - ${Preferences.getUser()?.companyName}", style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: FontColor.black.withValues(alpha: 0.7)
+                        ),),
+                        Text("Versi ${Configuration.version}-${Configuration.buildNumber}", style: TextStyle(
                             fontFamily: FontColor.fontPoppins,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -142,80 +152,36 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                 ),
-                ListTile(
-                  leading: Image.asset('assets/images/home.png', width: 20, height: 20,),
-                  title:  Text('Home', style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontWeight: FontWeight.w400,
-                      color: FontColor.black,
-                    fontSize: 14
-                  ),),
-                  onTap: () {
-                    setState(() {
-                      drawer = 0;
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Image.asset('assets/images/ballot-check.png', width: 20, height: 20,),
-                  title:  Text('Absensi', style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontWeight: FontWeight.w400,
-                      color: FontColor.black,
-                      fontSize: 14
-                  ),),
-                  onTap: () {
-                    setState(() {
-                      drawer = 1;
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Image.asset('assets/images/box-open.png', width: 20, height: 20,),
-                  title:  Text('List Produk', style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontWeight: FontWeight.w400,
-                      color: FontColor.black,
-                      fontSize: 14
-                  ),),
-                  onTap: () {
-                    setState(() {
-                      drawer = 2;
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Image.asset('assets/images/checklist-task-budget.png', width: 20, height: 20,),
-                  title:  Text('Laporan Kerja', style: TextStyle(
-                      fontFamily: FontColor.fontPoppins,
-                      fontWeight: FontWeight.w400,
-                      color: FontColor.black,
-                      fontSize: 14
-                  ),),
-                  onTap: () {
-                    setState(() {
-                      drawer = 3;
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
+                DrawerItem(onTap: () {
+                  setState(() {
+                    drawer = 0;
+                  });
+                  Navigator.pop(context);
+                }, text: 'Home', image: 'assets/images/home.png', isActive: true,),
+                DrawerItem(onTap: () {
+                  setState(() {
+                    drawer = 1;
+                  });
+                  Navigator.pop(context);
+                }, text: 'Absensi', image: 'assets/images/ballot-check.png', isActive: provider.isAbsenteeism == 1 || provider.isAbsenteeism == 2,),
+                DrawerItem(onTap: () {
+                  setState(() {
+                    drawer = 2;
+                  });
+                  Navigator.pop(context);
+                }, text: 'List Produk', image: 'assets/images/box-open.png', isActive: provider.isProduct == 1 || provider.isProduct == 2,),
+                DrawerItem(onTap: () {
+                  setState(() {
+                    drawer = 3;
+                  });
+                  Navigator.pop(context);
+                }, text: 'Laporan Kerja', image: 'assets/images/checklist-task-budget.png', isActive: provider.isReport == 1 || provider.isReport == 2,),
               ],
             ),
-            ListTile(
-              leading: Image.asset('assets/images/sign-out-alt.png', width: 20, height: 20,),
-              title:  Text('Logout', style: TextStyle(
-                  fontFamily: FontColor.fontPoppins,
-                  fontWeight: FontWeight.w400,
-                  color: FontColor.black,
-                fontSize: 14
-              ),),
-              onTap: () async {
-                await Provider.of<MainProvider>(context, listen: false).logout(context);
-              },
-            ),
+            DrawerItem(onTap: () async {
+              await Provider.of<MainProvider>(context, listen: false).logout(context);
+            }, text: 'Logout', image: 'assets/images/sign-out-alt.png', isActive: true,),
+
           ],
         ),
       ),

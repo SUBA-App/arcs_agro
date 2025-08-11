@@ -6,7 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sales_app/api/api_service.dart';
 import 'package:sales_app/api/response/active_absen_response.dart';
+import 'package:sales_app/api/response/check_status_response.dart';
 import 'package:sales_app/api/response/default_response.dart';
+import 'package:sales_app/configuration.dart';
 import 'package:sales_app/screen/login_screen/login_screen.dart';
 import 'package:sales_app/util/preferences.dart';
 
@@ -16,6 +18,10 @@ class MainProvider extends ChangeNotifier {
 
   bool isLoading = true;
   ActiveResult? result;
+
+  int isAbsenteeism = 0;
+  int isReport = 0;
+  int isProduct = 0;
 
   void showLoading(BuildContext context) {
     showDialog(
@@ -31,6 +37,33 @@ class MainProvider extends ChangeNotifier {
             ),
           );
         });
+  }
+
+  Future<void> checkStatus(BuildContext context) async {
+
+    final user = Preferences.getUser();
+    if (user != null) {
+      isAbsenteeism = user.isAbsenteeism;
+      isReport = user.isReport;
+      isProduct = user.isProduct;
+      notifyListeners();
+    }
+
+    final response = await ApiService.checkStatus(context,Configuration.buildNumber);
+    if (response.runtimeType == CheckStatusResponse) {
+      final resp = response as CheckStatusResponse;
+      if (!resp.error) {
+        await Preferences.saveUser(resp.result.user);
+
+        final user = Preferences.getUser();
+        if (user != null) {
+          isAbsenteeism = user.isAbsenteeism;
+          isReport = user.isReport;
+          isProduct = user.isProduct;
+          notifyListeners();
+        }
+      }
+    }
   }
 
   Future<void> getActiveAbsensi(BuildContext context) async {

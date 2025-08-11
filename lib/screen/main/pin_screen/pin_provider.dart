@@ -46,9 +46,6 @@ class PinProvider extends ChangeNotifier {
                   (e) => false);
         }
       } else {
-        if (context.mounted) {
-          Navigator.pop(context);
-        }
         Fluttertoast.showToast(msg: resp.message);
       }
     }
