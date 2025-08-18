@@ -11,6 +11,7 @@ import 'package:sales_app/screen/item/home_menu.dart';
 
 import 'package:sales_app/screen/main/main_provider.dart';
 import 'package:sales_app/screen/product/product_screen.dart';
+import 'package:sales_app/screen/sales-canvasser/receipts_screen.dart';
 import 'package:sales_app/shimmer_n.dart';
 import 'package:sales_app/util/preferences.dart';
 
@@ -248,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 16),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       HomeMenu(
                         onTap: () {
@@ -264,6 +265,21 @@ class _HomePageState extends State<HomePage> {
                         text: "Laporan Kerja",
                         isActive: provider.isReport == 2 || provider.isReport == 1,
                         image: 'assets/images/checklist-task-budget.png',
+                      ),
+                      HomeMenu(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                              const ReceiptsScreen(drawer: false),
+                            ),
+                          );
+                        },
+                        text: "Sales Canvasser",
+                        isActive: provider.isReport == 2 || provider.isReport == 1,
+                        image: 'assets/images/calendar-lines-pen.png',
                       ),
                     ],
                   ),

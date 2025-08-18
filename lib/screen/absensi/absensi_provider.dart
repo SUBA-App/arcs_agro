@@ -15,6 +15,7 @@ import 'package:sales_app/api/response/active_absen_response.dart';
 import 'package:sales_app/api/response/default_response.dart';
 import 'package:sales_app/font_color.dart';
 import 'package:sales_app/screen/main/main_page.dart';
+import 'package:sales_app/util.dart';
 import 'package:sales_app/util/preferences.dart';
 
 import '../../service/location_foreground_service.dart';
@@ -128,7 +129,7 @@ class AbsensiProvider extends ChangeNotifier {
   }
 
   Future<void> addAbsen(
-      BuildContext context, List<File> files, String kios, String note) async {
+      BuildContext context, List<File> files, String kios,String kiosId, String note) async {
     if (files.isNotEmpty && kios != 'Pilih Kios') {
       showLoading(context);
       final result = await _determinePosition();
@@ -150,9 +151,10 @@ class AbsensiProvider extends ChangeNotifier {
         }
       } else {
         if (context.mounted) {
+          final f = await Util.watermarkImageF(files,'${result.position!.latitude},${result.position!.longitude}');
           final response = await ApiService.addAbsen(context,
-              files, result.position!.latitude, result.position!.longitude,
-              kios,note);
+              f, result.position!.latitude, result.position!.longitude,
+              kios,kiosId,note);
 
 
           if (response.runtimeType == DefaultResponse) {

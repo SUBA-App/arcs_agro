@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sales_app/custom_camera.dart';
 import 'package:sales_app/screen/absensi/next_absensi_screen.dart';
-import 'package:sales_app/util.dart';
 
 class TakePictureAbsensiScreen extends StatefulWidget {
   const TakePictureAbsensiScreen({super.key, required this.camera});
@@ -38,12 +37,11 @@ class _TakePictureAbsensiScreenState extends State<TakePictureAbsensiScreen> {
     return CustomCamera(onNext: (e) async{
       showLoading(context);
       try {
-        final files = await Util.watermarkImageF(e);
         if (context.mounted) {
           Navigator.pop(context);
           Navigator.pushReplacement(context,
               MaterialPageRoute(
-                  builder: (context) => NextAbsensiScreen(paths: files)));
+                  builder: (context) => NextAbsensiScreen(paths: e)));
         }
       } catch(_) {
         if (context.mounted) {

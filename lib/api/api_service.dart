@@ -5,17 +5,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sales_app/api/body/coordinate_body.dart';
+import 'package:sales_app/api/body/receipt_body.dart';
 import 'package:sales_app/api/body/report_body.dart';
 import 'package:sales_app/api/response/absen_response.dart';
 import 'package:sales_app/api/response/active_absen_response.dart';
+import 'package:sales_app/api/response/add_receipt_response.dart';
 import 'package:sales_app/api/response/check_status_response.dart';
 import 'package:sales_app/api/response/create_pin_response.dart';
 import 'package:sales_app/api/response/customer_response.dart';
 import 'package:sales_app/api/response/default_response.dart';
 import 'package:sales_app/api/response/invoice_response.dart';
+import 'package:sales_app/api/response/list_product_response.dart';
 import 'package:sales_app/api/response/login_response.dart';
 import 'package:sales_app/api/response/product_response.dart';
+import 'package:sales_app/api/response/report_detail_response.dart';
 import 'package:sales_app/api/response/report_response.dart';
+import 'package:sales_app/api/response/receipts_response.dart';
 import 'package:sales_app/configuration.dart';
 import 'package:sales_app/location_model.dart';
 import 'package:sales_app/screen/login_screen/login_screen.dart';
@@ -137,7 +142,7 @@ class ApiService {
   }
 
   static Future<Object> addAbsen(BuildContext context, List<File> files,
-      double latitude, double longitude, String kios, String note) async {
+      double latitude, double longitude, String kios,String kiosId, String note) async {
     try {
       var request = http.MultipartRequest(
           "POST", Uri.parse('${Configuration.apiUrl}absensi/add'));
@@ -149,6 +154,7 @@ class ApiService {
         ));
       }
       request.fields['store_name'] = kios;
+      request.fields['store_id'] = kiosId;
       request.fields['note'] = note;
       request.fields['latitude'] = latitude.toString();
       request.fields['longitude'] = longitude.toString();
@@ -399,6 +405,27 @@ class ApiService {
     }
   }
 
+  static Future<Object> reportDetail(
+      BuildContext context, String id) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '${Configuration.apiUrl}report/detail/$id'),
+        headers: _headers,
+      );
+      if (kDebugMode) {
+        print('response report-detail : ${response.body}');
+      }
+      return ReportDetailResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
   static Future<Object> addReport(
       BuildContext context, List<File> files, ReportBody body) async {
     try {
@@ -439,7 +466,7 @@ class ApiService {
         if (kDebugMode) {
           print('response add : $responseToString');
         }
-        return DefaultResponse.fromJson(jsonBody as Map<String, dynamic>);
+        return ReportDetailResponse.fromJson(jsonBody as Map<String, dynamic>);
       } else if (response.statusCode == 422) {
         var responseData = await response.stream.toBytes();
         var responseToString = String.fromCharCodes(responseData);
@@ -447,7 +474,7 @@ class ApiService {
         if (kDebugMode) {
           print('response add : $responseToString');
         }
-        return DefaultResponse.fromJson(jsonBody as Map<String, dynamic>);
+        return ReportDetailResponse.fromJson(jsonBody as Map<String, dynamic>);
       } else {
         var responseData = await response.stream.toBytes();
         var responseToString = String.fromCharCodes(responseData);
@@ -658,6 +685,88 @@ class ApiService {
         print('response check email : ${response.body}');
       }
       return DefaultResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
+  static Future<Object> receipts(BuildContext context, int page, String search,String sort, String start, String end) async {
+    try {
+      final response = await http
+          .get(Uri.parse('${Configuration.apiUrl}sales-canvasser/receipt?page=$page&search=$search&sort=$sort&start=$start&end=$end'), headers: _headers);
+      if (kDebugMode) {
+        print('response tanda_terima : ${response.body}');
+      }
+      if (response.statusCode == 401) {
+        Preferences.clear();
+        if (context.mounted) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (e) => false);
+        }
+      }
+      return ReceiptsResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+  static Future<Object> listProduct(BuildContext context, String keyword) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${Configuration.apiUrl}sales-canvasser/list-product?keyword=$keyword'),
+        headers: _headers,
+      );
+      if (kDebugMode) {
+        print('response list barang : ${response.body}');
+      }
+      if (response.statusCode == 401) {
+        Preferences.clear();
+        if (context.mounted) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (e) => false);
+        }
+      }
+      return ListProductResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return e.toString();
+    }
+  }
+
+  static Future<Object> addReceipt(BuildContext context, ReceiptBody body) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${Configuration.apiUrl}sales-canvasser/receipt/add'),
+        headers: _headers,
+        body:body.toJson()
+      );
+      if (kDebugMode) {
+        print('response add receipt : ${response.body}');
+      }
+      if (response.statusCode == 401) {
+        Preferences.clear();
+        if (context.mounted) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (e) => false);
+        }
+      }
+      return AddReceiptResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
     } catch (e) {
       if (kDebugMode) {

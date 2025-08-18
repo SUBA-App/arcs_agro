@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
+import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -9,10 +10,11 @@ import 'package:sales_app/api/api_service.dart';
 import 'package:sales_app/api/body/report_body.dart';
 import 'package:sales_app/api/model/method.dart';
 import 'package:sales_app/api/response/customer_response.dart';
-import 'package:sales_app/api/response/default_response.dart';
 import 'package:sales_app/api/response/invoice_response.dart';
+import 'package:sales_app/api/response/report_detail_response.dart';
 import 'package:sales_app/api/response/report_response.dart';
 import 'package:sales_app/bank.dart';
+import 'package:sales_app/screen/report/success_screen.dart';
 import 'package:sales_app/util.dart';
 
 import '../../font_color.dart';
@@ -22,6 +24,8 @@ class ReportProvider extends ChangeNotifier {
 
   bool isLoading = false;
   List<ReportData> reports = [];
+  bool isLoadingDetail = false;
+  ReportData? reportData;
 
   List<Bank> banks = [];
   List<Bank> banks2 = [];
@@ -222,6 +226,19 @@ class ReportProvider extends ChangeNotifier {
       if (!resp.error) {
         isLoading = false;
         reports = resp.result.results;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> reportDetail(BuildContext context,String id) async {
+    isLoadingDetail = true;
+    notifyListeners();
+    final response = await ApiService.reportDetail(context,id);
+    if (response is ReportDetailResponse) {
+      if (!response.error) {
+        isLoadingDetail = false;
+        reportData = response.result;
         notifyListeners();
       }
     }
@@ -463,18 +480,21 @@ class ReportProvider extends ChangeNotifier {
 
       showLoading(context);
       final response = await ApiService.addReport(context,selectedListImage, body);
-      if (response.runtimeType == DefaultResponse) {
-        final resp = response as DefaultResponse;
-        if (!resp.error) {
+      if (response is ReportDetailResponse) {
+
+        if (!response.error) {
           if (context.mounted) {
+            List<int> template = await Util.templatePrintReport(response.result, PaperSize.mm80);
+
+            if (!context.mounted) return;
             Navigator.pop(context);
-            Navigator.pop(context, ['ss']);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SuccessScreen(template: template, count: 1,)));
           }
         } else {
           if (context.mounted) {
             Navigator.pop(context);
           }
-          Fluttertoast.showToast(msg: resp.message);
+          Fluttertoast.showToast(msg: response.message);
         }
       } else {
         if (context.mounted) {

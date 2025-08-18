@@ -57,8 +57,11 @@ class ReportData {
   String id;
   String salesName;
   String salesCompany;
+  String salesCompanyLetter;
   String storeName;
   String invoice;
+  String? uniqueCode;
+  String? no;
   List<InvoiceData> invoices;
   Payment payment;
   String createdAt;
@@ -72,6 +75,7 @@ class ReportData {
     required this.id,
     required this.salesName,
     required this.salesCompany,
+    required this.salesCompanyLetter,
     required this.storeName,
     required this.invoice,
     required this.invoices,
@@ -79,13 +83,14 @@ class ReportData {
     required this.createdAt,
     required this.note,
     required this.status,
-    required this.checkDate, required this.inputDate});
+    required this.checkDate, required this.inputDate,required this.no, required this.uniqueCode});
 
   factory ReportData.fromJson(Map<String, dynamic> json) => ReportData(
     id: json["id"],
     status: json['status'],
     salesName: json['sales_name'],
     salesCompany: json['sales_company'],
+    salesCompanyLetter: json['sales_company_letter'],
     storeName: json['store_name'],
     invoice: json['invoice'] ?? '',
     note: json['note'] ?? '',
@@ -93,7 +98,7 @@ class ReportData {
     createdAt: json['created_at'],
     checkDate: CheckDate.fromJson(json['check']),
     inputDate: InputDate.fromJson(json['input']), invoices: json['invoices'] == null ? [] : List<InvoiceData>.from(
-      json['invoices'].map((e) => InvoiceData.fromJson(e))),
+      json['invoices'].map((e) => InvoiceData.fromJson(e))), no: json['no'], uniqueCode: json['unique_code'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -104,6 +109,8 @@ class ReportData {
     'store_name': storeName,
     'invoice': invoice,
     'note': note,
+    'no':no,
+    'unique_code':uniqueCode,
     'payment':payment.toJson(),
     'created_at': createdAt,
     'check': checkDate.toJson(),

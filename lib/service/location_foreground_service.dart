@@ -80,7 +80,6 @@ class MyTaskHandler extends TaskHandler {
               id: 10,
               channelKey: 'basic_channel',
               actionType: ActionType.KeepOnTop,
-              //category: NotificationCategory.Alarm,
               title: 'Location Denied',
               body: 'Please Refer to sales app',
             )

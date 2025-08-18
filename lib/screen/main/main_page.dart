@@ -78,7 +78,7 @@ class _MainPageState extends State<MainPage> {
         iconTheme: const IconThemeData(
             color: FontColor.black
         ),
-        title: Text(drawer == 0 ?"Home" : drawer == 1? "Absensi" : drawer == 2 ? "List Produk" :  "Laporan Kerja", style: TextStyle(
+        title: Text(drawer == 0 ?"Home" : drawer == 1? "Absensi" : drawer == 2 ? "List Produk" : drawer == 4 ? 'Tanda Terima' : "Laporan Kerja", style: TextStyle(
           fontFamily: FontColor.fontPoppins,
           color: FontColor.black,
           fontSize: 16
@@ -176,6 +176,12 @@ class _MainPageState extends State<MainPage> {
                   });
                   Navigator.pop(context);
                 }, text: 'Laporan Kerja', image: 'assets/images/checklist-task-budget.png', isActive: provider.isReport == 1 || provider.isReport == 2,),
+                DrawerItem(onTap: () {
+                  setState(() {
+                    drawer = 4;
+                  });
+                  Navigator.pop(context);
+                }, text: 'Sales Canvasser', image: 'assets/images/calendar-lines-pen.png', isActive: provider.isCanvasser == 1 || provider.isCanvasser == 2,),
               ],
             ),
             DrawerItem(onTap: () async {

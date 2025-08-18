@@ -41,6 +41,15 @@ class ReportItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      report.no ?? '',
+                      style: TextStyle(
+                        fontFamily: FontColor.fontPoppins,
+                        color: Colors.black54,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     Text(report.storeName, style: TextStyle(
                         fontFamily: FontColor.fontPoppins,
                         fontSize: 14,

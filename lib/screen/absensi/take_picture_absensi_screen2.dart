@@ -39,10 +39,9 @@ class _TakePictureAbsensiScreenState extends State<TakePictureAbsensiScreen2> {
       if (widget.mode == 1) {
         showLoading(context);
         try {
-          final files = await Util.watermarkImageF(e);
           if (context.mounted) {
             Navigator.pop(context);
-            Navigator.pop(context, files);
+            Navigator.pop(context, e);
           }
         } catch (_) {
           if (context.mounted) {

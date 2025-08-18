@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +11,7 @@ import 'package:sales_app/screen/report/report_provider.dart';
 
 
 import '../../font_color.dart';
+import '../../refresh_controller.dart';
 import '../dialog/filter_dialog.dart';
 import '../main/main_provider.dart';
 
@@ -29,6 +32,13 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
       Provider.of<MainProvider>(context, listen: false).checkStatus(context);
       Provider.of<ReportProvider>(context, listen: false).clear();
       Provider.of<ReportProvider>(context, listen: false).getReports(context, 1);
+
+
+    });
+
+    _subscription = RefreshController.stream.listen((_) {
+      Provider.of<ReportProvider>(context, listen: false).getReports(
+          context, 1);
     });
     super.initState();
   }
@@ -68,6 +78,14 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
     }
   }
 
+  late final StreamSubscription _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ReportProvider>(context);
@@ -90,8 +108,7 @@ class _LaporanKerjaScreenState extends State<LaporanKerjaScreen> {
         final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const AddLaporanScreen()));
         if (result != null) {
           if (context.mounted) {
-            Provider.of<ReportProvider>(context, listen: false).getReports(
-                context, 1);
+
           }
         }
       },backgroundColor: FontColor.yellow72, child: const Icon(Icons.add, color: FontColor.black,),) : null,

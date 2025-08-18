@@ -22,6 +22,7 @@ class MainProvider extends ChangeNotifier {
   int isAbsenteeism = 0;
   int isReport = 0;
   int isProduct = 0;
+  int isCanvasser = 0;
 
   void showLoading(BuildContext context) {
     showDialog(
@@ -46,6 +47,7 @@ class MainProvider extends ChangeNotifier {
       isAbsenteeism = user.isAbsenteeism;
       isReport = user.isReport;
       isProduct = user.isProduct;
+      isCanvasser = user.isCanvasser;
       notifyListeners();
     }
 
@@ -60,6 +62,7 @@ class MainProvider extends ChangeNotifier {
           isAbsenteeism = user.isAbsenteeism;
           isReport = user.isReport;
           isProduct = user.isProduct;
+          isCanvasser = user.isCanvasser;
           notifyListeners();
         }
       }

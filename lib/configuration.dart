@@ -17,7 +17,7 @@ class Configuration {
        version = packageInfo.version;
         break;
       case "com.subagro.salesreport.debug":
-        _baseUrl =  'https://salesreport-development.subagro.com/';
+        _baseUrl = 'https://salesreport-development.subagro.com/';
         apiUrl = '${_baseUrl}api/';
         buildNumber = packageInfo.buildNumber;
         version = packageInfo.version;

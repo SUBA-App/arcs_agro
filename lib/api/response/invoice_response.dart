@@ -106,9 +106,9 @@ class InvoiceData {
 
   factory InvoiceData.fromJson(Map<String, dynamic> json) => InvoiceData(
     id: json['id'],
-    totalAmount: json['totalAmount'] ?? 0,
-    piutang:json['primeOwing'],
-    taxDateView: json['taxDate'] ?? '',
+    totalAmount: json['total_amount'] ?? 0,
+    piutang:json['prime_owing'] ?? 0,
+    taxDateView: json['tax_date_view'] ?? '',
     number: json['number'],
     checked: false,
   );
