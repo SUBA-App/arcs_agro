@@ -53,7 +53,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
         padding: const EdgeInsets.all(8.0),
         child:
             provider.isLoadingDetail
-                ? Center(
+                ? const Center(
                   child: CircularProgressIndicator(color: FontColor.black),
                 )
                 : Column(
@@ -135,7 +135,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 16,),
+                                  const SizedBox(height: 16,),
                                   Text(
                                     "Invoice",
                                     style: TextStyle(
@@ -147,7 +147,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                                   provider.reportData?.invoice.isNotEmpty ?? false
                                       ? Container(
                                         width: double.infinity,
-                                        padding: EdgeInsets.all(4),
+                                        padding: const EdgeInsets.all(4),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10),
                                           border: Border.all(
@@ -175,8 +175,8 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                                         itemBuilder: (context, index) {
                                           return Container(
                                             width: double.infinity,
-                                            padding: EdgeInsets.all(4),
-                                            margin: EdgeInsets.symmetric(vertical: 4),
+                                            padding: const EdgeInsets.all(4),
+                                            margin: const EdgeInsets.symmetric(vertical: 4),
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10),
                                               border: Border.all(
@@ -601,7 +601,7 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8,),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(

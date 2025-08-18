@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sales_app/api/response/receipts_response.dart';
@@ -118,7 +117,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
                           context,
                           MaterialPageRoute(
                             builder:
-                                (context) => ChooseListProductScreen(
+                                (context) => const ChooseListProductScreen(
                             ),
                           ),
                         );

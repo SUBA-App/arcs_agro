@@ -71,7 +71,7 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget.data.storeName ?? '',
+                                      widget.data.storeName,
                                       style: TextStyle(
                                         fontFamily: FontColor.fontPoppins,
                                         color: FontColor.black,

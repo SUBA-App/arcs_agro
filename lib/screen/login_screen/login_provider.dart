@@ -31,7 +31,6 @@ class LoginProvider extends ChangeNotifier {
       showLoading(context);
       FocusManager.instance.primaryFocus?.unfocus();
       final response = await ApiService.login(email, password, Configuration.buildNumber);
-      print(Configuration.buildNumber);
 
       if (response.runtimeType == LoginResponse) {
         final resp = response as LoginResponse;

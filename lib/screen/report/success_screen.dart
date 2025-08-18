@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sales_app/screen/print/print_screen.dart';
 
@@ -40,7 +39,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset('assets/images/accept.png', width: 120,height: 120,),
-                SizedBox(height: 16,),
+                const SizedBox(height: 16,),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

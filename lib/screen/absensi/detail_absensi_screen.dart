@@ -130,7 +130,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8,),
+                  const SizedBox(height: 8,),
                   widget.result!.note.isNotEmpty ?  Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
@@ -152,7 +152,7 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
                       ),
                     ),
                   ) : const SizedBox(),
-                  SizedBox(height: 8,),
+                  const SizedBox(height: 8,),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

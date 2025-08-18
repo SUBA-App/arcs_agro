@@ -1,15 +1,10 @@
-import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:sales_app/api/response/receipts_response.dart';
-import 'package:sales_app/screen/report/item/invoice_item.dart';
-import 'package:sales_app/screen/report/report_provider.dart';
 import 'package:sales_app/screen/sales-canvasser/list_product_item.dart';
 import 'package:sales_app/screen/sales-canvasser/receipts_provider.dart';
-import 'package:sales_app/util.dart';
 
-import '../../api/response/invoice_response.dart';
 import '../../font_color.dart';
 
 class ChooseListProductScreen extends StatefulWidget {

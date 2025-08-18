@@ -14,6 +14,7 @@ import 'package:sales_app/screen/item/drawer_item.dart';
 import 'package:sales_app/screen/product/product_screen.dart';
 import 'package:sales_app/screen/report/laporan_kerja_screen.dart';
 import 'package:sales_app/screen/main/main_provider.dart';
+import 'package:sales_app/screen/sales-canvasser/receipts_screen.dart';
 import 'package:sales_app/service/location_foreground_service.dart';
 import 'package:sales_app/util/preferences.dart';
 
@@ -191,7 +192,7 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
-      body: drawer == 0 ? const HomePage() : drawer == 1 ? const AbsensiScreen(drawer: true) : drawer == 2 ? const ProductScreen(drawer: true): const LaporanKerjaScreen(drawer: true),
+      body: drawer == 0 ? const HomePage() : drawer == 1 ? const AbsensiScreen(drawer: true) : drawer == 2 ? const ProductScreen(drawer: true): drawer == 4 ? const ReceiptsScreen(drawer: true) : const LaporanKerjaScreen(drawer: true),
     );
   }
 }

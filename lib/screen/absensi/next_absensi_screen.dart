@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:sales_app/screen/absensi/absensi_provider.dart';
 import 'package:sales_app/screen/absensi/next_absensi_provider.dart';
 import 'package:sales_app/screen/absensi/take_picture_absensi_screen2.dart';
-import 'package:sales_app/util.dart';
 
 import '../../font_color.dart';
 import '../report/choose_customer_screen.dart';

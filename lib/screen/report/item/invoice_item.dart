@@ -88,7 +88,7 @@ class InvoiceItem extends StatelessWidget {
                   ),
                 ),
                 invoiceData.checked ?
-                const Icon(Icons.check, color: Colors.green,) : SizedBox.shrink()
+                const Icon(Icons.check, color: Colors.green,) : const SizedBox.shrink()
               ],
             ),
           ],

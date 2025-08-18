@@ -17,12 +17,9 @@ import 'package:sales_app/screen/main/main_provider.dart';
 import 'package:sales_app/screen/main/otp_screen/otp_provider.dart';
 import 'package:sales_app/screen/main/pin_screen/pin_provider.dart';
 import 'package:sales_app/screen/main/pin_screen/pin_screen.dart';
-import 'package:sales_app/screen/print/print_screen.dart';
 import 'package:sales_app/screen/product/product_provider.dart';
 import 'package:sales_app/screen/report/report_provider.dart';
-import 'package:sales_app/screen/report/success_screen.dart';
 import 'package:sales_app/screen/sales-canvasser/receipts_provider.dart';
-import 'package:sales_app/screen/sales-canvasser/add_receipt_screen.dart';
 import 'package:sales_app/util/preferences.dart';
 
 void main() async {

@@ -326,8 +326,8 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                 itemCount: provider.selectedInvoices.length,
                                     itemBuilder: (context, index) {
                                       return Container(
-                                        margin: EdgeInsets.symmetric(vertical: 4),
-                                        padding: EdgeInsets.all(4),
+                                        margin: const EdgeInsets.symmetric(vertical: 4),
+                                        padding: const EdgeInsets.all(4),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius: BorderRadius.circular(10)
@@ -344,7 +344,7 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
                                                 fontWeight: FontWeight.w400,
                                               ),
                                             ),
-                                            SizedBox(height: 4,),
+                                            const SizedBox(height: 4,),
                                             Text(
                                               'Rp ${Util.convertToIdr(provider.selectedInvoices[index].piutang, 0)}',
                                               style: TextStyle(

@@ -63,7 +63,7 @@ class Util {
     int total = 0;
     // Detail produk
     for(var i in data.listProducts) {
-      bytes += generator.text('${i.productName}', styles: const PosStyles(bold: true));
+      bytes += generator.text(i.productName, styles: const PosStyles(bold: true));
       bytes += generator.row([
         PosColumn(text: '${i.productQuantity} x Rp. ${Util.convertToIdr(int.parse(i.productPrice), 0)}', width: 6),
         PosColumn(text: 'Rp. ${Util.convertToIdr(int.parse(i.productPrice) * i.productQuantity, 0)}', width: 6, styles: const PosStyles(align: PosAlign.right)),

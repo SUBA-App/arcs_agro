@@ -104,22 +104,22 @@ class ListProductItem extends StatelessWidget {
                 ),
               ],
             ),
-            onMin == null ? SizedBox() : const SizedBox(height: 8,),
-            onMin == null ? SizedBox() : Container(
+            onMin == null ? const SizedBox() : const SizedBox(height: 8,),
+            onMin == null ? const SizedBox() : Container(
               width: double.infinity,
               height: 1,
               color: const Color(0xffeaeaea),
             ),
-            onMin == null ? SizedBox() : Column(
+            onMin == null ? const SizedBox() : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 4,),
+                const SizedBox(height: 4,),
                 Text('Masukan Harga', style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w500,
                   fontFamily: FontColor.fontPoppins
                 ),),
-                SizedBox(height: 4,),
+                const SizedBox(height: 4,),
                 SizedBox(
                   width: 200,
                   height: 35,

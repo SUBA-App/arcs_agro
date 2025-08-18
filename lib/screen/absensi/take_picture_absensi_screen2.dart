@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../custom_camera.dart';
-import '../../util.dart';
 
 class TakePictureAbsensiScreen2 extends StatefulWidget {
   const TakePictureAbsensiScreen2({super.key, required this.camera, required this.mode});

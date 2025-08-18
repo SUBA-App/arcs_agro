@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +93,6 @@ class _PrintScreenState extends State<PrintScreen> {
   }
 
   Future<void> printStruk(BuildContext context, int currentCount) async {
-    print(currentCount);
     bool isConnected = await PrintBluetoothThermal.connectionStatus;
     if (!isConnected) {
       if (kDebugMode) {
@@ -135,8 +133,6 @@ class _PrintScreenState extends State<PrintScreen> {
   }
 
   List<PaperSize> papers = [PaperSize.mm58, PaperSize.mm72, PaperSize.mm80];
-
-  final PaperSize _selectedPaperSize = PaperSize.mm80;
 
   @override
   void initState() {
