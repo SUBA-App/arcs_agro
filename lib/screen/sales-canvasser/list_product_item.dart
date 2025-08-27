@@ -1,3 +1,4 @@
+import 'package:arcs_agro/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../font_color.dart';
@@ -35,6 +36,7 @@ class ListProductItem extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Column(
@@ -61,12 +63,14 @@ class ListProductItem extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(width: 16,),
                 onMin == null ?  Row(
                   children: [
                     listProduct.checked ?
                     const Icon(Icons.check, color: Colors.green,) : const SizedBox.shrink()
                   ],
                 ) : Row(
+
                   children: [
                     GestureDetector(
                       onTap: onMin,
@@ -76,7 +80,7 @@ class ListProductItem extends StatelessWidget {
                           color: FontColor.yellow72,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Icon(Icons.remove,size: 12, color: FontColor.black,),
+                        child: const Icon(Icons.remove,size: 12, color: Colors.white),
                       ),
                     ),
                     const SizedBox(width: 8,),
@@ -97,7 +101,7 @@ class ListProductItem extends StatelessWidget {
                           color: FontColor.yellow72,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Icon(Icons.add,size: 12, color: FontColor.black,),
+                        child: const Icon(Icons.add,size: 12, color: Colors.white,),
                       ),
                     ),
                   ],
@@ -114,46 +118,56 @@ class ListProductItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 4,),
-                Text('Masukan Harga', style: TextStyle(
+                Text('Masukan Harga per Box', style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w500,
                   fontFamily: FontColor.fontPoppins
                 ),),
                 const SizedBox(height: 4,),
-                SizedBox(
-                  width: 200,
-                  height: 35,
-                  child: TextField(
-                    cursorColor: FontColor.black,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      CurrencyInputFormatter(),
-                    ],
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(
-                        fontFamily: FontColor.fontPoppins,
-                        fontWeight: FontWeight.w400,
-                        color: FontColor.black,
-                        fontSize: 12
-                    ),
-                    decoration: InputDecoration(
-                        hintText: "Harga",
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: Colors.black26,
-                          ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      height: 35,
+                      child: TextField(
+                        cursorColor: FontColor.black,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          CurrencyInputFormatter(),
+                        ],
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            fontWeight: FontWeight.w400,
+                            color: FontColor.black,
+                            fontSize: 12
                         ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: FontColor.yellow72,
-                            )
+                        decoration: InputDecoration(
+                            hintText: "Harga",
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: Colors.black26,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: FontColor.yellow72,
+                                )
+                            ),
+                            contentPadding: const EdgeInsets.all(8)
                         ),
-                        contentPadding: const EdgeInsets.all(8)
+                        onChanged: onChanged,
+                      ),
                     ),
-                    onChanged: onChanged,
-                  ),
+                    Text('Rp. ${Util.convertToIdr(listProduct.subtotal, 0)}', style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: FontColor.fontPoppins
+                    ),),
+                  ],
                 ),
               ],
             ),

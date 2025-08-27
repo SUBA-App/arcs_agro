@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:sales_app/api/response/product_response.dart';
-import 'package:sales_app/util.dart';
+import 'package:arcs_agro/api/response/product_response.dart';
+import 'package:arcs_agro/util.dart';
 
 import '../../font_color.dart';
 

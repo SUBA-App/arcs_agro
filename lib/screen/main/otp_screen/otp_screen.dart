@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/font_color.dart';
-import 'package:sales_app/screen/main/otp_screen/otp_provider.dart';
+import 'package:arcs_agro/font_color.dart';
+import 'package:arcs_agro/screen/main/otp_screen/otp_provider.dart';
 
 
 import '../../../util.dart';

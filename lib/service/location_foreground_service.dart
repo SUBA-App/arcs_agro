@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sales_app/api/body/coordinate_body.dart';
-import 'package:sales_app/api/response/default_response.dart';
-import 'package:sales_app/configuration.dart';
-import 'package:sales_app/location_model.dart';
-import 'package:sales_app/util.dart';
-import 'package:sales_app/util/preferences.dart';
+import 'package:arcs_agro/api/body/coordinate_body.dart';
+import 'package:arcs_agro/api/response/default_response.dart';
+import 'package:arcs_agro/configuration.dart';
+import 'package:arcs_agro/location_model.dart';
+import 'package:arcs_agro/util.dart';
+import 'package:arcs_agro/util/preferences.dart';
 
 import '../api/api_service.dart';
 import '../api/model/location_result.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:floor/floor.dart';
-import 'package:sales_app/location_dao.dart';
+import 'package:arcs_agro/location_dao.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'location_model.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sales_app/api/response/absen_response.dart';
+import 'package:arcs_agro/api/response/absen_response.dart';
 
 import 'detail_absensi_screen.dart';
 import '../../font_color.dart';

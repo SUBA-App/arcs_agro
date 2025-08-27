@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import '../../font_color.dart'; // Pastikan path ini benar
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../font_color.dart';
 
 class HomeMenu extends StatelessWidget {
   const HomeMenu({
@@ -27,10 +29,11 @@ class HomeMenu extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Image.asset(
+          SvgPicture.asset(
             image,
             width: 30,
             height: 30,
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
           Text(
             text, // Menggunakan variabel text
@@ -39,7 +42,7 @@ class HomeMenu extends StatelessWidget {
                 fontFamily: FontColor.fontPoppins,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: FontColor.black),
+                color: Colors.white),
           ),
         ],
       ),

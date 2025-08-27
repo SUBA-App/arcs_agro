@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/api/response/receipts_response.dart';
-import 'package:sales_app/screen/sales-canvasser/choose_list_product_screen.dart';
-import 'package:sales_app/screen/sales-canvasser/list_product_item.dart';
-import 'package:sales_app/screen/sales-canvasser/receipts_provider.dart';
+import 'package:arcs_agro/api/response/receipts_response.dart';
+import 'package:arcs_agro/screen/sales-canvasser/choose_list_product_screen.dart';
+import 'package:arcs_agro/screen/sales-canvasser/list_product_item.dart';
+import 'package:arcs_agro/screen/sales-canvasser/receipts_provider.dart';
 
 import '../../font_color.dart';
+import '../../refresh_controller.dart';
+import '../../util.dart';
 import '../report/choose_customer_screen.dart';
 
 class AddReceiptScreen extends StatefulWidget {
@@ -32,12 +34,12 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Tambah Tanda Terima",
           style: TextStyle(
             fontFamily: FontColor.fontPoppins,
-            color: FontColor.black,
+            color: Colors.white,
             fontSize: 16,
           ),
         ),
@@ -169,6 +171,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
                               )
                                   : ListView.builder(
                                 shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: provider.selectedProduct.length,
                                 itemBuilder: (context, index) {
                                   return ListProductItem(listProduct: provider.selectedProduct[index], onMin: () {
@@ -199,6 +202,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
                     context,
                     listen: false,
                   ).addReceipt(context);
+                  RefreshController.refresh();
                 },
                 style: ButtonStyle(
                   backgroundColor: const WidgetStatePropertyAll(Colors.black),

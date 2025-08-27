@@ -1,5 +1,5 @@
 
-import 'package:sales_app/api/response/report_response.dart';
+import 'package:arcs_agro/api/response/report_response.dart';
 
 class ReportDetailResponse {
   bool error;

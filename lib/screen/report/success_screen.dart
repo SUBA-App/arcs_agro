@@ -1,13 +1,16 @@
+import 'package:arcs_agro/screen/print/print_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:sales_app/screen/print/print_screen.dart';
+import 'package:arcs_agro/screen/print/print_screen.dart';
 
+import '../../api/response/receipts_response.dart';
+import '../../api/response/report_response.dart';
 import '../../font_color.dart';
 
 class SuccessScreen extends StatefulWidget {
-  const SuccessScreen({super.key, required this.template, required this.count});
+  const SuccessScreen({super.key, this.receiptsData, this.reportData, });
 
-  final List<int> template;
-  final int count;
+  final ReceiptsData? receiptsData;
+  final ReportData? reportData;
 
   @override
   State<SuccessScreen> createState() => _SuccessScreenState();
@@ -20,12 +23,13 @@ class _SuccessScreenState extends State<SuccessScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
+
         title: Text(
           "Tambah Laporan",
           style: TextStyle(
             fontFamily: FontColor.fontPoppins,
-            color: FontColor.black,
+            color: Colors.white,
             fontSize: 16,
           ),
         ),
@@ -44,7 +48,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PrintScreen(template: widget.template, count: widget.count,)));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PrintPreview(receiptsData: widget.receiptsData,reportData: widget.reportData,)));
                     },
                     style: ButtonStyle(
                       backgroundColor: const WidgetStatePropertyAll(Colors.black),

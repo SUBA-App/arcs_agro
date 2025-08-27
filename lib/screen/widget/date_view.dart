@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:sales_app/font_color.dart';
+import 'package:arcs_agro/font_color.dart';
 
 class DateView extends StatelessWidget {
   const DateView({super.key, required this.top, required this.value, required this.onTap});

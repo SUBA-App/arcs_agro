@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sales_app/api/response/invoice_response.dart';
+import 'package:arcs_agro/api/response/invoice_response.dart';
 
 import '../../../font_color.dart';
 import '../../../util.dart';

@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:sales_app/font_color.dart';
+import 'package:arcs_agro/font_color.dart';
 import '../widget/date_view.dart';
 
 class FilterDialog extends StatelessWidget {

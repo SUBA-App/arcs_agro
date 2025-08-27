@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:intl/intl.dart';
-import 'package:sales_app/api/response/receipts_response.dart';
-import 'package:sales_app/api/response/report_response.dart';
-import 'package:sales_app/font_color.dart';
+import 'package:arcs_agro/api/response/receipts_response.dart';
+import 'package:arcs_agro/api/response/report_response.dart';
+import 'package:arcs_agro/font_color.dart';
 import 'package:watermark_unique/image_format.dart' as format;
 import 'package:watermark_unique/watermark_unique.dart';
 
@@ -22,9 +22,9 @@ extension DateTimeFromTimeOfDay on DateTime {
 }
 
 class Util {
-  static Future<List<int>> templateReceipt(ReceiptsData data) async {
+  static Future<List<int>> templateReceipt(ReceiptsData data, PaperSize paperSize, String text) async {
     final profile = await CapabilityProfile.load();
-    final generator = Generator(PaperSize.mm80, profile);
+    final generator = Generator(paperSize, profile);
 
     List<int> bytes = [];
 
@@ -43,7 +43,7 @@ class Util {
       styles: const PosStyles(align: PosAlign.center),
     );
     bytes += generator.text(
-      '0812-1234 5678',
+      data.user.companyTelephone,
       styles: const PosStyles(align: PosAlign.center),
     );
     bytes += generator.hr();
@@ -85,14 +85,35 @@ class Util {
 
     bytes += generator.hr();
 
-    // Tanda tangan
+    bytes += generator.emptyLines(3);
+
     bytes += generator.row([
-      PosColumn(text: 'Nama & Stempel Kios', width: 6, styles: const PosStyles(align: PosAlign.center)),
-      PosColumn(text: 'Salesman', width: 6, styles: const PosStyles(align: PosAlign.center)),
+      PosColumn(
+        text: '----------',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center),
+      ),
+      PosColumn(
+        text: '----------',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center),
+      ),
+    ]);
+
+    bytes += generator.row([
+      PosColumn(
+        text: 'Nama & Stempel Kios',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center),
+      ),
+      PosColumn(
+        text: 'Salesman',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center),
+      ),
     ]);
     bytes += generator.emptyLines(3);
 
-    // Catatan
     bytes += generator.text(
       'BUKTI INI HANYA TANDA TERIMA,\nBUKAN INVOICE!',
       styles: const PosStyles(align: PosAlign.center, bold: true),
@@ -100,7 +121,6 @@ class Util {
 
     bytes += generator.emptyLines(1);
 
-    // Kode unik
     bytes += generator.text('Kode Unik', styles: const PosStyles(align: PosAlign.center, bold: true));
     bytes += generator.text(
       data.uniqueCode ?? '',
@@ -109,16 +129,24 @@ class Util {
 
     bytes += generator.emptyLines(3);
 
+    bytes += generator.text(
+      text,
+      styles: const PosStyles(
+        align: PosAlign.right,
+        bold: false,
+      ),
+    );
+
+    bytes += generator.emptyLines(3);
+
     return bytes;
   }
-  static Future<List<int>> templatePrintReport(ReportData data, PaperSize paperSize) async {
-    // Load profile ESC/POS
+  static Future<List<int>> templatePrintReport(ReportData data, PaperSize paperSize, String text) async {
     final profile = await CapabilityProfile.load();
     final generator = Generator(paperSize, profile);
 
     List<int> bytes = [];
 
-    // Header toko
     bytes += generator.text(data.salesCompanyLetter,
         styles: const PosStyles(
           bold: true,
@@ -128,10 +156,9 @@ class Util {
         ));
     bytes += generator.text('Distributor Pestisida & Alat Pertanian',
         styles: const PosStyles(align: PosAlign.center));
-    bytes += generator.text('0812-1234 5678', styles: const PosStyles(align: PosAlign.center));
+    bytes += generator.text(data.salesCompanyTelephone, styles: const PosStyles(align: PosAlign.center));
     bytes += generator.hr();
 
-    // Info utama
     bytes += generator.row([
       PosColumn(text: 'No', width: 3),
       PosColumn(text: ': ${data.no}', width: 9),
@@ -150,7 +177,6 @@ class Util {
     ]);
     bytes += generator.emptyLines(1);
 
-    // Nominal & metode
     bytes += generator.row([
       PosColumn(text: 'Nominal Pembayaran', width: 6),
       PosColumn(text: ': Rp. ${convertToIdr(data.payment.amount, 0)}', width: 6),
@@ -159,13 +185,22 @@ class Util {
       PosColumn(text: 'Metode Pembayaran', width: 6),
       PosColumn(text: ': ${data.payment.method == 1 ? 'TUNAI' :data.payment.method == 2 ? 'TRANSFER' : 'CEK/GIRO'}', width: 6),
     ]);
+    data.payment.method == 2 || data.payment.method == 3 ?
+    bytes += generator.row([
+      PosColumn(text: 'Bank', width: 6),
+      PosColumn(text: ': ${data.payment.bankName}', width: 6),
+    ]) : '';
+    data.payment.method == 3 ?
+    bytes += generator.row([
+      PosColumn(text: 'Nomor Giro', width: 6),
+      PosColumn(text: ': ${data.payment.noGiro}', width: 6),
+    ]) : '';
     bytes += generator.row([
       PosColumn(text: 'Keterangan', width: 6),
       PosColumn(text: ': ${data.note.isEmpty ? '-' : data.note}', width: 6),
     ]);
     bytes += generator.emptyLines(1);
 
-    // Detail invoice
     if (data.invoice.isEmpty) {
       for (var i in data.invoices) {
         bytes += generator.text(
@@ -178,20 +213,50 @@ class Util {
 
     bytes += generator.hr();
 
-    // Tanda tangan
+    bytes += generator.emptyLines(3);
     bytes += generator.row([
-      PosColumn(text: 'Nama & Stempel Kios', width: 6, styles: const PosStyles(align: PosAlign.center)),
-      PosColumn(text: 'Salesman', width: 6, styles: const PosStyles(align: PosAlign.center)),
+      PosColumn(
+        text: '--------------------', // garis kios
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center),
+      ),
+      PosColumn(
+        text: '--------------------', // garis salesman
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center),
+      ),
+    ]);
+
+    bytes += generator.row([
+      PosColumn(
+        text: 'Nama & Stempel Kios',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center),
+      ),
+      PosColumn(
+        text: 'Salesman',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.center),
+      ),
     ]);
     bytes += generator.emptyLines(3);
 
-    // Kode unik
     bytes += generator.text('Kode Unik', styles: const PosStyles(align: PosAlign.center, bold: true));
     bytes += generator.text(
       '${data.uniqueCode}',
       styles: const PosStyles(align: PosAlign.center),
     );
     bytes += generator.emptyLines(3);
+
+    bytes += generator.text(
+      text,
+      styles: const PosStyles(
+        align: PosAlign.right,
+        bold: false,
+      ),
+    );
+
+    bytes += generator.emptyLines(1);
 
     return bytes;
   }

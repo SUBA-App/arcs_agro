@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/screen/main/main_provider.dart';
+import 'package:arcs_agro/screen/main/main_provider.dart';
 
 import '../../font_color.dart';
 
@@ -30,12 +30,12 @@ class _ChangePwScreenState extends State<ChangePw2Screen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Ganti Sandi",
           style: TextStyle(
               fontFamily: FontColor.fontPoppins,
-              color: FontColor.black,
+              color: Colors.white,
               fontSize: 16),
         ),
       ),

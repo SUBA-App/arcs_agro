@@ -7,11 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/api/response/invoice_response.dart';
-import 'package:sales_app/screen/report/choose_customer_screen.dart';
-import 'package:sales_app/screen/report/choose_invoice_screen.dart';
-import 'package:sales_app/screen/report/report_provider.dart';
-import 'package:sales_app/util.dart';
+import 'package:arcs_agro/api/response/invoice_response.dart';
+import 'package:arcs_agro/screen/report/choose_customer_screen.dart';
+import 'package:arcs_agro/screen/report/choose_invoice_screen.dart';
+import 'package:arcs_agro/screen/report/report_provider.dart';
+import 'package:arcs_agro/util.dart';
 
 import '../../currency_formatter.dart';
 import '../../font_color.dart';
@@ -136,12 +136,12 @@ class _AddLaporanScreenState extends State<AddLaporanScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Tambah Laporan",
           style: TextStyle(
             fontFamily: FontColor.fontPoppins,
-            color: FontColor.black,
+            color: Colors.white,
             fontSize: 16,
           ),
         ),

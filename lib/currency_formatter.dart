@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-import 'package:sales_app/util.dart';
+import 'package:arcs_agro/util.dart';
 
 class CurrencyInputFormatter extends TextInputFormatter {
 

@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:sales_app/location_model.dart';
+import 'package:arcs_agro/location_model.dart';
 
 @dao
 abstract class LocationDao {

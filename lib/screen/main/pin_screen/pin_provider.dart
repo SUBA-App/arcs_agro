@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sales_app/api/response/default_response.dart';
-import 'package:sales_app/screen/main/main_page.dart';
-import 'package:sales_app/screen/main/pin_screen/pin_screen.dart';
+import 'package:arcs_agro/api/response/default_response.dart';
+import 'package:arcs_agro/screen/main/main_page.dart';
+import 'package:arcs_agro/screen/main/pin_screen/pin_screen.dart';
 
 import '../../../api/api_service.dart';
 import '../../../api/response/create_pin_response.dart';

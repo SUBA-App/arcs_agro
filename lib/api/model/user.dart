@@ -4,6 +4,7 @@ class User {
   String email;
   String companyName;
   String companyLetter;
+  String companyTelephone;
   bool hasPin;
   int isAbsenteeism;
   int isReport;
@@ -12,7 +13,7 @@ class User {
   int versionApp;
   String role;
 
-  User({required this.role,required this.companyLetter,required this.versionApp,required this.id, required this.name, required this.email, required this.companyName, required this.hasPin, required this.isAbsenteeism, required this.isReport, required this.isProduct, required this.isCanvasser});
+  User({required this.role,required this.companyLetter,required this.versionApp,required this.id, required this.name, required this.email, required this.companyName, required this.hasPin, required this.isAbsenteeism, required this.isReport, required this.isProduct, required this.isCanvasser, required this.companyTelephone});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
       id: json['id'],
@@ -25,7 +26,7 @@ class User {
     isProduct: json['is_product'] ?? 0,
     isCanvasser: json['is_canvasser'] ?? 0,
     versionApp: json['version_app'] ?? 0,
-    role: json['role'] ?? '', companyLetter: json['company_letter'] ?? ''
+    role: json['role'] ?? '', companyLetter: json['company_letter'] ?? '', companyTelephone: json['company_telephone'] ?? ''
   );
 
   Map<String, dynamic> toJson() => {

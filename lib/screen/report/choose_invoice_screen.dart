@@ -2,8 +2,8 @@ import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:sales_app/screen/report/item/invoice_item.dart';
-import 'package:sales_app/screen/report/report_provider.dart';
+import 'package:arcs_agro/screen/report/item/invoice_item.dart';
+import 'package:arcs_agro/screen/report/report_provider.dart';
 
 import '../../api/response/invoice_response.dart';
 import '../../font_color.dart';
@@ -52,12 +52,12 @@ class _ChooseCustomerScreenState extends State<ChooseInvoiceScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Pilih Invoice",
           style: TextStyle(
             fontFamily: FontColor.fontPoppins,
-            color: FontColor.black,
+            color: Colors.white,
             fontSize: 16,
           ),
         ),

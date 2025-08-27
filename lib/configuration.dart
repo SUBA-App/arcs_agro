@@ -17,6 +17,12 @@ class Configuration {
        version = packageInfo.version;
         break;
       case "com.subagro.salesreport.debug":
+        _baseUrl = 'http://10.0.2.2:8000/';
+        apiUrl = '${_baseUrl}api/';
+        buildNumber = packageInfo.buildNumber;
+        version = packageInfo.version;
+        break;
+      case "com.subagro.salesreport.stg":
         _baseUrl = 'https://salesreport-development.subagro.com/';
         apiUrl = '${_baseUrl}api/';
         buildNumber = packageInfo.buildNumber;

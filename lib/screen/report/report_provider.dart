@@ -6,16 +6,16 @@ import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sales_app/api/api_service.dart';
-import 'package:sales_app/api/body/report_body.dart';
-import 'package:sales_app/api/model/method.dart';
-import 'package:sales_app/api/response/customer_response.dart';
-import 'package:sales_app/api/response/invoice_response.dart';
-import 'package:sales_app/api/response/report_detail_response.dart';
-import 'package:sales_app/api/response/report_response.dart';
-import 'package:sales_app/bank.dart';
-import 'package:sales_app/screen/report/success_screen.dart';
-import 'package:sales_app/util.dart';
+import 'package:arcs_agro/api/api_service.dart';
+import 'package:arcs_agro/api/body/report_body.dart';
+import 'package:arcs_agro/api/model/method.dart';
+import 'package:arcs_agro/api/response/customer_response.dart';
+import 'package:arcs_agro/api/response/invoice_response.dart';
+import 'package:arcs_agro/api/response/report_detail_response.dart';
+import 'package:arcs_agro/api/response/report_response.dart';
+import 'package:arcs_agro/bank.dart';
+import 'package:arcs_agro/screen/report/success_screen.dart';
+import 'package:arcs_agro/util.dart';
 
 import '../../font_color.dart';
 
@@ -484,11 +484,10 @@ class ReportProvider extends ChangeNotifier {
 
         if (!response.error) {
           if (context.mounted) {
-            List<int> template = await Util.templatePrintReport(response.result, PaperSize.mm80);
 
             if (!context.mounted) return;
             Navigator.pop(context);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SuccessScreen(template: template, count: 1,)));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SuccessScreen(reportData: response.result,)));
           }
         } else {
           if (context.mounted) {

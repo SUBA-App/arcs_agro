@@ -4,19 +4,19 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/change_pw_screen.dart';
-import 'package:sales_app/configuration.dart';
-import 'package:sales_app/screen/absensi/absensi_provider.dart';
-import 'package:sales_app/screen/absensi/absensi_screen.dart';
-import 'package:sales_app/font_color.dart';
-import 'package:sales_app/home_page.dart';
-import 'package:sales_app/screen/item/drawer_item.dart';
-import 'package:sales_app/screen/product/product_screen.dart';
-import 'package:sales_app/screen/report/laporan_kerja_screen.dart';
-import 'package:sales_app/screen/main/main_provider.dart';
-import 'package:sales_app/screen/sales-canvasser/receipts_screen.dart';
-import 'package:sales_app/service/location_foreground_service.dart';
-import 'package:sales_app/util/preferences.dart';
+import 'package:arcs_agro/change_pw_screen.dart';
+import 'package:arcs_agro/configuration.dart';
+import 'package:arcs_agro/screen/absensi/absensi_provider.dart';
+import 'package:arcs_agro/screen/absensi/absensi_screen.dart';
+import 'package:arcs_agro/font_color.dart';
+import 'package:arcs_agro/home_page.dart';
+import 'package:arcs_agro/screen/item/drawer_item.dart';
+import 'package:arcs_agro/screen/product/product_screen.dart';
+import 'package:arcs_agro/screen/report/laporan_kerja_screen.dart';
+import 'package:arcs_agro/screen/main/main_provider.dart';
+import 'package:arcs_agro/screen/sales-canvasser/receipts_screen.dart';
+import 'package:arcs_agro/service/location_foreground_service.dart';
+import 'package:arcs_agro/util/preferences.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -77,11 +77,11 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
         iconTheme: const IconThemeData(
-            color: FontColor.black
+            color: Colors.white
         ),
         title: Text(drawer == 0 ?"Home" : drawer == 1? "Absensi" : drawer == 2 ? "List Produk" : drawer == 4 ? 'Tanda Terima' : "Laporan Kerja", style: TextStyle(
           fontFamily: FontColor.fontPoppins,
-          color: FontColor.black,
+          color: Colors.white,
           fontSize: 16
         ),),
         actions: [

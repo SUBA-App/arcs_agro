@@ -1,13 +1,14 @@
+import 'package:arcs_agro/screen/print/print_preview.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sales_app/api/response/report_response.dart';
-import 'package:sales_app/font_color.dart';
-import 'package:sales_app/screen/report/report_provider.dart';
-import 'package:sales_app/util.dart';
-import 'package:sales_app/view_pic_screen.dart';
+import 'package:arcs_agro/api/response/report_response.dart';
+import 'package:arcs_agro/font_color.dart';
+import 'package:arcs_agro/screen/report/report_provider.dart';
+import 'package:arcs_agro/util.dart';
+import 'package:arcs_agro/view_pic_screen.dart';
 
 import '../print/print_screen.dart';
 
@@ -39,12 +40,12 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
       backgroundColor: FontColor.blackF9,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Detail Laporan Kerja",
           style: TextStyle(
             fontFamily: FontColor.fontPoppins,
-            color: FontColor.black,
+            color: Colors.white,
             fontSize: 16,
           ),
         ),
@@ -613,20 +614,17 @@ class _LaporanKerjaDetailState extends State<LaporanKerjaDetail> {
                               null) {
                             return;
                           }
-                          final template = await Util.templatePrintReport(
-                            Provider.of<ReportProvider>(
-                              context,
-                              listen: false,
-                            ).reportData!,
-                            PaperSize.mm80,
-                          );
+
                           if (!context.mounted) return;
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder:
                                   (context) =>
-                                  PrintScreen(template: template, count: 1,),
+                                  PrintPreview(reportData: Provider.of<ReportProvider>(
+                                    context,
+                                    listen: false,
+                                  ).reportData,),
                             ),
                           );
                         },

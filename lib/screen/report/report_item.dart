@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:sales_app/api/response/report_response.dart';
-import 'package:sales_app/util.dart';
+import 'package:arcs_agro/api/response/report_response.dart';
+import 'package:arcs_agro/util.dart';
 
 import '../../font_color.dart';
 import 'laporan_kerja_detail.dart';

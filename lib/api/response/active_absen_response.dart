@@ -1,6 +1,6 @@
 
 
-import 'package:sales_app/api/response/absen_response.dart';
+import 'package:arcs_agro/api/response/absen_response.dart';
 
 class ActiveAbsenResponse {
   bool error;

@@ -1,8 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sales_app/custom_camera.dart';
-import 'package:sales_app/screen/absensi/next_absensi_screen.dart';
+import 'package:arcs_agro/custom_camera.dart';
+import 'package:arcs_agro/screen/absensi/next_absensi_screen.dart';
 
 class TakePictureAbsensiScreen extends StatefulWidget {
   const TakePictureAbsensiScreen({super.key, required this.camera});

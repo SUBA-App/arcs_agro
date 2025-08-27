@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:sales_app/api/response/receipts_response.dart';
-import 'package:sales_app/screen/sales-canvasser/list_product_item.dart';
-import 'package:sales_app/screen/sales-canvasser/receipts_provider.dart';
+import 'package:arcs_agro/api/response/receipts_response.dart';
+import 'package:arcs_agro/screen/sales-canvasser/list_product_item.dart';
+import 'package:arcs_agro/screen/sales-canvasser/receipts_provider.dart';
 
 import '../../font_color.dart';
 
@@ -46,12 +46,12 @@ class _ChooseCustomerScreenState extends State<ChooseListProductScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Pilih Barang",
           style: TextStyle(
             fontFamily: FontColor.fontPoppins,
-            color: FontColor.black,
+            color: Colors.white,
             fontSize: 16,
           ),
         ),

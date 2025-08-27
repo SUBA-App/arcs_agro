@@ -1,4 +1,4 @@
-import 'package:sales_app/api/model/user.dart';
+import 'package:arcs_agro/api/model/user.dart';
 
 class LoginResponse {
   bool error;

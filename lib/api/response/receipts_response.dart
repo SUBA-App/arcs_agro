@@ -1,4 +1,4 @@
-import 'package:sales_app/api/model/user.dart';
+import 'package:arcs_agro/api/model/user.dart';
 
 import '../../util.dart';
 
@@ -98,20 +98,21 @@ class ReceiptsData {
 class ListProduct {
   String id;
   String productName;
+  int subtotal;
   int productQuantity;
   String productPrice;
   int remainingQuantity;
   int qty;
   bool checked = false;
 
-  ListProduct({required this.id,required this.qty,required this.remainingQuantity,required this.productName,required this.productQuantity,required this.productPrice,required this.checked
+  ListProduct({required this.id,required this.subtotal,required this.qty,required this.remainingQuantity,required this.productName,required this.productQuantity,required this.productPrice,required this.checked
     });
 
   factory ListProduct.fromJson(Map<String, dynamic> json) => ListProduct(
       id: json["id"],
       productName: json['product_name'],
       productQuantity: json['product_quantity'] ?? 0,
-      productPrice: json['product_price']?.toString() ?? '0', checked: false, remainingQuantity: json['remaining_quantity'] ?? 0, qty: json['qty'] ?? 0
+      productPrice: json['product_price']?.toString() ?? '0', checked: false, remainingQuantity: json['remaining_quantity'] ?? 0, qty: json['qty'] ?? 0, subtotal: 0
   );
 
   Map<String, dynamic> toJson() => {

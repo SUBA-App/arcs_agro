@@ -4,21 +4,19 @@ import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sales_app/api/api_service.dart';
-import 'package:sales_app/api/body/receipt_body.dart';
-import 'package:sales_app/api/response/add_receipt_response.dart';
-import 'package:sales_app/api/response/customer_response.dart';
-import 'package:sales_app/api/response/receipts_response.dart';
-import 'package:sales_app/bank.dart';
-import 'package:sales_app/screen/report/success_screen.dart';
-import 'package:sales_app/util.dart';
+import 'package:arcs_agro/api/api_service.dart';
+import 'package:arcs_agro/api/body/receipt_body.dart';
+import 'package:arcs_agro/api/response/add_receipt_response.dart';
+import 'package:arcs_agro/api/response/customer_response.dart';
+import 'package:arcs_agro/api/response/receipts_response.dart';
+import 'package:arcs_agro/bank.dart';
+import 'package:arcs_agro/screen/report/success_screen.dart';
+import 'package:arcs_agro/util.dart';
 
 import '../../api/response/list_product_response.dart';
 import '../../font_color.dart';
 
-
 class ReceiptsProvider extends ChangeNotifier {
-
   bool isLoading = false;
   List<ReceiptsData> receipts = [];
 
@@ -50,6 +48,15 @@ class ReceiptsProvider extends ChangeNotifier {
   String start = '';
   String end = '';
 
+  void count(int index) {
+    ListProduct listProduct = selectedProduct[index];
+    listProduct.subtotal = 0;
+    for (var i in selectedProduct) {
+      listProduct.subtotal += (int.parse(Util.toClearNumber(i.productPrice)) * i.qty);
+    }
+    notifyListeners();
+  }
+
   void checkProduct(int index) {
     listProduct[index].checked = !listProduct[index].checked;
     if (listProduct[index].checked) {
@@ -57,13 +64,13 @@ class ReceiptsProvider extends ChangeNotifier {
     } else {
       listProduct[index].qty = 0;
     }
-
     notifyListeners();
   }
 
   void qtyPlus(int index) {
     if (selectedProduct[index].qty < selectedProduct[index].remainingQuantity) {
       selectedProduct[index].qty++;
+      count(index);
       notifyListeners();
     }
   }
@@ -76,19 +83,20 @@ class ReceiptsProvider extends ChangeNotifier {
       selectedProduct[index].qty--;
       notifyListeners();
     }
+    count(index);
   }
 
   void setPrice(int index, String price) {
-
     selectedProduct[index].productPrice = price;
-      notifyListeners();
-
+    count(index);
+    notifyListeners();
   }
 
   void setSearch(String value) {
     search = value;
     notifyListeners();
   }
+
   void setSort(String value) {
     sort = value;
     notifyListeners();
@@ -109,7 +117,6 @@ class ReceiptsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   void clear() {
     sort = 'DESC';
     start = '';
@@ -124,8 +131,11 @@ class ReceiptsProvider extends ChangeNotifier {
   }
 
   Future<void> loadBanks(BuildContext context) async {
-    String data = await DefaultAssetBundle.of(context).loadString("assets/json/banks.json");
-    final bankse = (jsonDecode(data) as List).map((e) => Bank.fromJson(e)).toList();
+    String data = await DefaultAssetBundle.of(
+      context,
+    ).loadString("assets/json/banks.json");
+    final bankse =
+        (jsonDecode(data) as List).map((e) => Bank.fromJson(e)).toList();
     banks.clear();
     banks2.clear();
     banks.addAll(bankse);
@@ -142,21 +152,22 @@ class ReceiptsProvider extends ChangeNotifier {
 
   void showLoading(BuildContext context) {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white,
-            child: LottieBuilder.asset(
-              'assets/lottie/loading.json',
-              width: 70,
-              height: 70,
-            ),
-          );
-        });
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          child: LottieBuilder.asset(
+            'assets/lottie/loading.json',
+            width: 70,
+            height: 70,
+          ),
+        );
+      },
+    );
   }
 
-  Future<void> listBarang(BuildContext context,String keyword) async {
+  Future<void> listBarang(BuildContext context, String keyword) async {
     isListProductLoading = true;
     notifyListeners();
     final response = await ApiService.listProduct(context, keyword);
@@ -169,12 +180,19 @@ class ReceiptsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getReceipts(BuildContext context,int page) async {
+  Future<void> getReceipts(BuildContext context, int page) async {
     isLoading = true;
     receipts = [];
     notifyListeners();
     isMaxReached = false;
-    final response = await ApiService.receipts(context,page, search,sort,start,end);
+    final response = await ApiService.receipts(
+      context,
+      page,
+      search,
+      sort,
+      start,
+      end,
+    );
     if (response is ReceiptsResponse) {
       if (!response.error) {
         isLoading = false;
@@ -184,10 +202,17 @@ class ReceiptsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> loadMoreReceipts(BuildContext context,int page) async {
+  Future<void> loadMoreReceipts(BuildContext context, int page) async {
     enhancedStatus = EnhancedStatus.loading;
     notifyListeners();
-    final response = await ApiService.reports(context,page,search,sort,start,end);
+    final response = await ApiService.reports(
+      context,
+      page,
+      search,
+      sort,
+      start,
+      end,
+    );
     if (response is ReceiptsResponse) {
       if (!response.error) {
         receipts.addAll(response.result.results);
@@ -201,11 +226,15 @@ class ReceiptsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getCustomers(BuildContext context,int page, String keyword) async {
+  Future<void> getCustomers(
+    BuildContext context,
+    int page,
+    String keyword,
+  ) async {
     isCustLoading = true;
     notifyListeners();
     isMaxReached = true;
-    final response = await ApiService.customers(context,page, keyword);
+    final response = await ApiService.customers(context, page, keyword);
     if (response.runtimeType == CustomerResponse) {
       final resp = response as CustomerResponse;
       if (!resp.error) {
@@ -215,58 +244,78 @@ class ReceiptsProvider extends ChangeNotifier {
       } else {
         if (resp.message == 'key_failed') {
           if (context.mounted) {
-            showDialog(context: context,
-                barrierDismissible: false,
-                builder: (context) {
-                  return Dialog(
-                    backgroundColor: Colors.white,
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return Dialog(
+                  backgroundColor: Colors.white,
 
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('Tidak Ada Token API', style: TextStyle(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Tidak Ada Token API',
+                          style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: FontColor.black,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Hubungi Administrator',
+                          style: TextStyle(
+                            fontFamily: FontColor.fontPoppins,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: FontColor.black,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          style: const ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              FontColor.black,
+                            ),
+                          ),
+                          child: Text(
+                            'OK',
+                            style: TextStyle(
                               fontFamily: FontColor.fontPoppins,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: FontColor.black
-                          ),),
-                          const SizedBox(height: 8,),
-                          Text('Hubungi Administrator', style: TextStyle(
-                              fontFamily: FontColor.fontPoppins,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: FontColor.black
-                          ),),
-                          const SizedBox(height: 8,),
-                          ElevatedButton(onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          }, style: const ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
-                                  FontColor.black)
-                          ), child: Text('OK', style: TextStyle(
-                              fontFamily: FontColor.fontPoppins,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white
-                          ),))
-                        ],
-                      ),
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                });
+                  ),
+                );
+              },
+            );
           }
         }
       }
     }
   }
 
-  Future<void> loadMoreCust(BuildContext context,int page, String keyword) async {
+  Future<void> loadMoreCust(
+    BuildContext context,
+    int page,
+    String keyword,
+  ) async {
     enhancedStatus = EnhancedStatus.loading;
     notifyListeners();
-    final response = await ApiService.customers(context,page, keyword);
+    final response = await ApiService.customers(context, page, keyword);
     if (response.runtimeType == CustomerResponse) {
       final resp = response as CustomerResponse;
       if (!resp.error) {
@@ -290,7 +339,6 @@ class ReceiptsProvider extends ChangeNotifier {
   }
 
   Future<void> addReceipt(BuildContext context) async {
-
     bool error = false;
 
     for (var i in selectedProduct) {
@@ -305,19 +353,25 @@ class ReceiptsProvider extends ChangeNotifier {
     }
 
     if (!error) {
-      final body = ReceiptBody(storeName: selectedKios, products: selectedProduct);
+      final body = ReceiptBody(
+        storeName: selectedKios,
+        products: selectedProduct,
+      );
 
       showLoading(context);
-      final response = await ApiService.addReceipt(context,body);
+      final response = await ApiService.addReceipt(context, body);
       if (response is AddReceiptResponse) {
-
         if (!response.error) {
           if (context.mounted) {
-            List<int> template = await Util.templateReceipt(response.result);
-
             if (!context.mounted) return;
             Navigator.pop(context);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SuccessScreen(template: template,count:2)));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => SuccessScreen(receiptsData: response.result,),
+              ),
+            );
           }
         } else {
           if (context.mounted) {
@@ -328,13 +382,11 @@ class ReceiptsProvider extends ChangeNotifier {
       } else {
         if (context.mounted) {
           Navigator.pop(context);
-          }
+        }
         Fluttertoast.showToast(msg: response.toString());
       }
     } else {
       Fluttertoast.showToast(msg: 'Data Belum Lengkap');
     }
-
-
   }
 }

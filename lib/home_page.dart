@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/api/api_service.dart';
-import 'package:sales_app/api/response/default_response.dart';
-import 'package:sales_app/local_db.dart';
-import 'package:sales_app/screen/absensi/absensi_item.dart';
-import 'package:sales_app/screen/item/home_menu.dart';
+import 'package:arcs_agro/api/api_service.dart';
+import 'package:arcs_agro/api/response/default_response.dart';
+import 'package:arcs_agro/local_db.dart';
+import 'package:arcs_agro/screen/absensi/absensi_item.dart';
+import 'package:arcs_agro/screen/item/home_menu.dart';
 
-import 'package:sales_app/screen/main/main_provider.dart';
-import 'package:sales_app/screen/product/product_screen.dart';
-import 'package:sales_app/screen/sales-canvasser/receipts_screen.dart';
-import 'package:sales_app/shimmer_n.dart';
-import 'package:sales_app/util/preferences.dart';
+import 'package:arcs_agro/screen/main/main_provider.dart';
+import 'package:arcs_agro/screen/product/product_screen.dart';
+import 'package:arcs_agro/screen/sales-canvasser/receipts_screen.dart';
+import 'package:arcs_agro/shimmer_n.dart';
+import 'package:arcs_agro/util/preferences.dart';
 
 import 'screen/absensi/absensi_screen.dart';
 
@@ -228,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         text: "Absensi",
                         isActive: provider.isAbsenteeism == 2 || provider.isAbsenteeism == 1,
-                        image: 'assets/images/ballot-check.png',
+                        image: 'assets/images/ballot-check.svg',
                       ),
                       HomeMenu(
                         onTap: () {
@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         text: "List Produk",
                         isActive: provider.isProduct == 2 || provider.isProduct == 1,
-                        image: 'assets/images/box-open.png',
+                        image: 'assets/images/box-open.svg',
                       ),
                     ],
                   ),
@@ -264,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         text: "Laporan Kerja",
                         isActive: provider.isReport == 2 || provider.isReport == 1,
-                        image: 'assets/images/checklist-task-budget.png',
+                        image: 'assets/images/checklist-task-budget.svg',
                       ),
                       HomeMenu(
                         onTap: () {
@@ -279,7 +279,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         text: "Sales Canvasser",
                         isActive: provider.isReport == 2 || provider.isReport == 1,
-                        image: 'assets/images/calendar-lines-pen.png',
+                        image: 'assets/images/calendar-lines-pen.svg',
                       ),
                     ],
                   ),

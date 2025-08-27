@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sales_app/screen/main/otp_screen/otp_screen.dart';
+import 'package:arcs_agro/screen/main/otp_screen/otp_screen.dart';
 
 import '../../../api/api_service.dart';
 import '../../../api/response/default_response.dart';

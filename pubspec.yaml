@@ -1,4 +1,4 @@
-name: sales_app
+name: arcs_agro
 description: "A new Flutter project."
 publish_to: 'none'
 
@@ -50,6 +50,7 @@ dependencies:
   print_bluetooth_thermal: ^1.1.6
   flutter_blue_plus: ^1.35.5
   dropdown_button2: ^2.3.9
+  flutter_svg: ^2.0.13
 
 
 dev_dependencies:

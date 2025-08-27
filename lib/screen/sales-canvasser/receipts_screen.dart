@@ -5,10 +5,10 @@ import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/screen/report/report_provider.dart';
-import 'package:sales_app/screen/sales-canvasser/add_receipt_screen.dart';
-import 'package:sales_app/screen/sales-canvasser/receipt_item.dart';
-import 'package:sales_app/screen/sales-canvasser/receipts_provider.dart';
+import 'package:arcs_agro/screen/report/report_provider.dart';
+import 'package:arcs_agro/screen/sales-canvasser/add_receipt_screen.dart';
+import 'package:arcs_agro/screen/sales-canvasser/receipt_item.dart';
+import 'package:arcs_agro/screen/sales-canvasser/receipts_provider.dart';
 
 
 import '../../font_color.dart';
@@ -92,11 +92,11 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
       appBar: widget.drawer ? null :  AppBar(
         backgroundColor: FontColor.yellow72,
         iconTheme: const IconThemeData(
-          color: FontColor.black
+          color: Colors.white
         ),
         title: Text("Tanda Terima",style: TextStyle(
           fontFamily: FontColor.fontPoppins,
-          color: FontColor.black,
+          color: Colors.white,
           fontSize: 16
         ),),
       ),

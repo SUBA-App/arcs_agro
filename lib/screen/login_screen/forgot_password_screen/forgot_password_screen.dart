@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/screen/login_screen/forgot_password_screen/forgot_provider.dart';
+import 'package:arcs_agro/screen/login_screen/forgot_password_screen/forgot_provider.dart';
 
 import '../../../font_color.dart';
 

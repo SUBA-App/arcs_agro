@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:sales_app/api/response/receipts_response.dart';
+import 'package:arcs_agro/api/response/receipts_response.dart';
 
 class ReceiptBody {
   String storeName;

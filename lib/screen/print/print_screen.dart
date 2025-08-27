@@ -6,15 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
-import 'package:sales_app/refresh_controller.dart';
-import 'package:sales_app/util.dart';
+import 'package:arcs_agro/refresh_controller.dart';
+import 'package:arcs_agro/util.dart';
 
 import '../../font_color.dart';
 
 class PrintScreen extends StatefulWidget {
-  const PrintScreen({super.key, required this.template, required this.count});
+  const PrintScreen({super.key, required this.templateKios,required this.templateSales, required this.count});
 
-  final List<int> template;
+  final List<int> templateKios;
+  final List<int> templateSales;
   final int count;
 
   @override
@@ -79,8 +80,8 @@ class _PrintScreenState extends State<PrintScreen> {
     );
     if (connected) {
       if (!context.mounted) return;
-      for (int i = 1; i <= widget.count; i++) {
-        await printStruk(context, i);
+      for (int i = 1; i <= 2; i++) {
+        await printStruk(context, i, i == 1 ? widget.templateKios : widget.templateSales);
       }
     } else {
       if (!context.mounted) return;
@@ -92,7 +93,7 @@ class _PrintScreenState extends State<PrintScreen> {
     Navigator.pop(context);
   }
 
-  Future<void> printStruk(BuildContext context, int currentCount) async {
+  Future<void> printStruk(BuildContext context, int currentCount, List<int> template) async {
     bool isConnected = await PrintBluetoothThermal.connectionStatus;
     if (!isConnected) {
       if (kDebugMode) {
@@ -101,10 +102,10 @@ class _PrintScreenState extends State<PrintScreen> {
       return;
     }
     // Kirim ke printer
-    await PrintBluetoothThermal.writeBytes(widget.template);
+    await PrintBluetoothThermal.writeBytes(template);
 
     if (!context.mounted) return;
-    if (currentCount == widget.count) {
+    if (currentCount == 2) {
       RefreshController.refresh();
       Navigator.pop(context);
     }
@@ -146,12 +147,12 @@ class _PrintScreenState extends State<PrintScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Pilih Device",
           style: TextStyle(
             fontFamily: FontColor.fontPoppins,
-            color: FontColor.black,
+            color: Colors.white,
             fontSize: 16,
           ),
         ),

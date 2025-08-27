@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/api/response/absen_response.dart';
-import 'package:sales_app/screen/absensi/absensi_provider.dart';
+import 'package:arcs_agro/api/response/absen_response.dart';
+import 'package:arcs_agro/screen/absensi/absensi_provider.dart';
 
 import '../../font_color.dart';
 import '../../view_pic_screen.dart';
@@ -36,12 +36,12 @@ class _DetailAbsensiScreenState extends State<DetailAbsensiScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Detail Absensi",
           style: TextStyle(
               fontFamily: FontColor.fontPoppins,
-              color: FontColor.black,
+              color: Colors.white,
               fontSize: 16),
         ),
       ),

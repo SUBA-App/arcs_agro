@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/font_color.dart';
-import 'package:sales_app/screen/main/otp_screen/otp_screen.dart';
-import 'package:sales_app/screen/main/pin_screen/pin_provider.dart';
-import 'package:sales_app/util/preferences.dart';
+import 'package:arcs_agro/font_color.dart';
+import 'package:arcs_agro/screen/main/otp_screen/otp_screen.dart';
+import 'package:arcs_agro/screen/main/pin_screen/pin_provider.dart';
+import 'package:arcs_agro/util/preferences.dart';
 
 
 class PinScreen extends StatefulWidget {

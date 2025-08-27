@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/screen/absensi/absensi_provider.dart';
-import 'package:sales_app/screen/absensi/next_absensi_provider.dart';
-import 'package:sales_app/screen/absensi/take_picture_absensi_screen2.dart';
+import 'package:arcs_agro/screen/absensi/absensi_provider.dart';
+import 'package:arcs_agro/screen/absensi/next_absensi_provider.dart';
+import 'package:arcs_agro/screen/absensi/take_picture_absensi_screen2.dart';
 
 import '../../font_color.dart';
 import '../report/choose_customer_screen.dart';
@@ -57,12 +57,12 @@ class _NextAbsensiScreenState extends State<NextAbsensiScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: FontColor.yellow72,
-        iconTheme: const IconThemeData(color: FontColor.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Check In Absensi",
           style: TextStyle(
               fontFamily: FontColor.fontPoppins,
-              color: FontColor.black,
+              color: Colors.white,
               fontSize: 16),
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:enhanced_paginated_view/enhanced_paginated_view.dart';
 import 'package:flutter/material.dart';
-import 'package:sales_app/api/response/product_response.dart';
-import 'package:sales_app/font_color.dart';
+import 'package:arcs_agro/api/response/product_response.dart';
+import 'package:arcs_agro/font_color.dart';
 
 import '../../api/api_service.dart';
 

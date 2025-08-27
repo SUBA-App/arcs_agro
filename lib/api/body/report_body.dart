@@ -1,4 +1,4 @@
-import 'package:sales_app/api/response/invoice_response.dart';
+import 'package:arcs_agro/api/response/invoice_response.dart';
 
 class ReportBody {
   int payDate;

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:sales_app/api/model/user.dart';
+import 'package:arcs_agro/api/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

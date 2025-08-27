@@ -6,12 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sales_app/screen/absensi/absensi_item.dart';
-import 'package:sales_app/screen/absensi/absensi_provider.dart';
-import 'package:sales_app/screen/absensi/take_picture_absensi_screen.dart';
-import 'package:sales_app/screen/dialog/filter_dialog.dart';
-import 'package:sales_app/screen/main/main_provider.dart';
-import 'package:sales_app/show_camera_permission.dart';
+import 'package:arcs_agro/screen/absensi/absensi_item.dart';
+import 'package:arcs_agro/screen/absensi/absensi_provider.dart';
+import 'package:arcs_agro/screen/absensi/take_picture_absensi_screen.dart';
+import 'package:arcs_agro/screen/dialog/filter_dialog.dart';
+import 'package:arcs_agro/screen/main/main_provider.dart';
+import 'package:arcs_agro/show_camera_permission.dart';
 
 import '../../font_color.dart';
 
@@ -85,11 +85,11 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
       appBar: widget.drawer ? null : AppBar(
         backgroundColor: FontColor.yellow72,
         iconTheme: const IconThemeData(
-          color: FontColor.black
+          color: Colors.white
         ),
         title: Text("Absensi",style: TextStyle(
           fontFamily: FontColor.fontPoppins,
-          color: FontColor.black,
+          color: Colors.white,
           fontSize: 16
         ),),
       ),
