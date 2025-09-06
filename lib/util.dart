@@ -55,8 +55,9 @@ class Util {
     ]);
     bytes += generator.text(data.dateAt, styles: const PosStyles());
     bytes += generator.text(data.timeAt, styles: const PosStyles());
-    bytes += generator.hr();
     bytes += generator.text('Nama Kios :  ${data.storeName}');
+    bytes += generator.hr();
+
 
     bytes += generator.emptyLines(1);
 
@@ -85,7 +86,7 @@ class Util {
 
     bytes += generator.hr();
 
-    bytes += generator.emptyLines(3);
+    bytes += generator.emptyLines(5);
 
     bytes += generator.row([
       PosColumn(
@@ -200,12 +201,17 @@ class Util {
       PosColumn(text: ': ${data.note.isEmpty ? '-' : data.note}', width: 6),
     ]);
     bytes += generator.emptyLines(1);
-
+    bytes += generator.hr();
     if (data.invoice.isEmpty) {
+      // Header tabel
+      bytes += generator.text('No Inv       Tanggal       Jumlah');
+
       for (var i in data.invoices) {
-        bytes += generator.text(
-            '${i.number}  ${i.taxDateView} : Rp. ${convertToIdr(
-                i.totalAmount, 0)}');
+        final no = i.number.padRight(12); // sesuaikan lebar kolom
+        final date = i.taxDateView.padRight(12);
+        final amount = 'Rp. ${convertToIdr(i.totalAmount, 0)}'.padLeft(12);
+
+        bytes += generator.text('$no$date$amount');
       }
     } else {
       bytes += generator.text(data.invoice);
@@ -213,7 +219,7 @@ class Util {
 
     bytes += generator.hr();
 
-    bytes += generator.emptyLines(3);
+    bytes += generator.emptyLines(5);
     bytes += generator.row([
       PosColumn(
         text: '--------------------', // garis kios

@@ -69,8 +69,9 @@ class _PrintPreviewState extends State<PrintPreview> {
                 ],
               ),
               Text('${data.dateAt} ${data.timeAt}'),
-              const Divider(),
               Text('Nama Kios: ${data.storeName}'),
+              const Divider(),
+
               const SizedBox(height: 8),
 
               ...data.listProducts.map((i) {
@@ -178,7 +179,9 @@ class _PrintPreviewState extends State<PrintPreview> {
                   ),
                 ),
               ),
-              const Center(child: Text('Distributor Pestisida & Alat Pertanian')),
+              const Center(
+                child: Text('Distributor Pestisida & Alat Pertanian'),
+              ),
               Center(child: Text(data.salesCompanyTelephone ?? '')),
               const Divider(),
 
@@ -191,51 +194,109 @@ class _PrintPreviewState extends State<PrintPreview> {
 
               // Payment info
               _buildRowLabelValue(
-                  'Nominal Pembayaran', 'Rp. ${Util.convertToIdr(data.payment.amount, 0)}'),
+                'Nominal Pembayaran',
+                'Rp. ${Util.convertToIdr(data.payment.amount, 0)}',
+              ),
               _buildRowLabelValue(
-                  'Metode Pembayaran',
-                  data.payment.method == 1
-                      ? 'TUNAI'
-                      : data.payment.method == 2
-                      ? 'TRANSFER'
-                      : 'CEK/GIRO'),
+                'Metode Pembayaran',
+                data.payment.method == 1
+                    ? 'TUNAI'
+                    : data.payment.method == 2
+                    ? 'TRANSFER'
+                    : 'CEK/GIRO',
+              ),
               if (data.payment.method == 2 || data.payment.method == 3)
                 _buildRowLabelValue('Bank', data.payment.bankName ?? ''),
               if (data.payment.method == 3)
                 _buildRowLabelValue('Nomor Giro', data.payment.noGiro ?? ''),
-              _buildRowLabelValue('Keterangan', data.note.isEmpty ? '-' : data.note),
+              _buildRowLabelValue(
+                'Keterangan',
+                data.note.isEmpty ? '-' : data.note,
+              ),
               const SizedBox(height: 8),
 
               const Divider(),
 
-              // Items
-              ...data.invoices.isNotEmpty
-                  ? data.invoices.map((i) => Text(
-                '${i.number}  ${i.taxDateView} : Rp. ${Util.convertToIdr(i.totalAmount, 0)}',
-              ))
-                  : [Text(data.invoice)],
+              data.invoices.isNotEmpty
+                  ? Column(
+                    children: [
+                      Row(
+                        children: const [
+                          Expanded(
+                            child: Text(
+                              'No Inv',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Tanggal',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Jumlah',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ...data.invoices.map(
+                        (i) => Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                i.number,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                i.taxDateView,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Rp. ${Util.convertToIdr(i.totalAmount, 0)}',
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                  : Text(data.invoice),
 
               const Divider(),
 
               // Signature
-              const SizedBox(height: 32),
-              Row(
+              const SizedBox(height: 84),
+              const Row(
                 children: [
                   Expanded(
                     child: Column(
                       children: [
-                        const Divider(),
+                        Divider(),
                         Center(child: Text('Nama & Stempel Kios')),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 32),
+                  SizedBox(width: 32),
                   Expanded(
                     child: Column(
-                      children: [
-                        const Divider(),
-                        Center(child: Text('Salesman')),
-                      ],
+                      children: [Divider(), Center(child: Text('Salesman'))],
                     ),
                   ),
                 ],
@@ -249,7 +310,9 @@ class _PrintPreviewState extends State<PrintPreview> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              Center(child: Text(data.uniqueCode ?? '', textAlign: TextAlign.center)),
+              Center(
+                child: Text(data.uniqueCode ?? '', textAlign: TextAlign.center),
+              ),
 
               const SizedBox(height: 24),
 

@@ -43,6 +43,7 @@ class ProductData {
   String productName;
   String productNo;
   int price;
+  int priceR2;
   int size;
   int show;
   String qty;
@@ -53,6 +54,7 @@ class ProductData {
       required this.productName,
       required this.productNo,
       required this.price,
+        required this.priceR2,
       required this.size,
         required this.show,
       required this.qty,
@@ -66,7 +68,7 @@ class ProductData {
       size: json['size'] ?? 0,
       show: json['show'] ?? 1,
       qty: json['qty'] ?? '',
-      composition: json['composition'] ?? '');
+      composition: json['composition'] ?? '', priceR2: json['price_r2']);
 
   Map<String, dynamic> toJson() => {
         "id": id,

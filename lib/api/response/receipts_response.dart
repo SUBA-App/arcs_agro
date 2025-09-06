@@ -121,4 +121,9 @@ class ListProduct {
     'qty': qty.toString(),
     'product_price': int.parse(Util.toClearNumber(productPrice)),
   };
+
+  void sumSubtotal() {
+    subtotal = 0;
+    subtotal += (int.parse(Util.toClearNumber(productPrice)) * qty);
+  }
 }

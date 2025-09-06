@@ -11,7 +11,6 @@ import 'package:arcs_agro/api/response/customer_response.dart';
 import 'package:arcs_agro/api/response/receipts_response.dart';
 import 'package:arcs_agro/bank.dart';
 import 'package:arcs_agro/screen/report/success_screen.dart';
-import 'package:arcs_agro/util.dart';
 
 import '../../api/response/list_product_response.dart';
 import '../../font_color.dart';
@@ -22,6 +21,9 @@ class ReceiptsProvider extends ChangeNotifier {
 
   bool isLoadingDetail = false;
   ReceiptsData? receiptData;
+
+  String selectedListProductId = "";
+  String responseListProductId = "";
 
   List<Bank> banks = [];
   List<Bank> banks2 = [];
@@ -50,10 +52,7 @@ class ReceiptsProvider extends ChangeNotifier {
 
   void count(int index) {
     ListProduct listProduct = selectedProduct[index];
-    listProduct.subtotal = 0;
-    for (var i in selectedProduct) {
-      listProduct.subtotal += (int.parse(Util.toClearNumber(i.productPrice)) * i.qty);
-    }
+    listProduct.sumSubtotal();
     notifyListeners();
   }
 
@@ -88,6 +87,7 @@ class ReceiptsProvider extends ChangeNotifier {
 
   void setPrice(int index, String price) {
     selectedProduct[index].productPrice = price;
+
     count(index);
     notifyListeners();
   }
@@ -112,8 +112,9 @@ class ReceiptsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setListProducts(List<ListProduct> list) {
+  void setListProducts(List<ListProduct> list, String id) {
     selectedProduct = list;
+    selectedListProductId = id;
     notifyListeners();
   }
 
@@ -174,6 +175,7 @@ class ReceiptsProvider extends ChangeNotifier {
     if (response is ListProductResponse) {
       if (!response.error) {
         isListProductLoading = false;
+        responseListProductId = response.listProductId;
         listProduct = response.result;
         notifyListeners();
       }
@@ -356,7 +358,10 @@ class ReceiptsProvider extends ChangeNotifier {
       final body = ReceiptBody(
         storeName: selectedKios,
         products: selectedProduct,
+        id: selectedListProductId
       );
+
+      print(body.id);
 
       showLoading(context);
       final response = await ApiService.addReceipt(context, body);

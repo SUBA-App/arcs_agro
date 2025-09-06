@@ -70,7 +70,7 @@ class _ChooseCustomerScreenState extends State<ChooseListProductScreen> {
                       selecteds.add(i);
                     }
                   }
-                  Navigator.pop(context,{'selecteds': selecteds});
+                  Navigator.pop(context,{'selecteds': selecteds, 'id':Provider.of<ReceiptsProvider>(context, listen: false).responseListProductId});
                 },
               )
               : const SizedBox(),

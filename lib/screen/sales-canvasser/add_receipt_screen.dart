@@ -128,7 +128,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
                             Provider.of<ReceiptsProvider>(
                               context,
                               listen: false,
-                            ).setListProducts(result['selecteds'] as List<ListProduct>);
+                            ).setListProducts(result['selecteds'] as List<ListProduct>, result['id']);
                           }
                         }
                       },
@@ -179,7 +179,7 @@ class _AddReceiptScreenState extends State<AddReceiptScreen> {
                                   },onPlus: (){
                                     Provider.of<ReceiptsProvider>(context, listen: false).qtyPlus(index);
                                   },onChanged: (e) {
-                                    Provider.of<ReceiptsProvider>(context, listen: false).setPrice(index, e);
+                                    Provider.of<ReceiptsProvider>(context, listen: false).setPrice(index, e.isEmpty ? "0" : e);
                                   },);
                                 },
                               ),
